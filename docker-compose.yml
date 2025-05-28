@@ -1,0 +1,152 @@
+# Sistema Guardião - MVP SACI
+# Docker Compose para desenvolvimento e demonstração
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: guardiao_postgres
+    environment:
+      POSTGRES_DB: sistema_guardiao
+      POSTGRES_USER: guardiao
+      POSTGRES_PASSWORD: guardiao_secure_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guardiao -d sistema_guardiao"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # InfluxDB Time Series Database
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: guardiao_influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: guardiao
+      DOCKER_INFLUXDB_INIT_PASSWORD: guardiao_secure_2024
+      DOCKER_INFLUXDB_INIT_ORG: sistema-guardiao
+      DOCKER_INFLUXDB_INIT_BUCKET: sensor_data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: guardiao-super-secret-auth-token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache & Message Queue
+  redis:
+    image: redis:7-alpine
+    container_name: guardiao_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass guardiao_secure_2024
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "guardiao_secure_2024", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # SACI MVP API
+  saci_api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: guardiao_saci_api
+    environment:
+      DATABASE_URL: postgresql://guardiao:guardiao_secure_2024@postgres:5432/sistema_guardiao
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: guardiao-super-secret-auth-token
+      INFLUXDB_ORG: sistema-guardiao
+      INFLUXDB_BUCKET: sensor_data
+      REDIS_URL: redis://:guardiao_secure_2024@redis:6379/0
+      ML_MODEL_PATH: /app/models/fire_risk_model.pkl
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/saci_mvp:/app
+      - ./models:/app/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # SACI Dashboard (React)
+  saci_dashboard:
+    build:
+      context: ./src/saci_mvp/dashboard
+      dockerfile: Dockerfile
+    container_name: guardiao_saci_dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+      REACT_APP_WEBSOCKET_URL: ws://localhost:8000/ws
+    depends_on:
+      saci_api:
+        condition: service_healthy
+    volumes:
+      - ./src/saci_mvp/dashboard:/app
+      - /app/node_modules
+
+  # Grafana Monitoring
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: guardiao_grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: guardiao_admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - influxdb
+      - postgres
+
+  # MQTT Broker for ESP32 Communication
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: guardiao_mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+
+volumes:
+  postgres_data:
+  influxdb_data:
+  redis_data:
+  grafana_data:
+  mosquitto_data:
+  mosquitto_logs:
+
+networks:
+  default:
+    name: guardiao_network
+    driver: bridge
