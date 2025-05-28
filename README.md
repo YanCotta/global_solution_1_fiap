@@ -30,6 +30,10 @@ Este documento contém:
 - **[Modelo de Dados](./docs/DATA_MODELS.md)**: Esquemas de banco de dados detalhados.
 - **[Especificação da Arquitetura](./docs/ARCHITECTURE_SPECIFICATION.md)**: Detalhes da arquitetura técnica.
 - **[Especificação do MVP SACI](./docs/SACI_MVP_SPECIFICATION.md)**: Especificação detalhada do MVP do SACI.
+- **[Fluxos de Dados](./docs/DATA_FLOWS.md)**: Detalhamento dos fluxos de dados entre subsistemas.
+- **[Matriz de Dependências Tecnológicas](./docs/TECH_DEPENDENCIES.md)**: Matriz explícita das tecnologias e suas interdependências.
+- **[Especificação da API](./docs/API_SPECIFICATION.md)**: Detalhamento dos endpoints e estrutura da API.
+- **[Protocolos de Comunicação IoT](./docs/IOT_PROTOCOLS.md)**: Especificação dos protocolos IoT utilizados.
 
 ---
 
@@ -207,7 +211,11 @@ O **Sistema Guardião** é uma arquitetura nacional brasileira que combina 5 sub
 ├── 📁 docs/                              # Documentação adicional
 │   ├── 📄 DATA_MODELS.md                # Esquemas de banco de dados
 │   ├── 📄 SACI_MVP_SPECIFICATION.md     # Especificação detalhada do MVP
-│   └── 📄 ARCHITECTURE_SPECIFICATION.md # Arquitetura técnica
+│   ├── 📄 ARCHITECTURE_SPECIFICATION.md # Arquitetura técnica
+│   ├── 📄 DATA_FLOWS.md                # Fluxos de dados entre subsistemas
+│   ├── 📄 TECH_DEPENDENCIES.md         # Matriz de dependências tecnológicas
+│   ├── 📄 API_SPECIFICATION.md          # Especificação da API
+│   └── 📄 IOT_PROTOCOLS.md             # Protocolos de comunicação IoT
 ├── 📁 hardware/                          # Configurações de hardware
 ├── 📁 .github/workflows/                 # CI/CD Pipeline
 ├── 📄 requirements.txt                   # Dependências Python
