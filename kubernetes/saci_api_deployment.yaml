@@ -1,0 +1,23 @@
+# Placeholder for Kubernetes Deployments
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saci-api-deployment
+  labels:
+    app: saci-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: saci-api
+  template:
+    metadata:
+      labels:
+        app: saci-api
+    spec:
+      containers:
+      - name: saci-api
+        image: your-repo/saci-api:latest # Replace with your actual image
+        ports:
+        - containerPort: 8000
