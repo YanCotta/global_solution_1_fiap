@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Guardião - C4 Architecture Diagrams</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            color: #e8eaed;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4fc3f7;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #81c784;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .diagram-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .diagram-title {
+            font-size: 1.8em;
+            color: #4fc3f7;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .diagram-description {
+            color: #b0bec5;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+        
+        .mermaid {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link {
+            display: block;
+            color: #4fc3f7;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .nav-link:hover {
+            background: rgba(79, 195, 247, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .key-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.1) 0%, rgba(129, 199, 132, 0.1) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        .feature-title {
+            color: #4fc3f7;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .navigation {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <h4 style="margin-top: 0; color: #4fc3f7;">Navigation</h4>
+            <a href="#context" class="nav-link">🌍 Context</a>
+            <a href="#containers" class="nav-link">📦 Containers</a>
+            <a href="#components" class="nav-link">⚙️ CURUPIRA Components</a>
+            <a href="#agentic" class="nav-link">🤖 Agentic AI</a>
+            <a href="#saci-components" class="nav-link">🔥 SACI Components</a>
+            <a href="#boitata-components" class="nav-link">⚡ BOITATÁ Components</a>
+            <a href="#data" class="nav-link">🗄️ Data Flow</a>
+            <a href="#security" class="nav-link">🔒 Security</a>
+        </div>
+
+        <h1>🛡️ Sistema Guardião</h1>
+        <div class="subtitle">Advanced Multi-Agent National Resilience Infrastructure</div>
+
+        <div class="key-features">
+            <div class="feature-card">
+                <div class="feature-title">🧠 Agentic AI Coordination</div>
+                Autonomous decision-making with emergent collective intelligence using CrewAI principles
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">🔄 Real-time Processing</div>
+                Processing 10M+ events/second with sub-second response times across all subsystems
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">🎭 Cultural Integration</div>
+                Brazilian folklore-inspired naming creates public trust and cultural resonance
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">🔒 Zero-Trust Security</div>
+                Quantum-resistant encryption with continuous behavioral monitoring
+            </div>
+        </div>
+
+        <!-- C1: Context Diagram -->
+        <div id="context" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">🌍</span>C1 - System Context</h2>
+            <div class="diagram-description">
+                High-level view showing how Sistema Guardião interacts with external systems, government agencies, and citizens. The system serves as Brazil's national resilience infrastructure, coordinating between multiple stakeholders.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% External Actors
+                    Citizens[👥 Citizens<br/>Population of Brazil<br/>200M+ people]
+                    GovAgencies[🏛️ Government Agencies<br/>Civil Defense, Health Ministry<br/>Security Forces]
+                    Emergency[🚨 Emergency Services<br/>Fire Departments<br/>Medical Services, Police]
+                    Utilities[⚡ Utility Companies<br/>CEMIG, COPASA<br/>Telecom Providers]
+                    International[🌎 International Systems<br/>WHO, UN Disaster Relief<br/>Regional Cooperation]
+                    
+                    %% Sistema Guardião (Main System)
+                    Guardian[🛡️ Sistema Guardião<br/>National Resilience Platform<br/>Agentic AI Coordination]
+                    
+                    %% Relationships
+                    Citizens -->|Emergency Reports<br/>Health Data<br/>Location Data| Guardian
+                    Guardian -->|Alerts & Warnings<br/>Safety Instructions<br/>Resource Coordination| Citizens
+                    
+                    GovAgencies -->|Policy Directives<br/>Resource Authorization<br/>Coordination Requests| Guardian
+                    Guardian -->|Threat Intelligence<br/>Response Recommendations<br/>Status Reports| GovAgencies
+                    
+                    Emergency -->|Response Capabilities<br/>Field Reports<br/>Resource Status| Guardian
+                    Guardian -->|Emergency Coordination<br/>Resource Deployment<br/>Tactical Intelligence| Emergency
+                    
+                    Utilities -->|Infrastructure Status<br/>Capacity Data<br/>Maintenance Schedules| Guardian
+                    Guardian -->|Protection Alerts<br/>Load Balancing<br/>Priority Routing| Utilities
+                    
+                    International -->|Global Threat Intel<br/>Best Practices<br/>Emergency Aid| Guardian
+                    Guardian -->|Regional Status<br/>Cooperation Requests<br/>Shared Intelligence| International
+                    
+                    %% Styling
+                    classDef primarySystem fill:#1976d2,stroke:#0d47a1,stroke-width:3px,color:#fff
+                    classDef externalActor fill:#4caf50,stroke:#2e7d32,stroke-width:2px,color:#fff
+                    classDef criticalActor fill:#f44336,stroke:#c62828,stroke-width:2px,color:#fff
+                    
+                    class Guardian primarySystem
+                    class Citizens,GovAgencies,International externalActor
+                    class Emergency,Utilities criticalActor
+            </div>
+        </div>
+
+        <!-- C2: Container Diagram -->
+        <div id="containers" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">📦</span>C2 - Container Architecture</h2>
+            <div class="diagram-description">
+                Shows the high-level technology choices and how responsibilities are distributed across containers. Each subsystem operates as an autonomous agent while maintaining coordinated intelligence.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Web Layer
+                    WebApp[🌐 Guardian Web Application<br/>React + TypeScript<br/>Real-time Dashboard]
+                    MobileApp[📱 Guardian Mobile App<br/>React Native<br/>Emergency Interface]
+                    PublicAPI[🔌 Public API Gateway<br/>GraphQL + REST<br/>Rate Limited & Secured]
+                    
+                    %% Core Coordination Layer
+                    Orchestrator[🎯 Agentic AI Orchestrator<br/>CrewAI + LangGraph<br/>Multi-Agent Coordination]
+                    MessageBus[📨 Guardian Message Bus<br/>Apache Kafka<br/>Event Streaming Platform]
+                    
+                    %% Guardian Subsystems (Folklore-Inspired)
+                    Curupira[🦶 CURUPIRA<br/>Cyber & Physical Security<br/>Python + TensorFlow]
+                    Saci[🔥 SACI<br/>Fire & Natural Disasters<br/>Python + PyTorch]
+                    Iara[🏥 IARA<br/>Health & Epidemiology<br/>Python + Scikit-Learn]
+                    Boitata[⚡ BOITATÁ<br/>Critical Infrastructure<br/>Go + Kubernetes]
+                    Anhanga[📡 ANHANGÁ<br/>Resilient Emergency Comms<br/>Specialized Protocols] %% MODIFIED: Replaced Caipora and Mula
+                    
+                    %% Data Layer
+                    TimeSeriesDB[📊 InfluxDB<br/>Time Series Data<br/>Sensor & Metrics Storage]
+                    GraphDB[🕸️ Neo4j<br/>Relationship Mapping<br/>Infrastructure Dependencies]
+                    VectorDB[🧠 Pinecone<br/>Vector Database<br/>AI Context & Similarity]
+                    PostgreSQL[🗃️ PostgreSQL<br/>Operational Data<br/>User & Configuration]
+                    
+                    %% External Integration
+                    GovIntegration[🏛️ Government Integration<br/>SOA + REST APIs<br/>Secure Communication]
+                    
+                    %% User Interactions
+                    WebApp --> PublicAPI
+                    MobileApp --> PublicAPI
+                    PublicAPI --> Orchestrator
+                    
+                    %% Core Coordination
+                    Orchestrator --> MessageBus
+                    MessageBus --> Curupira
+                    MessageBus --> Saci
+                    MessageBus --> Iara
+                    MessageBus --> Boitata
+                    MessageBus --> Anhanga %% MODIFIED: Connection to Anhangá, removed Caipora & Mula
+                    
+                    %% Cross-subsystem Communication
+                    Curupira -.->|Threat Intelligence| Boitata
+                    Boitata -.->|Infrastructure Status| Saci
+                    %% Removed: Saci -.->|Fire Risk Data| Caipora
+                    %% Removed: Iara -.->|Health Logistics| Mula
+                    
+                    %% Data Access
+                    Curupira --> TimeSeriesDB
+                    Saci --> TimeSeriesDB
+                    Iara --> TimeSeriesDB
+                    Boitata --> GraphDB
+                    Orchestrator --> VectorDB
+                    PublicAPI --> PostgreSQL
+                    
+                    %% External Integration
+                    Orchestrator --> GovIntegration
+                    
+                    %% Styling
+                    classDef webapp fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef core fill:#ff9800,stroke:#f57c00,stroke-width:3px,color:#fff
+                    classDef subsystem fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef database fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    
+                    class WebApp,MobileApp,PublicAPI webapp
+                    class Orchestrator,MessageBus core
+                    class Curupira,Saci,Iara,Boitata,Anhanga subsystem %% MODIFIED: Anhangá in, Caipora & Mula out
+                    class TimeSeriesDB,GraphDB,VectorDB,PostgreSQL database
+                    class GovIntegration external
+            </div>
+        </div>
+
+        <!-- C3: Component Diagram - Agentic AI Orchestrator -->
+        <div id="agentic" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">🤖</span>C3 - Agentic AI Orchestrator Components</h2>
+            <div class="diagram-description">
+                Detailed view of the core AI orchestration system showing how multiple AI agents coordinate using CrewAI principles for emergent collective intelligence.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Orchestrator Components
+                    subgraph "Agentic AI Orchestrator"
+                        AgentRegistry[🗂️ Agent Registry<br/>Agent Discovery & Lifecycle<br/>CrewAI Integration]
+                        CoordinationCrew[👥 Coordination Crew<br/>Multi-Agent Workflows<br/>Hierarchical Processing]
+                        TaskPlanner[📋 Intelligent Task Planner<br/>Dynamic Task Generation<br/>Priority-based Scheduling]
+                        ConflictResolver[⚖️ Conflict Resolution Engine<br/>Multi-objective Optimization<br/>Consensus Building]
+                        LearningEngine[🧠 Continuous Learning Engine<br/>RLHF Integration<br/>Performance Optimization]
+                    end
+                    
+                    %% Specialized AI Agents
+                    subgraph "Guardian AI Agents"
+                        CyberAgent[🛡️ Cyber Guardian Agent<br/>Role: Digital Threat Analysis<br/>Tools: NetworkAnalyzer, ThreatCorrelator]
+                        FireAgent[🔥 Fire Oracle Agent<br/>Role: Fire Risk Assessment<br/>Tools: WeatherIntegrator, SwarmCoordinator]
+                        HealthAgent[🏥 Health Oracle Agent<br/>Role: Epidemic Prediction<br/>Tools: BiometricsAnalyzer, EpidemicModeler]
+                        InfraAgent[⚡ Infrastructure Guardian<br/>Role: Critical System Protection<br/>Tools: DependencyMapper, FailurePredictor]
+                        EnviroAgent[🌿 Environmental Sentinel<br/>Role: Ecosystem Monitoring<br/>Tools: SatelliteAnalyzer, ClimateModeler]
+                        LogisticsAgent[🚛 Supply Chain Coordinator<br/>Role: Resource Optimization<br/>Tools: RouteOptimizer, InventoryTracker]
+                    end
+                    
+                    %% AI Tools & Models
+                    subgraph "AI Tools & Models"
+                        LLMService[🗣️ LLM Service<br/>GPT-4 + Claude<br/>Natural Language Processing]
+                        MLPipeline[⚙️ ML Pipeline<br/>TensorFlow + PyTorch<br/>Model Training & Inference]
+                        VectorStore[🧠 Vector Context Store<br/>Pinecone Integration<br/>Semantic Search & RAG]
+                        ReinforcementLearning[🎯 RL Training Environment<br/>Multi-Agent Training<br/>Reward Optimization]
+                    end
+                    
+                    %% Data Sources
+                    subgraph "Real-time Data Sources"
+                        SensorNetwork[📡 Sensor Network<br/>IoT Data Ingestion<br/>10M+ sensors nationwide]
+                        ExternalAPIs[🔌 External APIs<br/>Weather, Traffic, Social<br/>Government Data Feeds]
+                        HistoricalData[📚 Historical Knowledge<br/>Incident Database<br/>Pattern Recognition]
+                    end
+                    
+                    %% Coordination Flow
+                    AgentRegistry --> CoordinationCrew
+                    CoordinationCrew --> TaskPlanner
+                    TaskPlanner --> ConflictResolver
+                    ConflictResolver --> LearningEngine
+                    
+                    %% Agent Interactions
+                    AgentRegistry --> CyberAgent
+                    AgentRegistry --> FireAgent
+                    AgentRegistry --> HealthAgent
+                    AgentRegistry --> InfraAgent
+                    AgentRegistry --> EnviroAgent
+                    AgentRegistry --> LogisticsAgent
+                    
+                    %% Agent Coordination
+                    CoordinationCrew --> CyberAgent
+                    CoordinationCrew --> FireAgent
+                    CoordinationCrew --> HealthAgent
+                    CoordinationCrew --> InfraAgent
+                    CoordinationCrew --> EnviroAgent
+                    CoordinationCrew --> LogisticsAgent
+                    
+                    %% Tool Integration
+                    CyberAgent --> LLMService
+                    FireAgent --> MLPipeline
+                    HealthAgent --> VectorStore
+                    InfraAgent --> ReinforcementLearning
+                    
+                    %% Data Integration
+                    SensorNetwork --> CyberAgent
+                    SensorNetwork --> FireAgent
+                    ExternalAPIs --> HealthAgent
+                    HistoricalData --> VectorStore
+                    
+                    %% Learning Feedback
+                    LearningEngine --> ReinforcementLearning
+                    ReinforcementLearning --> CoordinationCrew
+                    
+                    %% Styling
+                    classDef orchestrator fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+                    classDef agent fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef aiTool fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef dataSource fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    
+                    class AgentRegistry,CoordinationCrew,TaskPlanner,ConflictResolver,LearningEngine orchestrator
+                    class CyberAgent,FireAgent,HealthAgent,InfraAgent,EnviroAgent,LogisticsAgent agent
+                    class LLMService,MLPipeline,VectorStore,ReinforcementLearning aiTool
+                    class SensorNetwork,ExternalAPIs,HistoricalData dataSource
+            </div>
+        </div>
+
+        <!-- C3: Component Diagram - CURUPIRA Subsystem -->
+        <div id="components" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">⚙️</span>C3 - CURUPIRA Hybrid Security Components</h2>
+            <div class="diagram-description">
+                Detailed view of the CURUPIRA subsystem showing how physical and digital security systems are integrated for comprehensive threat detection and response.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Main CURUPIRA Container
+                    subgraph "CURUPIRA - Cyber & Physical Security"
+                        HybridDetector[🔍 Hybrid Threat Detector<br/>Physical-Digital Correlation<br/>Real-time Analysis Engine]
+                        ThreatIntel[🎯 Threat Intelligence Hub<br/>Global Feed Aggregation<br/>Pattern Recognition AI]
+                        ResponseCoordinator[🚨 Response Coordinator<br/>Multi-vector Orchestration<br/>Automated Countermeasures]
+                        ForensicsEngine[🔬 Digital Forensics Engine<br/>Evidence Collection<br/>Chain of Custody]
+                    end
+                    
+                    %% Physical Security Components
+                    subgraph "Physical Security Layer"
+                        PhysicalSensors[📡 Physical Sensor Network<br/>Motion, Vibration, Thermal<br/>Perimeter Protection]
+                        AccessControl[🚪 Access Control Systems<br/>Biometric Authentication<br/>Badge & RFID Integration]
+                        CCTV[📹 CCTV Analytics<br/>Computer Vision AI<br/>Behavioral Analysis]
+                        EnvironmentalMonitors[🌡️ Environmental Monitors<br/>Chemical, Radiation Detection<br/>Air Quality Sensors]
+                    end
+                    
+                    %% Cyber Security Components
+                    subgraph "Cyber Security Layer"
+                        NetworkAnalyzer[🌐 Network Traffic Analyzer<br/>Deep Packet Inspection<br/>Anomaly Detection ML]
+                        EndpointSecurity[💻 Endpoint Security<br/>EDR & XDR Integration<br/>Behavioral Monitoring]
+                        SIEM[📊 Security Information & Event Management<br/>Log Correlation<br/>Real-time Alerting]
+                        VulnScanner[🔍 Vulnerability Scanner<br/>Continuous Assessment<br/>Risk Prioritization]
+                    end
+                    
+                    %% AI/ML Components
+                    subgraph "AI/ML Security Engine"
+                        CorrelationAI[🧠 Correlation AI Engine<br/>Multi-modal Analysis<br/>Threat Pattern Learning]
+                        PredictiveModels[🔮 Predictive Threat Models<br/>Attack Vector Prediction<br/>Risk Scoring Algorithm]
+                        BehavioralAI[👤 Behavioral Analytics AI<br/>User & Entity Analytics<br/>Anomaly Detection]
+                        AutoResponse[⚡ Automated Response AI<br/>Playbook Execution<br/>Dynamic Adaptation]
+                    end
+                    
+                    %% External Integrations
+                    subgraph "External Security Integrations"
+                        GovSecurityAPIs[🏛️ Government Security APIs<br/>ABIN, PF Intelligence<br/>Classified Threat Feeds]
+                        IntlThreatFeeds[🌍 International Threat Feeds<br/>MISP, STIX/TAXII<br/>Global Threat Intelligence]
+                        SecurityVendors[🏢 Security Vendor APIs<br/>Commercial Threat Intel<br/>Vendor-specific Tools]
+                    end
+                    
+                    %% Data Flow - Physical to Hybrid
+                    PhysicalSensors --> HybridDetector
+                    AccessControl --> HybridDetector
+                    CCTV --> HybridDetector
+                    EnvironmentalMonitors --> HybridDetector
+                    
+                    %% Data Flow - Cyber to Hybrid
+                    NetworkAnalyzer --> HybridDetector
+                    EndpointSecurity --> HybridDetector
+                    SIEM --> HybridDetector
+                    VulnScanner --> HybridDetector
+                    
+                    %% AI Processing Flow
+                    HybridDetector --> CorrelationAI
+                    CorrelationAI --> PredictiveModels
+                    PredictiveModels --> BehavioralAI
+                    BehavioralAI --> AutoResponse
+                    
+                    %% Intelligence Integration
+                    ThreatIntel --> GovSecurityAPIs
+                    ThreatIntel --> IntlThreatFeeds
+                    ThreatIntel --> SecurityVendors
+                    ThreatIntel --> CorrelationAI
+                    
+                    %% Response Coordination
+                    AutoResponse --> ResponseCoordinator
+                    ResponseCoordinator --> ForensicsEngine
+                    
+                    %% Cross-system Communication
+                    ResponseCoordinator -.->|Infrastructure Protection| BOITATA[⚡ BOITATÁ<br/>Infrastructure Protection]
+                    ResponseCoordinator -.->|Emergency Coordination| SACI[🔥 SACI<br/>Emergency Response]
+                    
+                    %% Feedback Loops
+                    ForensicsEngine --> ThreatIntel
+                    ResponseCoordinator --> PredictiveModels
+                    
+                    %% Styling
+                    classDef mainComponent fill:#f44336,stroke:#d32f2f,stroke-width:3px,color:#fff
+                    classDef physicalSec fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+                    classDef cyberSec fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef aiComponent fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    classDef crossSystem fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    
+                    class HybridDetector,ThreatIntel,ResponseCoordinator,ForensicsEngine mainComponent
+                    class PhysicalSensors,AccessControl,CCTV,EnvironmentalMonitors physicalSec
+                    class NetworkAnalyzer,EndpointSecurity,SIEM,VulnScanner cyberSec
+                    class CorrelationAI,PredictiveModels,BehavioralAI,AutoResponse aiComponent
+                    class GovSecurityAPIs,IntlThreatFeeds,SecurityVendors external
+                    class BOITATA,SACI crossSystem
+            </div>
+        </div>
+
+        <!-- Data Flow Architecture -->
+        <div id="data" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">🗄️</span>Data Flow & Processing Architecture</h2>
+            <div class="diagram-description">
+                Shows how data flows through the system, from sensor ingestion to AI processing and coordinated response. Handles 10M+ events per second with real-time processing.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Data Sources
+                    subgraph "Data Sources Layer"
+                        IoTSensors[📡 IoT Sensor Network<br/>10M+ sensors<br/>Environmental, Security, Health]
+                        SatelliteData[🛰️ Satellite Data<br/>Earth Observation<br/>Weather & Climate]
+                        SocialMedia[📱 Social Media Feeds<br/>Emergency Reports<br/>Sentiment Analysis]
+                        GovData[🏛️ Government Data<br/>Official Statistics<br/>Policy Information]
+                        UtilityData[⚡ Utility Data<br/>Power, Water, Telecom<br/>Infrastructure Status]
+                    end
+                    
+                    %% Ingestion Layer
+                    subgraph "Data Ingestion Layer"
+                        KafkaIngestion[📨 Kafka Ingestion<br/>Event Streaming<br/>10M+ events/sec]
+                        StreamProcessor[⚡ Stream Processing<br/>Apache Spark<br/>Real-time ETL]
+                        DataValidator[✅ Data Validation<br/>Quality Gates<br/>Schema Enforcement]
+                    end
+                    
+                    %% Processing Layer
+                    subgraph "AI Processing Layer"
+                        FeatureStore[🏪 Feature Store<br/>Feast Integration<br/>Real-time Features]
+                        MLPipelines[🤖 ML Pipelines<br/>TensorFlow/PyTorch<br/>Model Inference]
+                        EventCorrelation[🔗 Event Correlation<br/>Complex Event Processing<br/>Pattern Detection]
+                        AnomalyDetection[⚠️ Anomaly Detection<br/>Unsupervised Learning<br/>Statistical Analysis]
+                    end
+                    
+                    %% Storage Layer
+                    subgraph "Multi-Modal Storage"
+                        TimeSeriesDB[📊 InfluxDB<br/>Time Series Data<br/>Sensor Readings & Metrics]
+                        GraphDatabase[🕸️ Neo4j<br/>Relationship Data<br/>Infrastructure Dependencies]
+                        VectorDatabase[🧠 Pinecone<br/>Embeddings<br/>Semantic Search]
+                        ObjectStorage[📦 S3 Object Storage<br/>Raw Data Archive<br/>Model Artifacts]
+                        OperationalDB[🗃️ PostgreSQL<br/>Operational Data<br/>User & Configuration]
+                    end
+                    
+                    %% Analytics & AI Layer
+                    subgraph "Advanced Analytics"
+                        PredictiveModels[🔮 Predictive Models<br/>Threat Forecasting<br/>Risk Assessment]
+                        RealtimeAnalytics[⚡ Real-time Analytics<br/>Stream Analytics<br/>Live Dashboards]
+                        HistoricalAnalysis[📈 Historical Analysis<br/>Trend Analysis<br/>Pattern Mining]
+                        SimulationEngine[🎲 Simulation Engine<br/>Scenario Modeling<br/>Impact Analysis]
+                    end
+                    
+                    %% Output Layer
+                    subgraph "Response & Action Layer"
+                        AlertEngine[🚨 Alert Engine<br/>Multi-channel Alerts<br/>Priority-based Delivery]
+                        ActionOrchestrator[🎯 Action Orchestrator<br/>Automated Response<br/>Workflow Execution]
+                        ReportingEngine[📋 Reporting Engine<br/>Dashboard Generation<br/>Compliance Reports]
+                        APIGateway[🔌 API Gateway<br/>External Integration<br/>Rate Limiting]
+                    end
+                    
+                    %% Data Flow Connections
+                    IoTSensors --> KafkaIngestion
+                    SatelliteData --> KafkaIngestion
+                    SocialMedia --> KafkaIngestion
+                    GovData --> KafkaIngestion
+                    UtilityData --> KafkaIngestion
+                    
+                    KafkaIngestion --> StreamProcessor
+                    StreamProcessor --> DataValidator
+                    DataValidator --> FeatureStore
+                    
+                    FeatureStore --> MLPipelines
+                    FeatureStore --> EventCorrelation
+                    FeatureStore --> AnomalyDetection
+                    
+                    MLPipelines --> TimeSeriesDB
+                    EventCorrelation --> GraphDatabase
+                    AnomalyDetection --> VectorDatabase
+                    
+                    %% Storage to Analytics
+                    TimeSeriesDB --> PredictiveModels
+                    GraphDatabase --> SimulationEngine
+                    VectorDatabase --> RealtimeAnalytics
+                    OperationalDB --> HistoricalAnalysis
+                    
+                    %% Analytics to Response
+                    PredictiveModels --> AlertEngine
+                    RealtimeAnalytics --> ActionOrchestrator
+                    HistoricalAnalysis --> ReportingEngine
+                    SimulationEngine --> APIGateway
+                    
+                    %% Cross-connections
+                    EventCorrelation --> AlertEngine
+                    AnomalyDetection --> ActionOrchestrator
+                    
+                    %% Styling
+                    classDef dataSource fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef ingestion fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+                    classDef processing fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef storage fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef analytics fill:#f44336,stroke:#d32f2f,stroke-width:2px,color:#fff
+                    classDef output fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    
+                    class IoTSensors,SatelliteData,SocialMedia,GovData,UtilityData dataSource
+                    class KafkaIngestion,StreamProcessor,DataValidator ingestion
+                    class FeatureStore,MLPipelines,EventCorrelation,AnomalyDetection processing
+                    class TimeSeriesDB,GraphDatabase,VectorDatabase,ObjectStorage,OperationalDB storage
+                    class PredictiveModels,RealtimeAnalytics,HistoricalAnalysis,SimulationEngine analytics
+                    class AlertEngine,ActionOrchestrator,ReportingEngine,APIGateway output
+            </div>
+        </div>
+
+        <!-- C3: Component Diagram - SACI Fire Prevention -->
+        <div id="saci-components" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">🔥</span>C3 - SACI Fire Prevention Components</h2>
+            <div class="diagram-description">
+                Detailed view of the SACI subsystem showing swarm intelligence for fire detection and response coordination. Features distributed sensor networks and autonomous coordination algorithms.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Main SACI Container
+                    subgraph "SACI - Fire Prevention & Response"
+                        SwarmCoordinator[🐝 Swarm Intelligence Coordinator<br/>Distributed Decision Making<br/>Emergence-based Coordination]
+                        FireRiskEngine[🔥 Fire Risk Prediction Engine<br/>ML-based Risk Assessment<br/>Weather-Vegetation Correlation]
+                        ResponsePlanner[📋 Autonomous Response Planner<br/>Resource Optimization<br/>Multi-objective Planning]
+                        CommunicationHub[📡 Emergency Communication Hub<br/>Multi-channel Broadcasting<br/>Priority Message Routing]
+                    end
+                    
+                    %% Sensor Network Layer
+                    subgraph "Distributed Sensor Network"
+                        TempHumiditySensors[🌡️ Temperature & Humidity<br/>DHT22, BME280<br/>Microclimate Monitoring]
+                        SmokeSensors[💨 Smoke Detection<br/>MQ-2, MQ-135<br/>Particle & Gas Detection]
+                        WindSensors[💨 Wind Monitoring<br/>Anemometer, Direction<br/>Fire Spread Prediction]
+                        CameraSensors[📷 Computer Vision<br/>Thermal & Optical<br/>Early Fire Detection]
+                        VibrationSensors[📳 Seismic Sensors<br/>ADXL345<br/>Equipment Vibration Detection]
+                    end
+                    
+                    %% AI/ML Components
+                    subgraph "Fire Intelligence Engine"
+                        SwarmAI[🧠 Swarm Intelligence AI<br/>Ant Colony Optimization<br/>Distributed Coordination]
+                        FireSpreadModel[🔥 Fire Spread Predictor<br/>Cellular Automata<br/>Physics-based Simulation]
+                        WeatherIntegration[🌤️ Weather Correlation AI<br/>Meteorological Analysis<br/>Risk Factor Weighting]
+                        EvacuationOptimizer[🚶 Evacuation Route AI<br/>Pathfinding Algorithms<br/>Dynamic Route Optimization]
+                    end
+                    
+                    %% Response Coordination
+                    subgraph "Response Coordination Layer"
+                        FireBrigadeAPI[🚒 Fire Brigade Integration<br/>Resource Coordination<br/>Real-time Communication]
+                        AerialCoordination[🚁 Aerial Resource Mgmt<br/>Drone & Aircraft<br/>Water Drop Coordination]
+                        EvacuationManagement[🏃 Evacuation Coordinator<br/>Population Movement<br/>Safe Zone Management]
+                        SupplyChainCoord[📦 Supply Chain Coordination<br/>Equipment & Personnel<br/>Logistics Optimization]
+                    end
+                    
+                    %% External Integrations
+                    subgraph "External Data Sources"
+                        WeatherServices[🌦️ Weather APIs<br/>INMET, Weather.gov<br/>Real-time Meteorology]
+                        SatelliteImagery[🛰️ Satellite Data<br/>INPE, NASA FIRMS<br/>Fire Hotspot Detection]
+                        VegetationMaps[🌲 Vegetation Database<br/>IBGE, MapBiomas<br/>Fuel Load Assessment]
+                        TopographyData[⛰️ Topography Services<br/>Elevation Models<br/>Terrain Analysis]
+                    end
+                    
+                    %% Sensor Data Flow
+                    TempHumiditySensors --> SwarmCoordinator
+                    SmokeSensors --> SwarmCoordinator
+                    WindSensors --> SwarmCoordinator
+                    CameraSensors --> SwarmCoordinator
+                    VibrationSensors --> SwarmCoordinator
+                    
+                    %% AI Processing Flow
+                    SwarmCoordinator --> SwarmAI
+                    SwarmAI --> FireSpreadModel
+                    FireRiskEngine --> WeatherIntegration
+                    WeatherIntegration --> EvacuationOptimizer
+                    
+                    %% Response Coordination Flow
+                    ResponsePlanner --> FireBrigadeAPI
+                    ResponsePlanner --> AerialCoordination
+                    ResponsePlanner --> EvacuationManagement
+                    ResponsePlanner --> SupplyChainCoord
+                    
+                    %% External Data Integration
+                    WeatherServices --> WeatherIntegration
+                    SatelliteImagery --> FireRiskEngine
+                    VegetationMaps --> FireSpreadModel
+                    TopographyData --> EvacuationOptimizer
+                    
+                    %% Cross-system Communication
+                    CommunicationHub -.->|Infrastructure Protection| BOITATA[⚡ BOITATÁ<br/>Infrastructure Coordination]
+                    CommunicationHub -.->|Emergency Communications| ANHANGA[📡 ANHANGÁ<br/>Mesh Communications]
+                    
+                    %% Data and Intelligence Flow
+                    FireRiskEngine --> SwarmCoordinator
+                    SwarmAI --> ResponsePlanner
+                    FireSpreadModel --> CommunicationHub
+                    
+                    %% Styling
+                    classDef mainComponent fill:#ff5722,stroke:#d84315,stroke-width:3px,color:#fff
+                    classDef sensorComponent fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef aiComponent fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef responseComponent fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    classDef crossSystem fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+                    
+                    class SwarmCoordinator,FireRiskEngine,ResponsePlanner,CommunicationHub mainComponent
+                    class TempHumiditySensors,SmokeSensors,WindSensors,CameraSensors,VibrationSensors sensorComponent
+                    class SwarmAI,FireSpreadModel,WeatherIntegration,EvacuationOptimizer aiComponent
+                    class FireBrigadeAPI,AerialCoordination,EvacuationManagement,SupplyChainCoord responseComponent
+                    class WeatherServices,SatelliteImagery,VegetationMaps,TopographyData external
+                    class BOITATA,ANHANGA crossSystem
+            </div>
+        </div>
+
+        <!-- C3: Component Diagram - BOITATÁ Urban Resilience -->
+        <div id="boitata-components" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">⚡</span>C3 - BOITATÁ Urban Infrastructure Components</h2>
+            <div class="diagram-description">
+                Detailed view of the BOITATÁ subsystem for preventing and managing urban cascade failures. Features digital twin technology and complex systems modeling.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Main BOITATÁ Container
+                    subgraph "BOITATÁ - Urban Infrastructure Resilience"
+                        DigitalTwin[🏙️ Urban Digital Twin<br/>Real-time City Modeling<br/>Complex Systems Simulation]
+                        CascadePredictor[⚡ Cascade Failure Predictor<br/>System Dynamics Modeling<br/>Failure Propagation Analysis]
+                        MitigationPlanner[🛠️ Mitigation Strategy Planner<br/>Multi-objective Optimization<br/>Resource Allocation AI]
+                        InfraCoordinator[📊 Infrastructure Coordinator<br/>Cross-system Integration<br/>Priority Management]
+                    end
+                    
+                    %% Infrastructure Monitoring
+                    subgraph "Infrastructure Monitoring Layer"
+                        PowerGrid[⚡ Power Grid Monitoring<br/>SCADA Integration<br/>Load & Capacity Tracking]
+                        WaterSystems[💧 Water System Monitoring<br/>COPASA Integration<br/>Flow & Quality Sensors]
+                        TransportSystems[🚌 Transportation Networks<br/>Traffic Management<br/>Public Transit Integration]
+                        TelecomNetworks[📡 Telecom Infrastructure<br/>Network Performance<br/>Connectivity Monitoring]
+                        HealthcareSystems[🏥 Healthcare Infrastructure<br/>Hospital Capacity<br/>Emergency Services]
+                    end
+                    
+                    %% Dependency Analysis Engine
+                    subgraph "Dependency Analysis Engine"
+                        DependencyMapper[🕸️ Dependency Graph Builder<br/>Neo4j Integration<br/>System Relationship Mapping]
+                        CriticalityAnalyzer[🎯 Criticality Assessment<br/>Network Analysis<br/>Vulnerability Scoring]
+                        FailureSimulator[🔄 Failure Simulation Engine<br/>Monte Carlo Methods<br/>Scenario Generation]
+                        RecoveryPlanner[🔧 Recovery Strategy AI<br/>Restoration Sequencing<br/>Resource Optimization]
+                    end
+                    
+                    %% Predictive Analytics
+                    subgraph "Predictive Analytics Engine"
+                        LoadPredictor[📈 Load Prediction Models<br/>Time Series Forecasting<br/>Demand Anticipation]
+                        FailurePrediction[⚠️ Failure Prediction AI<br/>Anomaly Detection<br/>Maintenance Scheduling]
+                        CascadeModeling[🌊 Cascade Effect Modeler<br/>Complex Network Theory<br/>Percolation Analysis]
+                        ImpactAssessment[💥 Impact Assessment AI<br/>Economic & Social Impact<br/>Risk Quantification]
+                    end
+                    
+                    %% Response Coordination
+                    subgraph "Response & Recovery Coordination"
+                        EmergencyResponse[🚨 Emergency Response Coord<br/>Multi-agency Coordination<br/>Resource Deployment]
+                        UtilityCoordination[🔧 Utility Company Interface<br/>CEMIG, COPASA Integration<br/>Service Restoration]
+                        PublicCommunication[📢 Public Communication<br/>Alert Systems<br/>Information Dissemination]
+                        RecoveryManagement[🔄 Recovery Management<br/>Progress Tracking<br/>Milestone Coordination]
+                    end
+                    
+                    %% External Integrations
+                    subgraph "External Data Sources"
+                        UtilityAPIs[🏢 Utility Company APIs<br/>CEMIG, COPASA, Telefonica<br/>Real-time Infrastructure Data]
+                        GovSystems[🏛️ Government Systems<br/>Civil Defense, Traffic Control<br/>Municipal Integration]
+                        WeatherData[🌤️ Weather & Environmental<br/>Meteorological Services<br/>Environmental Conditions]
+                        EconomicData[💰 Economic Impact Data<br/>Business Continuity<br/>Financial Assessment]
+                    end
+                    
+                    %% Monitoring Data Flow
+                    PowerGrid --> DigitalTwin
+                    WaterSystems --> DigitalTwin
+                    TransportSystems --> DigitalTwin
+                    TelecomNetworks --> DigitalTwin
+                    HealthcareSystems --> DigitalTwin
+                    
+                    %% Dependency Analysis Flow
+                    DigitalTwin --> DependencyMapper
+                    DependencyMapper --> CriticalityAnalyzer
+                    CriticalityAnalyzer --> FailureSimulator
+                    FailureSimulator --> RecoveryPlanner
+                    
+                    %% Predictive Analytics Flow
+                    DigitalTwin --> LoadPredictor
+                    LoadPredictor --> FailurePrediction
+                    FailurePrediction --> CascadeModeling
+                    CascadeModeling --> ImpactAssessment
+                    
+                    %% Processing Integration
+                    DependencyMapper --> CascadePredictor
+                    ImpactAssessment --> MitigationPlanner
+                    RecoveryPlanner --> InfraCoordinator
+                    
+                    %% Response Coordination Flow
+                    MitigationPlanner --> EmergencyResponse
+                    InfraCoordinator --> UtilityCoordination
+                    CascadePredictor --> PublicCommunication
+                    EmergencyResponse --> RecoveryManagement
+                    
+                    %% External Data Integration
+                    UtilityAPIs --> PowerGrid
+                    UtilityAPIs --> WaterSystems
+                    GovSystems --> TransportSystems
+                    WeatherData --> LoadPredictor
+                    EconomicData --> ImpactAssessment
+                    
+                    %% Cross-system Communication
+                    InfraCoordinator -.->|Security Coordination| CURUPIRA[🛡️ CURUPIRA<br/>Security Protection]
+                    InfraCoordinator -.->|Emergency Communications| ANHANGA[📡 ANHANGÁ<br/>Backup Communications]
+                    
+                    %% Feedback Loops
+                    RecoveryManagement --> DigitalTwin
+                    UtilityCoordination --> CascadePredictor
+                    
+                    %% Styling
+                    classDef mainComponent fill:#ff9800,stroke:#f57c00,stroke-width:3px,color:#fff
+                    classDef monitoring fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef analysis fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef predictive fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef response fill:#f44336,stroke:#d32f2f,stroke-width:2px,color:#fff
+                    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    classDef crossSystem fill:#795548,stroke:#5d4037,stroke-width:2px,color:#fff
+                    
+                    class DigitalTwin,CascadePredictor,MitigationPlanner,InfraCoordinator mainComponent
+                    class PowerGrid,WaterSystems,TransportSystems,TelecomNetworks,HealthcareSystems monitoring
+                    class DependencyMapper,CriticalityAnalyzer,FailureSimulator,RecoveryPlanner analysis
+                    class LoadPredictor,FailurePrediction,CascadeModeling,ImpactAssessment predictive
+                    class EmergencyResponse,UtilityCoordination,PublicCommunication,RecoveryManagement response
+                    class UtilityAPIs,GovSystems,WeatherData,EconomicData external
+                    class CURUPIRA,ANHANGA crossSystem
+            </div>
+        </div>
+
+        <!-- Security Architecture -->
+        <div id="security" class="diagram-section">
+            <h2 class="diagram-title"><span class="icon">🔒</span>Security Architecture & Zero-Trust Implementation</h2>
+            <div class="diagram-description">
+                Comprehensive security architecture showing multi-layered protection, quantum-resistant encryption, and zero-trust principles across all Guardian subsystems.
+            </div>
+            <div class="mermaid">
+                graph TB
+                    %% Identity & Access Layer
+                    subgraph "Identity & Access Management"
+                        IdentityProvider[🔐 Identity Provider<br/>Multi-factor Authentication<br/>Biometric Integration]
+                        RBAC[👥 Role-Based Access Control<br/>Dynamic Permissions<br/>Principle of Least Privilege]
+                        PolicyEngine[📋 Policy Enforcement<br/>ABAC Implementation<br/>Context-aware Decisions]
+                        AuditLogger[📝 Audit & Compliance<br/>Immutable Logs<br/>Compliance Reporting]
+                    end
+                    
+                    %% Network Security Layer
+                    subgraph "Network Security"
+                        ZeroTrustGateway[🚪 Zero-Trust Gateway<br/>Never Trust, Always Verify<br/>Micro-segmentation]
+                        NetworkSegmentation[🔗 Network Segmentation<br/>Software-defined Perimeters<br/>Dynamic Isolation]
+                        QuantumEncryption[🔒 Quantum-Resistant Crypto<br/>Post-quantum Algorithms<br/>Key Distribution]
+                        DDoSProtection[🛡️ DDoS Protection<br/>Traffic Analysis<br/>Attack Mitigation]
+                    end
+                    
+                    %% Data Protection Layer
+                    subgraph "Data Protection"
+                        DataClassification[📊 Data Classification<br/>Automatic Labeling<br/>Sensitivity Scoring]
+                        EncryptionEngine[🔐 Encryption at Rest/Transit<br/>AES-256 + Quantum-safe<br/>Key Rotation]
+                        DataMasking[🎭 Data Masking & Anonymization<br/>LGPD Compliance<br/>Privacy Protection]
+                        BackupSecurity[💾 Secure Backup<br/>Immutable Storage<br/>Disaster Recovery]
+                    end
+                    
+                    %% Threat Detection Layer
+                    subgraph "Advanced Threat Detection"
+                        AIThreatDetection[🧠 AI Threat Detection<br/>Behavioral Analytics<br/>Anomaly Detection]
+                        ThreatIntelligence[🎯 Threat Intelligence<br/>Global Feed Integration<br/>IOC Correlation]
+                        IncidentResponse[🚨 Automated Incident Response<br/>SOAR Integration<br/>Playbook Execution]
+                        ForensicsCapability[🔍 Digital Forensics<br/>Evidence Collection<br/>Chain of Custody]
+                    end
+                    
+                    %% Guardian Subsystem Security
+                    subgraph "Subsystem Security Integration"
+                        CurupiraSecurity[🦶 CURUPIRA Security<br/>Hybrid Threat Detection<br/>Critical Infrastructure Protection]
+                        SaciSecurity[🔥 SACI Security<br/>Sensor Network Protection<br/>Emergency Communication Security]
+                        IaraSecurity[🏥 IARA Security<br/>Health Data Protection<br/>HIPAA/LGPD Compliance]
+                        BoitataSecurity[⚡ BOITATÁ Security<br/>Infrastructure Access Control<br/>SCADA Protection]
+                        AnhangaSecurity[📡 ANHANGÁ Security<br/>Secure Mesh Networks<br/>Emergency Crypto]
+                    end
+                    
+                    %% Compliance & Governance
+                    subgraph "Compliance & Governance"
+                        LGPDCompliance[📋 LGPD Compliance<br/>Privacy by Design<br/>Data Subject Rights]
+                        SOCCompliance[🏛️ SOC 2 Type II<br/>Security Controls<br/>Audit Readiness]
+                        ISO27001[🛡️ ISO 27001<br/>Information Security<br/>Risk Management]
+                        GovSecurity[🏛️ Government Security<br/>GSI Certification<br/>National Security Clearance]
+                    end
+                    
+                    %% Security Flow
+                    IdentityProvider --> RBAC
+                    RBAC --> PolicyEngine
+                    PolicyEngine --> AuditLogger
+                    
+                    ZeroTrustGateway --> NetworkSegmentation
+                    NetworkSegmentation --> QuantumEncryption
+                    QuantumEncryption --> DDoSProtection
+                    
+                    DataClassification --> EncryptionEngine
+                    EncryptionEngine --> DataMasking
+                    DataMasking --> BackupSecurity
+                    
+                    AIThreatDetection --> ThreatIntelligence
+                    ThreatIntelligence --> IncidentResponse
+                    IncidentResponse --> ForensicsCapability
+                    
+                    %% Integration with Guardian Subsystems
+                    PolicyEngine --> CurupiraSecurity
+                    PolicyEngine --> SaciSecurity
+                    PolicyEngine --> IaraSecurity
+                    PolicyEngine --> BoitataSecurity
+                    PolicyEngine --> AnhangaSecurity
+                    
+                    ZeroTrustGateway --> CurupiraSecurity
+                    ZeroTrustGateway --> SaciSecurity
+                    ZeroTrustGateway --> IaraSecurity
+                    ZeroTrustGateway --> BoitataSecurity
+                    ZeroTrustGateway --> AnhangaSecurity
+                    
+                    EncryptionEngine --> CurupiraSecurity
+                    EncryptionEngine --> SaciSecurity
+                    EncryptionEngine --> IaraSecurity
+                    EncryptionEngine --> BoitataSecurity
+                    EncryptionEngine --> AnhangaSecurity
+                    
+                    AIThreatDetection --> CurupiraSecurity
+                    AIThreatDetection --> SaciSecurity
+                    AIThreatDetection --> IaraSecurity
+                    AIThreatDetection --> BoitataSecurity
+                    AIThreatDetection --> AnhangaSecurity
+                    
+                    %% Compliance Integration
+                    AuditLogger --> LGPDCompliance
+                    AuditLogger --> SOCCompliance
+                    AuditLogger --> ISO27001
+                    AuditLogger --> GovSecurity
+                    
+                    %% Cross-references
+                    ForensicsCapability --> CurupiraSecurity
+                    BackupSecurity --> AnhangaSecurity
+                    
+                    %% Styling
+                    classDef identity fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+                    classDef network fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+                    classDef dataProtection fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+                    classDef threatDetection fill:#f44336,stroke:#d32f2f,stroke-width:2px,color:#fff
+                    classDef subsystemSec fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+                    classDef compliance fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+                    
+                    class IdentityProvider,RBAC,PolicyEngine,AuditLogger identity
+                    class ZeroTrustGateway,NetworkSegmentation,QuantumEncryption,DDoSProtection network
+                    class DataClassification,EncryptionEngine,DataMasking,BackupSecurity dataProtection
+                    class AIThreatDetection,ThreatIntelligence,IncidentResponse,ForensicsCapability threatDetection
+                    class CurupiraSecurity,SaciSecurity,IaraSecurity,BoitataSecurity,AnhangaSecurity subsystemSec
+                    class LGPDCompliance,SOCCompliance,ISO27001,GovSecurity compliance
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#4fc3f7',
+                primaryTextColor: '#0d47a1',
+                primaryBorderColor: '#01579b',
+                lineColor: '#37474f',
+                secondaryColor: '#81c784',
+                tertiaryColor: '#fff3e0'
+            }
+        });
+    </script>
+</body>
+</html>
