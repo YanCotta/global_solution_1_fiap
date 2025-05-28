@@ -158,7 +158,7 @@ O **Sistema Guardião** é uma arquitetura nacional brasileira que combina 5 sub
 
 ## 📚 Estrutura do Repositório
 
-```text
+```plaintext
 📁 global_solution_1_fiap/
 ├── 📄 README.md                           # Este documento de visão geral
 ├── 📄 MASTER_DOCUMENTATION.md             # Documentação técnica consolidada
@@ -191,7 +191,7 @@ O **Sistema Guardião** é uma arquitetura nacional brasileira que combina 5 sub
 │   └── 📄 init.sql                      # Inicialização do banco
 ├── 📁 docs/                              # Documentação detalhada
 │   ├── 📄 DATA_MODELS.md                # Esquemas de banco de dados
-│   ├── 📄 ARCHITECTURE_SPECIFICATION.md # Detalhes da arquitetura técnica
+│   ├── 📄 ARCHITECTURE_SPECIFICATION.md  # Detalhes da arquitetura técnica
 │   ├── 📄 SACI_MVP_SPECIFICATION.md     # Especificação do MVP SACI
 │   ├── 📄 DATA_FLOWS.md                # Fluxos de dados entre subsistemas
 │   ├── 📄 TECH_DEPENDENCIES.md         # Matriz de dependências tecnológicas
