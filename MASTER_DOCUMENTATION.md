@@ -39,12 +39,12 @@ O Sistema Guardião oferece um valor transformador para múltiplos stakeholders:
 
 ### Inovação Central: IA Agêntica em Escala Nacional
 
-**Coordenação Multi-Agente:** Sistema onde cada subsistema funciona como um agente inteligente autônomo, utilizando princípios de CrewAI e LangGraph para coordenação emergente.
+**Coordenação Multi-Agente:** Sistema onde cada subsistema funciona como um agente inteligente autônomo, utilizando princípios de CrewAI (fundada por um brasileiro) e LangGraph para coordenação emergente.
 
 **Valores Únicos de Proposta:**
-- **Inteligência Preventiva:** Alerta 72 horas antes de 85% dos eventos catastróficos
+- **Inteligência Preventiva:** Alertas dias antes de 85% dos eventos catastróficos
 - **Prevenção de Cascatas:** Intervenção automatizada antes da propagação de falhas
-- **Otimização de Recursos:** Alocação dinâmica reduzindo tempo de resposta em 60%
+- **Otimização de Recursos:** Alocação dinâmica reduzindo tempo de resposta em pelo menos 60%
 - **Integração Cultural:** Nomenclatura baseada no folclore brasileiro para confiança pública
 
 ### Os Cinco Guardiões Digitais
@@ -339,7 +339,7 @@ CREATE (water)-[:DEPENDS_ON {
 ### Linguagens e Frameworks Core
 
 **Backend Principal:**
-- **Python 3.11+** (85% do sistema)
+- **Python 3.11+** (85% do sistema) > Possibilidade de migrar certas partes do sistema para C++, Rust ou Go, para otimizar temporalmente os processos 
   - FastAPI (API Gateway)
   - PyTorch 2.0+ (Modelos neurais)
   - CrewAI (Coordenação multi-agente)
@@ -496,8 +496,8 @@ CREATE (water)-[:DEPENDS_ON {
 - **Escalabilidade:** 10M+ sensores simultâneos
 
 ### KPIs de Impacto Social
-- **Redução de Mortalidade:** -40% em eventos extremos
-- **Economia de Recursos:** R$ 2 bilhões/ano em danos evitados
+- **Redução de Mortalidade:** -60% em eventos extremos
+- **Economia de Recursos:** R$ 2-6 bilhões/ano em danos evitados
 - **Tempo de Recuperação:** -60% pós-desastre
 - **Cobertura Populacional:** 80% de Minas Gerais no piloto
 
