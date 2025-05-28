@@ -57,13 +57,13 @@ O **Sistema Guardião** é uma arquitetura nacional brasileira que combina 5 sub
 │        (GuardianCentralOrchestrator + CrewAI)           │
 ├─────────────────────────────────────────────────────────┤
 │              SUBSISTEMAS ESPECIALIZADOS                 │
-│     CURUPIRA │ IARA │ SACI │ BOITATÁ │ ANHANGÁ        │
+│     CURUPIRA │ IARA │ SACI │ BOITATÁ │ ANHANGÁ          │
 ├─────────────────────────────────────────────────────────┤
 │            CONECTIVIDADE AVANÇADA                       │
-│    (5G/6G, LoRaWAN, Mesh Networks, Satélite)          │
+│    (5G/6G, LoRaWAN, Mesh Networks, Satélite)            │
 ├─────────────────────────────────────────────────────────┤
 │           SENSORIAMENTO DISTRIBUÍDO                     │
-│         (IoT Edge + AI Distribuída)                    │
+│         (IoT Edge + AI Distribuída)                     │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -160,13 +160,55 @@ O **Sistema Guardião** é uma arquitetura nacional brasileira que combina 5 sub
 
 ```text
 📁 global_solution_1_fiap/
-├── 📄 README.md (este arquivo)
-├── 📄 MASTER_DOCUMENTATION.md (documentação principal)
-├── 📄 sistema_guardiao_c4_diagrams.html (diagramas C4)
-├── 📁 src/ (código do MVP)
-├── 📁 docs/ (documentação adicional)
-├── 📁 hardware/ (firmware ESP32)
-└── 📁 assets/ (imagens, diagramas, vídeos)
+├── 📄 README.md                           # Este documento de visão geral
+├── 📄 MASTER_DOCUMENTATION.md             # Documentação técnica consolidada
+├── 📄 sistema_guardiao_c4_diagrams.html   # Diagramas C4 interativos
+├── 📄 10_day_implementation_plan.md       # Plano detalhado de implementação
+├── 📁 src/
+│   └── 📁 saci_mvp/                      # MVP do subsistema SACI
+│       ├── 📄 README.md                  # Documentação do MVP SACI
+│       ├── 📁 esp32_firmware/            # Firmware para os sensores ESP32
+│       │   ├── 📄 main.py                # Código principal MicroPython
+│       │   └── 📄 config.json            # Configurações do dispositivo
+│       ├── 📁 ml_model/                  # Modelos de predição de incêndio
+│       │   ├── 📄 train.py               # Script de treinamento do modelo
+│       │   └── 📄 predict.py             # Script de predição
+│       ├── 📁 api/                       # Backend FastAPI
+│       │   ├── 📄 main.py                # Ponto de entrada da API
+│       │   └── 📁 models/                # Modelos de dados
+│       └── 📁 dashboard/                 # Frontend do sistema
+│           ├── 📄 index.html             # Página principal
+│           └── 📁 assets/                # Recursos estáticos
+├── 📁 data/                              # Datasets e dados
+│   └── 📁 synthetic/                     # Dados sintéticos para testes
+│       └── 📄 fire_risk_dataset.csv      # Dataset de treino para ML
+├── 📁 docker/                            # Configurações Docker
+│   └── 📁 api/                           # Docker config para API
+│       └── 📄 Dockerfile                 # Dockerfile da API SACI
+├── 📁 kubernetes/                        # Configurações K8s
+│   └── 📄 saci_api_deployment.yaml       # Deployment da API SACI
+├── 📁 sql/                              # Scripts SQL
+│   └── 📄 init.sql                      # Inicialização do banco
+├── 📁 docs/                              # Documentação detalhada
+│   ├── 📄 DATA_MODELS.md                # Esquemas de banco de dados
+│   ├── 📄 ARCHITECTURE_SPECIFICATION.md # Detalhes da arquitetura técnica
+│   ├── 📄 SACI_MVP_SPECIFICATION.md     # Especificação do MVP SACI
+│   ├── 📄 DATA_FLOWS.md                # Fluxos de dados entre subsistemas
+│   ├── 📄 TECH_DEPENDENCIES.md         # Matriz de dependências tecnológicas
+│   ├── 📄 API_SPECIFICATION.md          # Documentação da API
+│   └── 📄 IOT_PROTOCOLS.md             # Protocolos de comunicação IoT
+├── 📁 hardware/                          # Especificações de hardware
+│   ├── 📄 bom.csv                       # Lista de materiais (BOM)
+│   ├── 📁 schematics/                   # Esquemáticos de circuito
+│   └── 📁 3d_models/                    # Modelos 3D para cases 
+├── 📁 assets/                           # Recursos do projeto
+│   ├── 📁 images/                       # Imagens e diagramas
+│   ├── 📁 presentations/                # Apresentações do projeto
+│   └── 📁 videos/                       # Vídeos demonstrativos
+├── 📁 .github/workflows/                # Pipelines CI/CD
+├── 📄 requirements.txt                   # Dependências Python
+├── 📄 docker-compose.yml                 # Configuração de containers
+└── 📄 LICENSE                           # Licença do projeto
 ```
 
 ---
