@@ -1,0 +1,9 @@
+# Placeholder for Kubernetes ConfigMaps
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: saci-config
+data:
+  DATABASE_URL: "postgresql://user:password@host:port/database"
+  KAFKA_BROKER: "kafka-broker:9092"
