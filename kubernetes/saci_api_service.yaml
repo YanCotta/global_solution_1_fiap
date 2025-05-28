@@ -1,0 +1,14 @@
+# Placeholder for Kubernetes Services
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: saci-api-service
+spec:
+  selector:
+    app: saci-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
