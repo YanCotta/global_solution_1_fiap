@@ -111,178 +111,159 @@ graph TD
 ## 3. SOFTWARE ARCHITECTURE
 
 ### 3.1 ESP32 Firmware Specification
-```cpp
-// main.cpp - SACI ESP32 Firmware v1.0
-#include <WiFi.h>
-#include <LoRa.h>
-#include <DHT.h>
-#include <ArduinoJson.h>
-#include <esp_sleep.h>
+```python
+# SACI MVP - ESP32 Sensor Node (MicroPython)
+# Sistema Guardião - Fire Prevention and Detection
+# Author: Yan Cotta
+# Date: May 30, 2025
 
-class SACIFireSensor {
-private:
-    // Sensor pins
-    const int DHT_PIN = 4;
-    const int MQ2_PIN = A0;
-    const int CO2_RX = 16;
-    const int CO2_TX = 17;
-    const int BH1750_SDA = 21;
-    const int BH1750_SCL = 22;
-    const int MOISTURE_PIN = A1;
-    const int WIND_SPEED_PIN = 2;
-    const int WIND_DIR_PIN = A2;
+import machine
+import time
+import dht
+from machine import Pin, ADC
+import gc
+
+# Pin Configuration
+DHT22_PIN = 2  # GPIO2 (D4)
+MQ135_PIN = 36  # GPIO36 (VP - ADC1_CH0)
+
+# Sensor initialization
+try:
+    dht_sensor = dht.DHT22(Pin(DHT22_PIN))
+    mq135_adc = ADC(Pin(MQ135_PIN))
+    mq135_adc.atten(ADC.ATTN_11DB)  # For 3.3V range
+    print("SACI MVP - Sensors initialized successfully")
+except Exception as e:
+    print(f"Sensor initialization error: {e}")
+
+# Constants
+READING_INTERVAL = 2  # seconds
+SMOKE_THRESHOLD = 400  # Basic threshold for smoke detection
+TEMP_THRESHOLD = 35   # Temperature threshold in Celsius
+
+def read_dht22():
+    """
+    Read temperature and humidity from DHT22 sensor
+    Returns: tuple (temperature, humidity) or (None, None) if error
+    """
+    try:
+        dht_sensor.measure()
+        temperature = dht_sensor.temperature()
+        humidity = dht_sensor.humidity()
+        return temperature, humidity
+    except OSError as e:
+        print(f"DHT22 read error: {e}")
+        return None, None
+
+def read_mq135():
+    """
+    Read analog value from MQ-135 gas sensor
+    Returns: int (0-4095) or None if error
+    """
+    try:
+        # Read raw ADC value (0-4095 for 12-bit ADC)
+        raw_value = mq135_adc.read()
+        return raw_value
+    except Exception as e:
+        print(f"MQ-135 read error: {e}")
+        return None
+
+def calculate_fire_risk(temperature, humidity, smoke_level):
+    """
+    Calculate basic fire risk based on sensor readings
+    Returns: string risk level
+    """
+    if temperature is None or humidity is None or smoke_level is None:
+        return "UNKNOWN"
     
-    // LoRa pins
-    const int LORA_CS = 18;
-    const int LORA_RST = 14;
-    const int LORA_IRQ = 26;
+    risk_score = 0
     
-    // Configuration
-    String device_id;
-    float latitude, longitude;
-    int transmission_interval = 300; // 5 minutes
+    # Temperature factor
+    if temperature > TEMP_THRESHOLD:
+        risk_score += 2
+    elif temperature > 30:
+        risk_score += 1
     
-public:
-    struct SensorReading {
-        float temperature;
-        float humidity;
-        int smoke_level;
-        int co2_level;
-        float light_intensity;
-        float soil_moisture;
-        float wind_speed;
-        int wind_direction;
-        float pressure;
-        float battery_voltage;
-        uint32_t timestamp;
-    };
+    # Humidity factor (lower humidity = higher risk)
+    if humidity < 30:
+        risk_score += 2
+    elif humidity < 50:
+        risk_score += 1
     
-    void setup() {
-        // Initialize sensors
-        initializeSensors();
-        initializeLoRa();
-        initializeWiFi();
-        
-        // Load configuration from EEPROM
-        loadConfiguration();
-        
-        Serial.println("SACI Fire Sensor v1.0 - Initialized");
-    }
+    # Smoke level factor
+    if smoke_level > SMOKE_THRESHOLD:
+        risk_score += 3
+    elif smoke_level > 300:
+        risk_score += 1
     
-    void loop() {
-        SensorReading reading = collectSensorData();
-        
-        // Calculate derived metrics
-        float fire_risk_score = calculateFireRisk(reading);
-        
-        // Prepare data packet
-        String payload = createDataPacket(reading, fire_risk_score);
-        
-        // Transmit data
-        if (transmitLoRa(payload)) {
-            Serial.println("Data transmitted successfully");
-        } else {
-            // Fallback to WiFi or store locally
-            fallbackTransmission(payload);
-        }
-        
-        // Enter deep sleep to conserve battery
-        enterDeepSleep(transmission_interval);
-    }
+    # Determine risk level
+    if risk_score >= 5:
+        return "HIGH"
+    elif risk_score >= 3:
+        return "MEDIUM"
+    elif risk_score >= 1:
+        return "LOW"
+    else:
+        return "MINIMAL"
+
+def format_sensor_data(temperature, humidity, smoke_level):
+    """
+    Format sensor data for serial output
+    """
+    risk_level = calculate_fire_risk(temperature, humidity, smoke_level)
     
-private:
-    SensorReading collectSensorData() {
-        SensorReading reading;
-        
-        // DHT22 - Temperature & Humidity
-        reading.temperature = dht.readTemperature();
-        reading.humidity = dht.readHumidity();
-        
-        // MQ-2 - Smoke detection
-        reading.smoke_level = analogRead(MQ2_PIN);
-        
-        // MH-Z19B - CO2
-        reading.co2_level = readCO2Sensor();
-        
-        // BH1750 - Light intensity
-        reading.light_intensity = lightSensor.readLightLevel();
-        
-        // Soil moisture
-        reading.soil_moisture = analogRead(MOISTURE_PIN);
-        
-        // Wind sensors
-        reading.wind_speed = measureWindSpeed();
-        reading.wind_direction = analogRead(WIND_DIR_PIN);
-        
-        // BMP280 - Atmospheric pressure
-        reading.pressure = pressureSensor.readPressure();
-        
-        // Battery voltage
-        reading.battery_voltage = readBatteryVoltage();
-        
-        // Timestamp
-        reading.timestamp = millis();
-        
-        return reading;
-    }
+    # Handle None values
+    temp_str = f"{temperature:.1f}" if temperature is not None else "ERROR"
+    hum_str = f"{humidity:.1f}" if humidity is not None else "ERROR"
+    smoke_str = f"{smoke_level}" if smoke_level is not None else "ERROR"
     
-    float calculateFireRisk(const SensorReading& reading) {
-        // Simplified fire risk calculation
-        float risk = 0.0;
-        
-        // Temperature factor (higher = more risk)
-        if (reading.temperature > 30.0) {
-            risk += (reading.temperature - 30.0) * 0.02;
-        }
-        
-        // Humidity factor (lower = more risk)
-        if (reading.humidity < 30.0) {
-            risk += (30.0 - reading.humidity) * 0.01;
-        }
-        
-        // Smoke detection
-        if (reading.smoke_level > 400) {
-            risk += 0.5;
-        }
-        
-        // Wind speed (higher = faster spread)
-        risk += reading.wind_speed * 0.01;
-        
-        // Soil moisture (lower = more risk)
-        if (reading.soil_moisture < 20.0) {
-            risk += (20.0 - reading.soil_moisture) * 0.02;
-        }
-        
-        return min(risk, 1.0); // Cap at 1.0
-    }
+    return f"Temp: {temp_str} C, Hum: {hum_str} %, Smoke: {smoke_str}, Risk: {risk_level}"
+
+def main_loop():
+    """
+    Main sensor reading loop
+    """
+    print("SACI MVP starting sensor monitoring...")
+    print("Format: Temp: XX.X C, Hum: XX.X %, Smoke: XXXX, Risk: LEVEL")
+    print("-" * 60)
     
-    String createDataPacket(const SensorReading& reading, float fire_risk) {
-        DynamicJsonDocument doc(1024);
-        
-        doc["device_id"] = device_id;
-        doc["timestamp"] = reading.timestamp;
-        doc["location"]["lat"] = latitude;
-        doc["location"]["lon"] = longitude;
-        doc["battery"] = reading.battery_voltage;
-        
-        doc["sensors"]["temperature"] = reading.temperature;
-        doc["sensors"]["humidity"] = reading.humidity;
-        doc["sensors"]["smoke"] = reading.smoke_level;
-        doc["sensors"]["co2"] = reading.co2_level;
-        doc["sensors"]["light"] = reading.light_intensity;
-        doc["sensors"]["moisture"] = reading.soil_moisture;
-        doc["sensors"]["wind_speed"] = reading.wind_speed;
-        doc["sensors"]["wind_dir"] = reading.wind_direction;
-        doc["sensors"]["pressure"] = reading.pressure;
-        
-        doc["metrics"]["fire_risk"] = fire_risk;
-        doc["metrics"]["heat_index"] = calculateHeatIndex(reading.temperature, reading.humidity);
-        
-        String payload;
-        serializeJson(doc, payload);
-        return payload;
-    }
-};
+    reading_count = 0
+    
+    while True:
+        try:
+            # Read sensors
+            temperature, humidity = read_dht22()
+            smoke_level = read_mq135()
+            
+            # Format and print data
+            sensor_data = format_sensor_data(temperature, humidity, smoke_level)
+            print(sensor_data)
+            
+            # Memory management
+            reading_count += 1
+            if reading_count % 50 == 0:  # Every 100 seconds
+                gc.collect()
+                print(f"[INFO] Memory cleanup - Free: {gc.mem_free()} bytes")
+            
+            # Wait for next reading
+            time.sleep(READING_INTERVAL)
+            
+        except KeyboardInterrupt:
+            print("\nSACI MVP monitoring stopped by user")
+            break
+        except Exception as e:
+            print(f"Main loop error: {e}")
+            time.sleep(READING_INTERVAL)
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("SISTEMA GUARDIÃO - SACI MVP")
+    print("Fire Prevention & Detection Sensor Node")
+    print("ESP32 + DHT22 + MQ-135")
+    print("=" * 60)
+    
+    # Run main monitoring loop
+    main_loop()
 ```
 
 ### 3.2 Cloud Processing Architecture
