@@ -194,6 +194,148 @@ A abordagem de IA agêntica é central para a inteligência e adaptabilidade do 
 
 ---
 
+## 💻 TECH STACK CONSOLIDADO
+
+### Documentação Técnica Detalhada
+
+Para justificativas completas das escolhas tecnológicas, consulte:
+**[Tech Stack Justification](./docs/TECH_STACK_JUSTIFICATION.md)**
+
+Este documento detalha:
+* Justificativas para Python como linguagem principal
+* Casos de uso para Rust em componentes críticos
+* Escolha de PyTorch vs TensorFlow Lite
+* Arquitetura de bancos de dados multi-modal
+* Estratégia de evolução tecnológica do MVP para produção
+
+### Resumo Executivo do Stack
+
+**Backend Principal:**
+* **Python 3.11+** (85% do sistema)
+  * FastAPI (API Gateway)
+  * PyTorch 2.0+ (Modelos neurais)
+  * CrewAI (Coordenação multi-agente)
+  * LangGraph (Workflows de IA)
+  * Pandas, NumPy (Processamento de dados)
+
+**IA/ML Stack:**
+* **HuggingFace Transformers** (NLP)
+* **TensorFlow Lite** (Inferência edge)
+* **Scikit-learn** (ML clássico - MVP)
+* **RLHF** (Reinforcement Learning from Human Feedback)
+
+**Infraestrutura:**
+* **Kubernetes** (Orquestração)
+* **Apache Kafka** (Streaming)
+* **Redis Cluster** (Cache distribuído)
+
+**Bancos de Dados:**
+* **PostgreSQL + TimescaleDB** (Dados relacionais + séries temporais)
+* **Neo4j** (Grafos de dependências)
+* **InfluxDB** (Métricas IoT)
+* **Pinecone** (Banco vetorial para IA)
+
+**Edge Computing:**
+* **ESP32-S3** (Processamento edge com AI)
+* **Raspberry Pi 4** (Nós de coordenação)
+* **LoRa E32** (Comunicação longo alcance)
+
+**Frontend Conceitual:**
+* **React + TypeScript** (Dashboard web)
+* **D3.js** (Visualizações especializadas)
+* **React Native** (App móvel)
+
+---
+
+## 🛠️ IMPLEMENTAÇÃO MVP - SACI (DIA 2)
+
+### Status do Desenvolvimento - 30 de Maio de 2025
+
+#### Entregas do Dia 2
+
+**1. Documentação Técnica Finalizada ✅**
+* Justificativas completas do tech stack
+* Roadmap de evolução tecnológica MVP → Produção
+* Comparativo MicroPython vs Arduino C++
+
+**2. Firmware ESP32 Desenvolvido ✅**
+* **Arquivo:** `src/hardware/esp32/saci_sensor_node.py`
+* **Linguagem:** MicroPython (conforme justificativa)
+* **Sensores:** DHT22 (temperatura/umidade) + MQ-135 (gases)
+* **Funcionalidades:**
+  * Leitura de sensores a cada 2 segundos
+  * Cálculo básico de risco de incêndio
+  * Tratamento de erros robusto
+  * Gerenciamento de memória
+  * Formato de dados padronizado
+
+**3. Leitor Serial Python Desenvolvido ✅**
+* **Arquivo:** `src/data_collection/saci_serial_reader.py`
+* **Funcionalidades:**
+  * Parsing automático de dados do ESP32
+  * Suporte a argumentos de linha de comando
+  * Logs em formato JSON Lines
+  * Modo de teste de conexão
+  * Tratamento de erros de comunicação
+
+**4. Sistema de Testes Implementado ✅**
+* **Arquivo:** `src/tests/test_saci_serial.py`
+* **Cobertura:** Parsing de dados, casos de erro, simulação ESP32
+* **Validação:** Formato de dados, tratamento de erros
+
+#### Exemplo de Dados Coletados
+
+```json
+{
+  "timestamp": "2025-05-30T14:30:15.123456",
+  "temperature": 28.5,
+  "humidity": 45.2,
+  "smoke": 380,
+  "risk_level": "MEDIUM",
+  "raw_line": "Temp: 28.5 C, Hum: 45.2 %, Smoke: 380, Risk: MEDIUM"
+}
+```
+
+#### Instruções de Uso
+
+**1. Upload do Firmware:**
+```bash
+# Conectar ESP32 via USB
+# Usar Thonny IDE ou esptool para upload
+cp src/hardware/esp32/saci_sensor_node.py /media/ESP32/main.py
+```
+
+**2. Leitura de Dados:**
+```bash
+# Instalar dependências
+pip install -r src/requirements.txt
+
+# Leitura básica
+python src/data_collection/saci_serial_reader.py /dev/ttyUSB0
+
+# Com log em arquivo
+python src/data_collection/saci_serial_reader.py /dev/ttyUSB0 --output sensor_data.jsonl
+
+# Teste de conexão
+python src/data_collection/saci_serial_reader.py /dev/ttyUSB0 --test
+```
+
+**3. Validação do Sistema:**
+```bash
+# Executar testes
+python src/tests/test_saci_serial.py
+```
+
+#### Métricas de Performance MVP
+
+* **Frequência de Amostragem:** 0.5 Hz (a cada 2 segundos)
+* **Latência de Comunicação:** < 100ms (serial USB)
+* **Precisão de Sensores:** ±0.5°C (temperatura), ±2% RH (umidade)
+* **Uptime do ESP32:** > 24 horas contínuas
+* **Taxa de Parsing:** 100% para dados bem formados
+
+---
+
 ## 🗂️ MODELO DE DADOS UNIFICADO
 
 ### Banco de Dados Multi-Modal
@@ -333,232 +475,3 @@ CREATE (water)-[:DEPENDS_ON {
 ```
 
 ---
-
-## 💻 TECH STACK CONSOLIDADO
-
-### Linguagens e Frameworks Core
-
-**Backend Principal:**
-- **Python 3.11+** (85% do sistema) > Possibilidade de migrar certas partes do sistema para C++, Rust ou Go, para otimizar temporalmente os processos 
-  - FastAPI (API Gateway)
-  - PyTorch 2.0+ (Modelos neurais)
-  - CrewAI (Coordenação multi-agente)
-  - LangGraph (Workflows de IA)
-  - Pandas, NumPy (Processamento de dados)
-
-**IA/ML Stack:**
-- **HuggingFace Transformers** (NLP)
-- **TensorFlow Lite** (Inferência edge)
-- **Scikit-learn** (ML clássico)
-- **RLHF** (Reinforcement Learning from Human Feedback)
-
-**Infraestrutura:**
-- **Kubernetes** (Orquestração)
-- **Apache Kafka** (Streaming)
-- **Redis Cluster** (Cache distribuído)
-
-**Bancos de Dados:**
-- **PostgreSQL + TimescaleDB** (Dados relacionais + séries temporais)
-- **Neo4j** (Grafos de dependências)
-- **InfluxDB** (Métricas IoT)
-- **Pinecone** (Banco vetorial para IA)
-
-**Edge Computing:**
-- **ESP32-S3** (Processamento edge com AI)
-- **Raspberry Pi 4** (Nós de coordenação)
-- **LoRa E32** (Comunicação longo alcance)
-
-**Frontend Conceitual:**
-- **React + TypeScript** (Dashboard web)
-- **D3.js** (Visualizações especializadas)
-- **React Native** (App móvel)
-
----
-
-## 📊 MODELO DE NEGÓCIO E VIABILIDADE
-
-### Estrutura de Receita (Projeção 5 anos)
-
-**1. Licenciamento Governamental (B2G) - 70% da receita**
-- **Contratos Estaduais:** R$ 50-200 milhões/ano por estado
-- **Contrato Federal:** R$ 1-2 bilhões (implementação nacional)
-- **Modelo SaaS Governamental:** Atualizações e manutenção contínua
-
-**2. Parcerias Público-Privadas (PPP) - 20% da receita**
-- **Telecoms:** Integração com infraestrutura 5G/6G
-- **Utilities:** Monitoramento inteligente de energia/água
-- **Seguradoras:** Redução de riscos e cálculo de prêmios
-
-**3. Mercado Internacional - 10% da receita**
-- Licenciamento para países emergentes
-- Consultoria especializada em implementação
-
-### Análise Financeira Consolidada
-
-**CAPEX Inicial (Piloto Minas Gerais):**
-- Desenvolvimento de software: R$ 15 milhões
-- Hardware e sensores: R$ 8 milhões  
-- Infraestrutura cloud: R$ 5 milhões
-- **Total CAPEX:** R$ 28 milhões
-
-**OPEX Anual:**
-- Equipe técnica (50 pessoas): R$ 12 milhões/ano
-- Infraestrutura cloud: R$ 6 milhões/ano
-- Manutenção e suporte: R$ 4 milhões/ano
-- **Total OPEX:** R$ 22 milhões/ano
-
-**Projeção de ROI:**
-- Break-even: 18 meses
-- ROI 5 anos: 340%
-- Valor presente líquido: R$ 280 milhões
-
----
-
-## 🏛️ REGULAMENTAÇÕES E COMPLIANCE
-
-### Framework Legal Nacional
-
-**LGPD (Lei Geral de Proteção de Dados):**
-- Anonimização automática de dados pessoais
-- Consentimento explícito para dados sensíveis de saúde
-- Auditoria contínua e relatórios de privacidade
-
-**Segurança Nacional:**
-- Certificação GSI (Gabinete de Segurança Institucional)
-- Dados mantidos exclusivamente em território nacional
-- Criptografia pós-quântica com chaves gerenciadas pelo Brasil
-
-**Regulamentações Setoriais:**
-- **ANEEL:** Integração com setor elétrico nacional
-- **ANATEL:** Uso regulamentado do espectro para IoT
-- **ANVISA:** Conformidade para dados de saúde pública
-
-### Parcerias Estratégicas Institucionais
-
-**Governo Federal:**
-- Ministério da Defesa (integração com sistemas militares)
-- Casa Civil (coordenação nacional de emergências)
-- Ministério da Ciência e Tecnologia (P&D)
-
-**Estados e Municípios:**
-- Defesa Civil Estadual (integração operacional)
-- Secretarias de Saúde (dados epidemiológicos)
-- Corpo de Bombeiros (coordenação de resposta)
-
-**Academia e Pesquisa:**
-- UFMG (pesquisa em sistemas complexos)
-- USP (desenvolvimento de algoritmos)
-- ITA (sistemas críticos e confiabilidade)
-
----
-
-## 🎯 ROADMAP DE IMPLEMENTAÇÃO MVP (10 DIAS)
-
-### Fase 1: Fundação (Dias 1-2) ✅
-- [x] Arquitetura detalhada e documentação consolidada
-- [x] C4 diagrams completos
-- [x] Modelo de dados unificado
-- [x] Tech stack definido
-
-### Fase 2: Protótipos Core (Dias 3-4)
-- [ ] Implementar detector híbrido CURUPIRA
-- [ ] Algoritmo swarm SACI simplificado  
-- [ ] Modelo epidemiológico IARA básico
-- [ ] Simulador cascata BOITATÁ
-
-### Fase 3: Integração (Dias 5-6)
-- [ ] Dashboard unificado (React + D3.js)
-- [ ] Firmware ESP32 multi-sensor
-- [ ] API Gateway central
-- [ ] Testes de comunicação mesh
-
-### Fase 4: IA e Analytics (Dias 7-8)
-- [ ] Pipeline ML end-to-end
-- [ ] Modelos de ensemble integrados
-- [ ] Sistema de alertas inteligentes
-- [ ] Métricas de performance
-
-### Fase 5: Finalização (Dias 9-10)
-- [ ] Documentação técnica completa
-- [ ] Business plan executado
-- [ ] Vídeo demonstrativo profissional
-- [ ] Código no GitHub com documentação
-
----
-
-## 📈 MÉTRICAS DE SUCESSO E KPIs
-
-### KPIs Técnicos
-- **Precisão de Predição:** >92% para eventos críticos
-- **Tempo de Resposta:** <30 segundos para alertas críticos  
-- **Disponibilidade:** 99.9% uptime garantido
-- **Latência Edge:** <100ms processamento local
-- **Escalabilidade:** 10M+ sensores simultâneos
-
-### KPIs de Impacto Social
-- **Redução de Mortalidade:** -60% em eventos extremos
-- **Economia de Recursos:** R$ 2-6 bilhões/ano em danos evitados
-- **Tempo de Recuperação:** -60% pós-desastre
-- **Cobertura Populacional:** 80% de Minas Gerais no piloto
-
-### KPIs de Negócio
-- **Crescimento de Receita:** 150% ano-sobre-ano
-- **Market Share:** 60% do mercado nacional em 3 anos
-- **Satisfação do Cliente:** >4.5/5.0
-- **Expansão Internacional:** 5 países em 3 anos
-
----
-
-## 🔮 VISÃO DE LONGO PRAZO
-
-### Estado Piloto: Minas Gerais
-
-**Justificativa Estratégica:**
-- **Diversidade Geográfica:** Cerrado, Mata Atlântica, áreas urbanas densas
-- **Histórico de Eventos:** Brumadinho, secas prolongadas, incêndios florestais
-- **Infraestrutura Tecnológica:** Belo Horizonte como hub de inovação
-- **Parcerias Acadêmicas:** UFMG, PUC Minas, presença de pesquisadores renomados
-
-### Expansão Nacional (2025-2030)
-
-**Ano 1-2:** Consolidação em Minas Gerais
-**Ano 3:** Expansão para São Paulo e Rio de Janeiro
-**Ano 4-5:** Cobertura completa das regiões Sul e Sudeste
-**Ano 6+:** Implementação nacional completa
-
----
-
-## 🌟 CONCLUSÃO
-
-O Sistema Guardião transcende a tecnologia tradicional de emergência, estabelecendo uma nova categoria de **infraestrutura nacional inteligente**. A fusão de inteligência artificial agêntica com a sabedoria cultural brasileira cria não apenas um sistema técnico, mas um **símbolo de proteção nacional**.
-
-Esta documentação demonstra viabilidade técnica, sustentabilidade econômica e potencial de impacto transformador. O Sistema Guardião posiciona o Brasil como líder mundial em tecnologias de proteção civil inteligente.
-
-**"Assim como as lendas brasileiras protegiam nossas terras, o Sistema Guardião protegerá nosso futuro."**
-
----
-
-## 📚 ANEXOS E REFERÊNCIAS
-
-### A. Documentos Técnicos
-- [Diagramas C4 Interativos](./sistema_guardiao_c4_diagrams.html)
-- [Especificações de API](./api_specifications.md)
-- [Modelo de Dados Detalhado](./database_schemas.sql)
-
-### B. Código e Implementação
-- [Repositório GitHub Principal](https://github.com/YanCotta/global_solution_1_fiap)
-- [Protótipos MVP](./src/)
-- [Firmware ESP32](./hardware/)
-
-### C. Análises de Negócio
-- [Modelo Financeiro](./business_model.xlsx)
-- [Análise de Mercado](./market_analysis.pdf)
-- [Estratégia de Go-to-Market](./gtm_strategy.md)
-
----
-
-**Documento Preparado por:** Yan Cotta  
-**Competição:** Global Solution FIAP 2025.1  
-**Data:** Maio 2025  
-**Versão:** 2.0 - Master Documentation  
-**Status:** Ready for Submission
