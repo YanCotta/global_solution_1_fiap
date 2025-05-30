@@ -6,7 +6,7 @@ orchestrating responses across all five subsystems (CURUPIRA, IARA, SACI, BOITAT
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional # Ensure Optional is here
 from datetime import datetime
 
 # Import the subsystem classes
@@ -31,29 +31,88 @@ class ThreatEvent:
     severity: float                                  # Severity score from 0.0 to 1.0
     location: tuple                                  # Geographic coordinates (latitude, longitude)
     timestamp: datetime = field(default_factory=datetime.utcnow)  # When the threat was detected
+    # Suggestion for metadata: While flexible, consider conventions for common keys
+    # e.g., {'sensor_type': 'camera', 'reading': '...', 'device_status': 'online'}
+    # For SACI (fire): {'wind_speed': 15, 'humidity': 30, 'temperature': 35}
+    # For CURUPIRA (cyber): {'source_ip': '192.168.1.100', 'target_port': 80}
     metadata: Dict[str, Any] = field(default_factory=dict)        # Additional threat-specific data
     confidence_score: float = 1.0                    # Confidence in the detection (0.0 to 1.0)
+    origin_sensor_id: Optional[str] = None # ID of the specific sensor/source within the subsystem
 
 
 # Dummy classes for meta-learning components (placeholders for future implementation)
 class MetaLearningEngine:
-    """Placeholder for meta-learning AI that learns from cross-subsystem patterns."""
+    """Placeholder for meta-learning AI that learns from cross-subsystem patterns and response effectiveness."""
     def __init__(self):
+        # Placeholder for initialization (e.g., loading models, connecting to databases)
         pass
     
-    def analyze_threat_patterns(self, events: List[ThreatEvent]) -> Dict:
-        """Analyzes patterns across multiple threat events."""
-        return {"pattern_analysis": "placeholder"}
+    async def suggest_response_strategies(self, correlated_events: Dict, historical_data: List[Dict]) -> Dict:
+        """
+        Suggests or refines response strategies based on correlated events and historical data.
+
+        Args:
+            correlated_events (Dict): Output from MultiThreatCorrelator, e.g., groups of linked events.
+            historical_data (List[Dict]): Data on past responses and their outcomes.
+
+        Returns:
+            Dict: Containing suggested strategies, action priorities, or predicted effectiveness scores.
+                  Example: {'strategic_priority': 'group_1', 'suggested_actions': [...]}
+        """
+        print(f"MetaLearningEngine: Suggesting strategies for correlated events: {correlated_events.keys if isinstance(correlated_events, dict) else 'N/A'}")
+        # Placeholder: Actual logic would involve complex analysis and machine learning.
+        return {"suggested_strategy": "default_containment_protocol", "confidence": 0.6}
+
+    async def learn_from_response(self, response_plan: Dict, action_results: List[Dict], outcome_assessment: Dict) -> None:
+        """
+        Learns from the effectiveness of a completed response plan and its outcomes.
+        This method updates the engine's knowledge based on what worked and what didn't.
+
+        Args:
+            response_plan (Dict): The response plan that was executed.
+            action_results (List[Dict]): The results from each subsystem's actions.
+            outcome_assessment (Dict): An overall assessment of the response's success/failure and impact.
+                                      Example: {'success': True, 'impact_achieved': 0.7, 'lessons_learned': '...'}
+        """
+        print(f"MetaLearningEngine: Learning from response plan {response_plan.get('plan_id', 'N/A')}")
+        # Placeholder: Actual logic would update internal models or databases.
+        pass
 
 
 class MultiThreatCorrelator:
     """Placeholder for AI that correlates threats across different subsystems."""
     def __init__(self):
+        # Placeholder for initialization
         pass
     
-    def correlate_events(self, events: List[ThreatEvent]) -> Dict:
-        """Identifies correlations between different types of threats."""
-        return {"correlation_analysis": "placeholder"}
+    async def analyze_correlations(self, events: List[ThreatEvent]) -> Dict:
+        """
+        Identifies and scores potential correlations between different threat events.
+
+        Args:
+            events (List[ThreatEvent]): A list of threat events to analyze.
+
+        Returns:
+            Dict: A dictionary detailing identified correlations.
+                  Example: {'correlation_groups': {'group_1': [event_id_1, event_id_2]},
+                            'correlation_matrix': [...],
+                            'confidence_scores': {'group_1': 0.85}}
+                  Returns an empty dict if no significant correlations are found.
+        """
+        print(f"MultiThreatCorrelator: Analyzing correlations for {len(events)} events.")
+        if not events:
+            return {}
+        # Placeholder: Actual logic would involve sophisticated correlation analysis.
+        # For demonstration, if multiple events, group them.
+        if len(events) > 1:
+            return {
+                "correlation_groups": {
+                    "group_auto_1": [event.event_id for event in events]
+                },
+                "report": "Found potential correlation among all provided events based on placeholder logic.",
+                "confidence_scores": {"group_auto_1": 0.5}
+            }
+        return {"report": "No significant correlations found by placeholder logic for a single event."}
 
 
 class GuardianCentralOrchestrator:
@@ -108,61 +167,89 @@ class GuardianCentralOrchestrator:
         
         Returns:
             Dict: A comprehensive response plan coordinating all relevant subsystems.
-                  Example:
-                  {
-                      "coordination_successful": True,
-                      "total_threats_analyzed": 3,
-                      "threat_correlations": {
-                          "cross_domain_patterns": [...],
-                          "cascade_risks": [...]
-                      },
-                      "unified_response_plan": {
-                          "priority_sequence": ["threat_001", "threat_003", "threat_002"],
-                          "subsystem_actions": {
-                              "curupira": {"action": "increase_monitoring", "target_zones": [...]},
-                              "iara": {"action": "deploy_rapid_testing", "regions": [...]},
-                              "saci": {"action": "deploy_swarm", "coordinates": [...]},
-                              "boitata": {"action": "simulate_cascades", "scenarios": [...]},
-                              "anhanga": {"action": "establish_emergency_comms", "networks": [...]}
-                          },
-                          "resource_allocation": {...},
-                          "estimated_response_time": "15 minutes",
-                          "success_probability": 0.87
-                      },
-                      "communication_plan": {
-                          "alerts_issued": [...],
-                          "stakeholders_notified": [...]
-                      }
-                  }
-                  Returns a dict with "coordination_successful": False if the response
-                  cannot be coordinated due to resource constraints or other issues.
+                  Returns an empty dict or a dict with coordination_successful: False if issues occur.
         """
-        # Placeholder implementation: In a real scenario, this method would:
-        # 1. Use self.threat_correlator to identify relationships between threat_events.
-        # 2. Apply self.meta_ai to analyze patterns and predict optimal response strategies.
-        # 3. Coordinate actions across all relevant subsystems based on threat types and priorities.
-        # 4. Use self.anhanga to establish communication channels for the response.
-        # 5. Monitor response effectiveness and adapt strategies in real-time.
-        
+        # Conceptual flow:
+        # 1. **Threat Correlation (MultiThreatCorrelator):**
+        #    - Input: `threat_events: List[ThreatEvent]`
+        #    - Action: `self.threat_correlator.analyze_correlations(threat_events)` would analyze spatial,
+        #              temporal, causal, or other types of links between events.
+        #    - Output Example: A dictionary grouping correlated events, e.g.,
+        #              `{'group_1': [event_A, event_C], 'group_2': [event_B]}` or a list of
+        #              `CorrelationReport` objects detailing links between specific events.
+        #    - This helps understand if multiple events are part of a larger, coordinated incident
+        #      or if they might have cascading impacts.
+        #    # correlated_event_groups = await self.threat_correlator.analyze_correlations(threat_events)
+
+        # 2. **Response Strategy Generation (MetaLearningEngine):**
+        #    - Input: Output from the correlator (e.g., `correlated_event_groups`) and historical
+        #             response data (e.g., `self.response_history`).
+        #    - Action: `self.meta_ai.suggest_response_strategies(correlated_event_groups, self.response_history)`
+        #              would use this data to propose or refine response strategies. It might identify
+        #              optimal actions based on past effectiveness for similar correlated patterns.
+        #    - Output Example: Suggestions for high-level strategies or adjustments to potential actions.
+        #    # strategic_suggestions = await self.meta_ai.suggest_response_strategies(correlated_event_groups, self.response_history)
+
+        # 3. **Response Plan Formulation:**
+        #    - Based on correlated threats, strategic suggestions, and subsystem capabilities,
+        #      a detailed `response_plan` is constructed.
+        #    - Structure of `response_plan` (example):
+        #      ```
+        #      response_plan = {
+        #          'plan_id': f'rp_{datetime.utcnow().timestamp()}', # Unique plan ID
+        #          'target_event_ids': [event.event_id for event in threat_events],
+        #          'subsystem_actions': {
+        #              # Example: 'saci': [{'action_type': 'deploy_drones', 'target_area': (lat, lon), 'parameters': {'num_drones': 5}}],
+        #              #          'curupira': [{'action_type': 'isolate_network_segment', 'target_segment': 'iot_network_A', 'priority': 1}],
+        #              #          'iara': [{'action_type': 'issue_health_advisory', 'region': 'city_sector_B'}]
+        #          },
+        #          'coordination_strategy': 'simultaneous_execution', # or 'sequential', 'prioritized'
+        #          'priority': 'high', # Overall priority of the plan
+        #          'estimated_impact_reduction': 0.75 # Predicted effectiveness by MetaLearningEngine
+        #      }
+        #      ```
+        #    - Each 'action' in `subsystem_actions` would be a dictionary with `action_type`, `target`, `parameters`, `priority`, etc.
+
+        # 4. **Asynchronous Subsystem Action Execution:**
+        #    - The orchestrator would iterate through `response_plan['subsystem_actions']`.
+        #    - For each subsystem with assigned actions, it would call:
+        #      `await subsystem_instance.execute_response_plan(actions_for_subsystem)`
+        #    - `actions_for_subsystem` would be the list of action dicts for that subsystem.
+        #    - `asyncio.gather` would be used to execute these calls concurrently for multiple subsystems involved.
+        #      For example:
+        #      ```
+        #      tasks = []
+        #      if 'saci' in response_plan['subsystem_actions']:
+        #          tasks.append(self.saci.execute_response_plan(response_plan['subsystem_actions']['saci']))
+        #      if 'curupira' in response_plan['subsystem_actions']:
+        #          tasks.append(self.curupira.execute_response_plan(response_plan['subsystem_actions']['curupira']))
+        #      # ... and so on for other subsystems
+        #      action_results = await asyncio.gather(*tasks)
+        #      ```
+        #    - Each `execute_response_plan` method in the subsystem classes should be `async` and
+        #      return a result indicating the status of the executed actions (e.g.,
+        #      `[{'action_id': 'drone_deployment_1', 'status': 'success', 'details': '5 drones deployed'}, ...]`).
+
+        # 5. **Monitor, Log, and Learn:**
+        #    - Results from `action_results` would be logged.
+        #    - `self.meta_ai.learn_from_response(response_plan, action_results)` could be called to update
+        #      the learning engine based on the outcomes.
+        #    - `self.response_history` would be updated.
+
         print(f"Orchestrating response to {len(threat_events)} threat events:")
         for event in threat_events:
-            print(f"  - {event.threat_type} from {event.subsystem_source} "
-                  f"(severity: {event.severity:.2f}, confidence: {event.confidence_score:.2f})")
-        
-        # Update active threats list
+            print(f"  - Threat: {event.threat_type} from {event.subsystem_source} at {event.location}")
+            print(f"    Severity: {event.severity:.2f}, Confidence: {event.confidence_score:.2f}")
+            if event.origin_sensor_id:
+                print(f"    Origin Sensor ID: {event.origin_sensor_id}")
+            print(f"    Metadata: {event.metadata}")
+
         self.active_threats.extend(threat_events)
         
-        pass
-        # Example return for successful coordination:
-        # return {
-        #     "coordination_successful": True,
-        #     "total_threats_analyzed": len(threat_events),
-        #     "unified_response_plan": {
-        #         "primary_actions": ["deploy_saci_swarm", "activate_boitata_simulation"],
-        #         "estimated_response_time": "12 minutes"
-        #     }
-        # }
-        return {}
+        # Placeholder: Actual plan generation and execution would occur here.
+        # For now, returning an empty dictionary as per the original skeleton.
+        # A real implementation would return the 'response_plan' or a confirmation.
+        return {} # Example: response_plan or {'coordination_successful': True, 'plan_id': '...'}
 
     def get_system_status(self) -> Dict:
         """

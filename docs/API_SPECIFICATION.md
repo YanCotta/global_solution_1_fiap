@@ -21,46 +21,60 @@ O API Gateway Central será o ponto único de entrada para a maioria das intera�
 - `POST /auth/token` - Obter token de acesso.
 - `POST /auth/refresh` - Atualizar token de acesso.
 
-#### Orquestrador Agêntico Central (OAC)
-
-- `POST /api/v1/orchestrator/tasks` - Submeter uma nova tarefa ou evento para o orquestrador.
-  - **Request Body:** `{ "type": "event_report", "source": "citizen_app", "payload": { ... } }`
-- `GET /api/v1/orchestrator/status` - Obter o status geral do sistema e dos subsistemas.
-- `GET /api/v1/orchestrator/tasks/{task_id}` - Obter status de uma tarefa específica.
-
-#### Relato de Eventos/Ameaças (Entrada para o OAC)
+#### Relato de Eventos de Ameaça
 
 - `POST /api/v1/events/report`
-  - **Request Body:** Detalhes do evento (tipo, localização, descrição, mídia).
-  - **Exemplo:** Reportar um foco de incêndio, um sintoma de doença, uma falha de infraestrutura.
+  - **Request Body:** `ThreatEventInput` (conforme definido em `src/api/schemas.py` - contendo `subsystem_source`, `threat_type`, `severity`, `location`, `metadata`, `confidence_score`, `origin_sensor_id`).
+  - **Ação Conceitual:** Recebe um novo evento de ameaça, valida-o e o encaminha para o `GuardianCentralOrchestrator` para processamento e correlação. Um ID de evento único é gerado.
+  - **Response:** `AlertConfirmationResponse` (contendo `event_id`, `status`, `message`, `timestamp`).
 
-#### Alertas e Notificações
+#### Status do Sistema
 
-- `GET /api/v1/alerts` - Obter alertas ativos para o usuário/sistema autenticado.
+- `GET /api/v1/system/status`
+  - **Request Body:** Nenhum.
+  - **Ação Conceitual:** Retorna o status operacional geral do Sistema Guardião, incluindo o status de cada subsistema individual e a contagem de ameaças ativas.
+  - **Response:** `SystemStatusResponse` (contendo `overall_status`, `timestamp`, `active_threats_count`, e uma lista de `subsystems` com seus `name`, `status`, `alerts_count`, etc.).
+
+#### Listagem e Filtragem de Eventos
+
+- `GET /api/v1/events`
+  - **Request Body:** Nenhum.
+  - **Query Parameters (Opcionais):**
+    - `subsystem: Optional[str]` - Filtra eventos pela subsistema de origem (ex: "SACI").
+    - `severity_threshold: Optional[float]` - Filtra eventos por um limiar mínimo de severidade (0.0 a 1.0).
+    - `limit: int` (default: 100) - Número máximo de eventos a serem retornados.
+  - **Ação Conceitual:** Retorna uma lista de eventos de ameaça recentes ou filtrados, recuperados do banco de dados de eventos.
+  - **Response:** Lista de objetos `ThreatEventResponse`.
+
+#### Alerta Manual Específico do Subsistema (Exemplo SACI)
+
+- `POST /api/v1/saci/manual_alert`
+  - **Request Body:** `SaciManualAlertRequest` (contendo `location`, `description`, `reported_by`, `urgency`, `metadata`).
+  - **Ação Conceitual:** Permite o registro de um alerta manual para o subsistema SACI. Isso pode gerar um `ThreatEvent` que é então processado pelo orquestrador ou enviado diretamente ao SACI.
+  - **Response:** `AlertConfirmationResponse` (confirmando o recebimento e o ID do alerta manual gerado).
+
+#### Alertas e Notificações (Endpoints Genéricos Existentes - a serem revisados/integrados)
+Ainda existem definições para:
+- `GET /api/v1/alerts` - Obter alertas ativos para o usuário/sistema autenticado. (Considerar integração com `GET /api/v1/events` ou diferenciar claramente o propósito).
   - **Query Params:** `?severity=high&region=MG&type=fire`
 - `POST /api/v1/alerts/{alert_id}/acknowledge` - Confirmar recebimento de um alerta.
 - `GET /api/v1/notifications/preferences` - Gerenciar preferências de notificação.
 - `PUT /api/v1/notifications/preferences` - Atualizar preferências.
 
-#### Dados de Subsistemas (Exemplos, acesso controlado pelo OAC)
-
+#### Dados de Subsistemas (Exemplos, acesso controlado pelo OAC - a serem revisados/integrados)
+Ainda existem definições para interações diretas com subsistemas. A estratégia primária é via Orquestrador, mas estes podem ser mantidos para casos de uso específicos, com devida justificação e controle.
 - **SACI (Incêndios)**
-  - `GET /api/v1/saci/risks` - Obter mapa de risco de incêndio.
-    - **Query Params:** `?lat=-19.9&lon=-43.9&radius=50km`
-  - `GET /api/v1/saci/sensors` - Obter dados de sensores específicos (requer alta permissão).
+  - `GET /api/v1/saci/risks`
 - **IARA (Saúde)**
-  - `GET /api/v1/iara/epidemiology/trends` - Obter tendências epidemiológicas.
-    - **Query Params:** `?disease=dengue&region=MG`
+  - `GET /api/v1/iara/epidemiology/trends`
 - **BOITATÁ (Infraestrutura)**
-  - `GET /api/v1/boitata/infrastructure/status` - Obter status de infraestruturas críticas.
-    - **Query Params:** `?type=power_grid&area=belo_horizonte`
+  - `GET /api/v1/boitata/infrastructure/status`
 - **CURUPIRA (Segurança Ciberfísica)**
-  - `GET /api/v1/curupira/threats/active` - Obter ameaças ciberfísicas ativas.
+  - `GET /api/v1/curupira/threats/active`
 - **ANHANGÁ (Comunicações)**
-  - `GET /api/v1/anhanga/network/status` - Obter status da rede de comunicação de emergência.
+  - `GET /api/v1/anhanga/network/status`
 
-#### Administração (Acesso Restrito)
-
+#### Administração (Acesso Restrito - a serem revisados/integrados)
 - `GET /api/v1/admin/users`
 - `POST /api/v1/admin/users`
 - `GET /api/v1/admin/system/logs`
@@ -134,8 +148,38 @@ A comunicação entre subsistemas será primariamente via Message Bus (Kafka) pa
 
 Para comunicação em tempo real (ex: atualizações de dashboard, alertas instantâneos):
 
-- `WS /ws/v1/alerts` - Stream de alertas em tempo real.
-- `WS /ws/v1/saci/sensor_data` - Stream de dados de sensores do SACI (para visualizações ao vivo).
+- `WS /ws/v1/alerts`
+  - **Ação Conceitual:** Clientes (como dashboards de monitoramento) conectam-se a este endpoint WebSocket. O servidor envia mensagens em tempo real para os clientes conectados sempre que novos alertas são gerados ou atualizações importantes do sistema ocorrem. As mensagens podem ser novos `ThreatEventResponse` completos ou notificações resumidas.
+  - **Formato da Mensagem (Servidor para Cliente - Exemplo JSON):**
+    ```json
+    {
+      "alert_id": "evt_uuid_timestamp", // ID do evento ou do alerta específico
+      "type": "new_threat_event", // Tipos podem incluir: "new_threat_event", "event_update", "system_notification"
+      "timestamp": "2023-10-27T12:00:00Z", // ISO 8601 timestamp
+      "payload": {
+        // O payload pode ser um objeto ThreatEventResponse completo ou um resumo customizado.
+        // Exemplo de resumo:
+        "event_id": "evt_uuid_timestamp",
+        "subsystem_source": "SACI",
+        "threat_type": "wildfire",
+        "severity": 0.85,
+        "location": [-19.9174, -43.9343],
+        "message": "Alerta de incêndio de alta severidade detectado na Zona Industrial."
+      }
+    }
+    ```
+  - **Interação:** Conexão persistente. O servidor envia mensagens de forma assíncrona.
+- `WS /ws/v1/saci/sensor_data` - Stream de dados de sensores do SACI (para visualizações ao vivo). (Este é um exemplo pré-existente, manter para referência ou integrar com a lógica de alertas se aplicável).
+
+
+### Nota sobre Autenticação e Autorização (Conceitual)
+
+Para um ambiente de produção, a API Central do Sistema Guardião exigirá mecanismos robustos de autenticação e autorização para proteger seus recursos e dados. A abordagem recomendada seria:
+
+- **Autenticação:** OAuth 2.0 com OpenID Connect (OIDC), utilizando JWT (JSON Web Tokens) como tokens de acesso. Um Identity Provider (IdP) dedicado (como Keycloak, Auth0, ou similar) seria responsável pela emissão e validação dos tokens.
+- **Autorização:** Mecanismos baseados em roles (RBAC - Role-Based Access Control) e possivelmente em atributos (ABAC - Attribute-Based Access Control) seriam implementados. As permissões definiriam quais usuários ou sistemas clientes podem acessar quais endpoints e executar quais operações.
+
+A implementação detalhada destes mecanismos de segurança está fora do escopo da fase conceitual atual do MVP (Minimum Viable Product), mas é um requisito fundamental para implantações futuras. Os "Princípios Gerais da API" sobre segurança (HTTPS, etc.) devem ser observados desde o início.
 
 ## Considerações Futuras
 
