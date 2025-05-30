@@ -157,8 +157,13 @@ def main():
                                 predicted_label, probability_scores = predict_saci_fire_risk(model, temp, hum, smoke_adc)
 
                                 # Assuming class 1 is 'Fire' and class 0 is 'No Fire'.
-                                # probability_scores is often an array like [P(class_0), P(class_1)]
-                                prob_fire = probability_scores[1] if len(probability_scores) > 1 else probability_scores[0]
+                                # Validate the shape of probability_scores to ensure it matches expectations.
+                                if len(probability_scores) != 2:
+                                    raise ValueError(
+                                        f"Invalid probability_scores shape: expected 2 elements, got {len(probability_scores)}. "
+                                        f"Scores: {probability_scores}"
+                                    )
+                                prob_fire = probability_scores[1]
                                 risk_status = "Fire Detected" if predicted_label == 1 else "No Fire Detected"
 
                                 current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
