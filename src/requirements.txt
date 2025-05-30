@@ -1,0 +1,32 @@
+# SACI MVP Requirements
+# Sistema Guardião - Fire Prevention and Detection
+# Date: May 30, 2025
+
+# Core dependencies for data collection and processing
+pyserial>=3.5
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Data visualization and analysis
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Configuration and utilities
+python-dotenv>=1.0.0
+click>=8.1.0
+pyyaml>=6.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Optional: For future MQTT/IoT integration
+paho-mqtt>=1.6.0
+
+# Optional: For future database integration
+psycopg2-binary>=2.9.0
+influxdb-client>=1.37.0
