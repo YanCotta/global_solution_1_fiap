@@ -51,26 +51,43 @@ CREATE TABLE threat_correlations (
 ```
 
 ### 1.2 CURUPIRA Time Series Data (InfluxDB)
-```flux
-// Electromagnetic field measurements
-curupira_emf
-    |> range(start: -1h)
-    |> filter(fn: (r) => r._measurement == "electromagnetic_field")
-    |> map(fn: (r) => ({
-        device_id: r.device_id,
-        x_axis: r.x_axis,
-        y_axis: r.y_axis,
-        z_axis: r.z_axis,
-        frequency_spectrum: r.frequency_spectrum,
-        baseline_deviation: r.baseline_deviation,
-        location: r.location
-    }))
+```python
+# Schema for Electromagnetic field measurements
+curupira_emf = {
+    "measurement": "electromagnetic_field",
+    "tags": {
+        "device_id": "string",
+        "location": "string",
+        "device_type": "string"
+    },
+    "fields": {
+        "x_axis": "float",
+        "y_axis": "float",
+        "z_axis": "float",
+        "frequency_spectrum": "float",
+        "baseline_deviation": "float"
+    },
+    "time": "timestamp"
+}
 
-// Network traffic patterns
-curupira_network
-    |> range(start: -24h)
-    |> filter(fn: (r) => r._measurement == "network_traffic")
-    |> aggregateWindow(every: 5m, fn: mean)
+# Schema for Network traffic patterns
+curupira_network = {
+    "measurement": "network_traffic",
+    "tags": {
+        "device_id": "string",
+        "network_segment": "string",
+        "protocol": "string"
+    },
+    "fields": {
+        "bytes_in": "float",
+        "bytes_out": "float",
+        "packets_in": "integer",
+        "packets_out": "integer",
+        "error_rate": "float",
+        "latency": "float"
+    },
+    "time": "timestamp"
+}
 ```
 
 ---
@@ -132,19 +149,25 @@ CREATE TABLE seir_model_state (
 ```
 
 ### 2.2 IARA Time Series Data (InfluxDB)
-```flux
-// Real-time health indicators
-iara_health_metrics
-    |> range(start: -7d)
-    |> filter(fn: (r) => r._measurement == "health_indicators")
-    |> map(fn: (r) => ({
-        region: r.region_code,
-        symptom_reports: r.symptom_reports,
-        pharmacy_sales: r.pharmacy_sales,
-        hospital_admissions: r.hospital_admissions,
-        search_trends: r.search_trends,
-        social_media_sentiment: r.social_media_sentiment
-    }))
+```python
+# Schema for Real-time health indicators
+iara_health_metrics = {
+    "measurement": "health_indicators",
+    "tags": {
+        "region_code": "string",
+        "data_source": "string",
+        "reliability": "string"
+    },
+    "fields": {
+        "symptom_reports": "integer",
+        "pharmacy_sales": "float",
+        "hospital_admissions": "integer",
+        "search_trends": "float",
+        "social_media_sentiment": "float",
+        "anomaly_score": "float"
+    },
+    "time": "timestamp"
+}
 ```
 
 ---
@@ -219,30 +242,51 @@ CREATE TABLE swarm_agents (
 ```
 
 ### 3.2 SACI Time Series Data (InfluxDB)
-```flux
-// Multi-sensor environmental data
-saci_environmental
-    |> range(start: -1h)
-    |> filter(fn: (r) => r._measurement == "environmental_sensors")
-    |> map(fn: (r) => ({
-        device_id: r.device_id,
-        temperature: r.temperature,
-        humidity: r.humidity,
-        smoke_density: r.smoke_density,
-        co2_level: r.co2_level,
-        methane_level: r.methane_level,
-        wind_speed: r.wind_speed,
-        wind_direction: r.wind_direction,
-        solar_radiation: r.solar_radiation,
-        soil_moisture: r.soil_moisture,
-        location: r.location
-    }))
+```python
+# Schema for Multi-sensor environmental data
+saci_environmental = {
+    "measurement": "environmental_sensors",
+    "tags": {
+        "device_id": "string",
+        "sensor_type": "string",
+        "location": "string",
+        "vegetation_type": "string"
+    },
+    "fields": {
+        "temperature": "float",
+        "humidity": "float",
+        "smoke_density": "float",
+        "co2_level": "integer",
+        "methane_level": "float",
+        "wind_speed": "float",
+        "wind_direction": "integer",
+        "solar_radiation": "float",
+        "soil_moisture": "float",
+        "fire_risk_score": "float"
+    },
+    "time": "timestamp"
+}
 
-// Weather station integration
-saci_weather
-    |> range(start: -24h)
-    |> filter(fn: (r) => r._measurement == "weather_data")
-    |> aggregateWindow(every: 10m, fn: mean)
+# Schema for Weather station integration
+saci_weather = {
+    "measurement": "weather_data",
+    "tags": {
+        "station_id": "string",
+        "region_code": "string",
+        "elevation": "string"
+    },
+    "fields": {
+        "temperature": "float",
+        "humidity": "float",
+        "pressure": "float",
+        "wind_speed": "float",
+        "wind_direction": "integer",
+        "precipitation": "float",
+        "solar_radiation": "float",
+        "cloud_coverage": "integer"
+    },
+    "time": "timestamp"
+}
 ```
 
 ---
