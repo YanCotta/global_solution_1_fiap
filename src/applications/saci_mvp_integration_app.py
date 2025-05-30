@@ -103,12 +103,12 @@ def main():
     model = None
     try:
         model = load_model(args.model_path)
-        print(f"INFO: Successfully loaded ML model from: {args.model_path}")
+        logger.info(f"Successfully loaded ML model from: {args.model_path}")
     except FileNotFoundError:
-        print(f"ERROR: Model file not found at '{args.model_path}'. Please check the path and ensure the file exists.")
+        logger.error(f"Model file not found at '{args.model_path}'. Please check the path and ensure the file exists.")
         return  # Exit application if model cannot be loaded
     except Exception as e: # Catch other potential errors during model loading
-        print(f"ERROR: Could not load ML model from '{args.model_path}': {e}")
+        logger.error(f"Could not load ML model from '{args.model_path}': {e}")
         return  # Exit application if model loading fails
 
     # --- 2. Initialize SACISerialReader ---
