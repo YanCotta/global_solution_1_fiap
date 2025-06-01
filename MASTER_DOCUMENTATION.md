@@ -148,6 +148,7 @@ O `GuardianCentralOrchestrator` é o cérebro estratégico do Sistema Guardião.
 3.  **Análise e Tomada de Decisão Agêntica:**
     *   Emprega um framework de IA agêntica (inspirado em **CrewAI/LangGraph**) onde agentes especializados dentro do Orchestrator analisam a situação multifacetada.
     *   Estes agentes colaboram para: avaliar a severidade e o impacto potencial do evento; simular cenários de resposta; identificar conflitos de recursos; e otimizar a alocação de tarefas.
+    *   Para capacidades analíticas e de aprendizado ainda mais profundas, o GuardianCentralOrchestrator incorpora e gerencia motores de IA avançados, como o **MetaLearningEngine** (responsável pelo aprendizado evolutivo do sistema e descoberta de padrões emergentes) e o **ThreatCorrelationEngine** (especializado na identificação de conexões ocultas entre eventos e orquestração de respostas complexas). Esses motores são fundamentais para a inteligência estratégica e adaptativa do sistema. Para uma exploração aprofundada destes componentes de IA avançada, consulte o documento [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
     *   Modelos de aprendizado de máquina (predição, classificação, otimização) são continuamente atualizados e refinados com novos dados.
 
 4.  **Disseminação de Comandos e Coordenação:**
@@ -244,6 +245,7 @@ Este documento detalha:
 * **React + TypeScript** (Dashboard web)
 * **D3.js** (Visualizações especializadas)
 * **React Native** (App móvel)
+* *Nota: As especificações detalhadas para os dashboards executivos e especializados, que guiam o design e funcionalidade deste frontend, podem ser encontradas em [Especificações de Dashboard](./docs/DASHBOARD_SPECIFICATIONS.md).*
 
 ---
 
