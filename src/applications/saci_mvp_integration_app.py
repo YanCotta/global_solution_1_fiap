@@ -50,10 +50,12 @@ from datetime import datetime
 import argparse # For command-line arguments
 import logging # Import the logging module
 
-# Configure basic logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Define logger
 logger = logging.getLogger(__name__)
 
+if __name__ == '__main__':
+    # Configure basic logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 # Assuming the script is run from the root of the project or PYTHONPATH is set up
 # If running from root, 'python -m src.applications.saci_mvp_integration_app' might be needed
 # or ensure src directory is in PYTHONPATH.
