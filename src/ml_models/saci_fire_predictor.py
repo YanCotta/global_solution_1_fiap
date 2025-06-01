@@ -21,7 +21,6 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import joblib
 # import pickle # Alternative for model saving
@@ -112,21 +111,6 @@ def train_logistic_regression(X_train: pd.DataFrame, y_train: pd.Series) -> Logi
         LogisticRegression: The trained Logistic Regression model.
     """
     model = LogisticRegression(random_state=42, solver='liblinear')
-    model.fit(X_train, y_train)
-    return model
-
-def train_decision_tree(X_train: pd.DataFrame, y_train: pd.Series) -> DecisionTreeClassifier:
-    """
-    Trains a Decision Tree Classifier model.
-
-    Args:
-        X_train (pd.DataFrame): DataFrame containing the training features.
-        y_train (pd.Series): Series containing the training target variable.
-
-    Returns:
-        DecisionTreeClassifier: The trained Decision Tree Classifier model.
-    """
-    model = DecisionTreeClassifier(random_state=42)
     model.fit(X_train, y_train)
     return model
 
