@@ -45,10 +45,15 @@ Note:
     "SACI MVP Raw Data: Temp=XX.X,Hum=YY.Y,Smoke=ZZZ"
     or "SACI MVP Error: Sensor Error Message"
 """
+import sys
+import os
 import time
 from datetime import datetime
 import argparse # For command-line arguments
 import logging # Import the logging module
+
+# Add the project root to Python path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 # Define logger
 logger = logging.getLogger(__name__)
@@ -65,7 +70,7 @@ from src.ml_models.saci_fire_predictor import load_model, predict_saci_fire_risk
 # --- Configuration Constants ---
 DEFAULT_SERIAL_PORT = '/dev/ttyUSB0'  # Adjust for your OS (e.g., 'COM3' on Windows)
 DEFAULT_BAUD_RATE = 115200
-DEFAULT_MODEL_PATH = 'models/saci_logistic_regression_model.joblib' # Default path relative to the project root.
+DEFAULT_MODEL_PATH = 'models/saci_fire_risk_model.joblib' # Default path relative to the project root.
 
 def parse_arguments():
     """
