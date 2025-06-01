@@ -214,8 +214,7 @@ def predict_saci_fire_risk(model: LogisticRegression, live_temp: float, live_hum
 if __name__ == '__main__':
     # --- Configuration: Define dataset and model file paths ---
     DATASET_PATH = 'data/synthetic/fire_risk_dataset.csv'
-    LOG_REG_MODEL_PATH = 'saci_logistic_regression_model.joblib'
-    DEC_TREE_MODEL_PATH = 'saci_decision_tree_model.joblib'
+    LOG_REG_MODEL_PATH = 'models/saci_fire_risk_model.joblib'
 
     # --- Step 1: Load and Preprocess Data ---
     try:
@@ -248,35 +247,13 @@ if __name__ == '__main__':
     save_model(log_reg_model, LOG_REG_MODEL_PATH) # Save the trained model
     print("--- Logistic Regression Model Training and Saving Completed ---")
 
-    # --- Step 4: Train and Save Decision Tree Model ---
-    print("\n--- Training Decision Tree Classifier Model ---")
-    dec_tree_model = train_decision_tree(X_train, y_train)
-    print("Decision Tree Classifier model trained successfully.")
-    save_model(dec_tree_model, DEC_TREE_MODEL_PATH) # Save the trained model
-    print("--- Decision Tree Model Training and Saving Completed ---")
-
     # --- Step 5: Evaluate Models ---
     # Evaluate Logistic Regression model
     lr_accuracy, lr_precision, lr_recall, lr_f1, lr_conf_matrix = evaluate_model(
         log_reg_model, X_test, y_test, "Logistic Regression"
     )
-    # Evaluate Decision Tree model
-    dt_accuracy, dt_precision, dt_recall, dt_f1, dt_conf_matrix = evaluate_model(
-        dec_tree_model, X_test, y_test, "Decision Tree Classifier"
-    )
+    print(f"\nLogistic Regression weighted F1-score: {lr_f1:.4f}")
 
-    # --- Step 6: Model Comparison (Example) ---
-    # This section demonstrates choosing a model based on a metric (e.g., F1-score).
-    # The actual "best" model might depend on other factors or business requirements.
-    print("\n--- Model Comparison (Based on Weighted F1-score) ---")
-    if lr_f1 > dt_f1:
-        print(f"Logistic Regression selected as the better model (F1-score: {lr_f1:.4f} vs {dt_f1:.4f} for Decision Tree).")
-        # Potentially load this model for further use if needed, e.g., final_model = load_model(LOG_REG_MODEL_PATH)
-    elif dt_f1 > lr_f1:
-        print(f"Decision Tree Classifier selected as the better model (F1-score: {dt_f1:.4f} vs {lr_f1:.4f} for Logistic Regression).")
-        # final_model = load_model(DEC_TREE_MODEL_PATH)
-    else:
-        print(f"Both models have similar F1-scores (Logistic Regression: {lr_f1:.4f}, Decision Tree: {dt_f1:.4f}).")
 
     # --- Step 7: Live Prediction Example (using Logistic Regression model) ---
     # This demonstrates using the `predict_saci_fire_risk` function with sample live data.
