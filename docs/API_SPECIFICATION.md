@@ -181,6 +181,18 @@ Para um ambiente de produção, a API Central do Sistema Guardião exigirá meca
 
 A implementação detalhada destes mecanismos de segurança está fora do escopo da fase conceitual atual do MVP (Minimum Viable Product), mas é um requisito fundamental para implantações futuras. Os "Princípios Gerais da API" sobre segurança (HTTPS, etc.) devem ser observados desde o início.
 
+## 4. Requisitos Adicionais da API para Suporte ao Dashboard Detalhado
+
+A análise das `DASHBOARD_SPECIFICATIONS.md` (Dia 6) indica a necessidade de expansão ou detalhamento de endpoints da API para suportar plenamente as visualizações de dados ricas propostas. Embora os endpoints existentes (ex: `/api/v1/events`, `/api/v1/saci/risks`) forneçam uma base, os seguintes aspectos deverão ser considerados para futuras iterações da API:
+
+-   **Detalhes Completos do Evento:** Endpoints como `GET /api/v1/events/{event_id}/details` devem ser capazes de retornar informações granulares, incluindo detalhes técnicos, impacto estimado, fatores contribuintes e ações sugeridas, conforme especificado no painel de detalhes do evento do dashboard.
+-   **Key Performance Indicators (KPIs) por Subsistema:** A API precisará expor KPIs específicos para cada subsistema (SACI, IARA, etc.) para popular o painel `SystemStatus` do dashboard (ex: `GET /api/v1/subsystems/{subsistema_nome}/kpis`).
+-   **Dados para Mapas de Calor:** Endpoints como `GET /api/v1/saci/heatmap` ou `GET /api/v1/iara/heatmap` devem suportar a consulta de dados agregados de risco, potencialmente com filtros espaço-temporais, para a geração dos mapas de calor de risco.
+-   **Dados de Grafos de Dependência (BOITATÁ):** Para a visualização de dependências urbanas do BOITATÁ, a API deve fornecer dados estruturados de grafos (lista de nós e arestas), por exemplo, via `GET /api/v1/boitata/dependency_graph`.
+-   **Timelines de Eventos Correlacionados:** A API deve ser capaz de fornecer sequências de eventos que foram identificados como correlacionados pelo `ThreatCorrelationEngine`, alimentando a visualização da timeline (ex: `GET /api/v1/events/correlated_timeline`).
+
+Os schemas de resposta associados (potencialmente em `src/api/schemas.py` ou um local similar) também precisarão ser expandidos para acomodar esses conjuntos de dados detalhados. Esta nota serve como um reconhecimento desses requisitos para o desenvolvimento futuro da API.
+
 ## Considerações Futuras
 
 - **API de Desenvolvedor Externo:** Para permitir que terceiros (aprovados) integrem com o Sistema Guardião.
