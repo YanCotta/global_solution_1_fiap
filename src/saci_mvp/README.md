@@ -121,6 +121,9 @@ LOG_LEVEL=INFO
 ## 📡 HARDWARE - ESP32 SENSOR NODE
 
 ### Componentes Necessários
+
+**Nota sobre Sensores MVP:** A implementação atual do firmware MVP (conforme `src/hardware/esp32/saci_sensor_node.py`) foca nos sensores DHT22 (temperatura/umidade) e MQ-135/MQ-2 (gases/fumaça). A lista abaixo representa a especificação completa planejada para o nó SACI ou iterações futuras do MVP, visando expandir as capacidades de monitoramento ambiental.
+
 | Componente | Modelo | Função | Preço Estimado |
 |------------|--------|--------|----------------|
 | Microcontrolador | ESP32-WROOM-32 | Processamento principal | R$ 35 |

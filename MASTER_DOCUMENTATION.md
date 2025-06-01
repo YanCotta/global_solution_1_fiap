@@ -137,7 +137,7 @@ O Sistema Guardião emprega um conjunto diversificado de protocolos de comunica�
 O `GuardianCentralOrchestrator` é o cérebro estratégico do Sistema Guardião. Seu fluxo de dados e processo decisório são complexos e iterativos:
 
 1.  **Ingestão de Eventos e Inteligência:**
-    *   Recebe fluxos contínuos de eventos, alertas e dados processados dos cinco subsistemas (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) via tópicos dedicados no Kafka.
+    *   Recebe fluxos contínuos de eventos, alertas e dados processados dos cinco subsistemas (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) via tópicos dedicados no Kafka. Esses eventos são padronizados (por exemplo, como objetos ThreatEvent, conforme definido em `guardian_orchestrator.py`) e podem incluir detalhes granulares como `origin_sensor_id` para rastreabilidade precisa da origem do dado.
     *   Consome dados de fontes externas (meteorologia, inteligência de ameaças globais, dados governamentais) através de adaptadores específicos.
 
 2.  **Enriquecimento e Contextualização:**

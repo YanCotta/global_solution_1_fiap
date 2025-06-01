@@ -37,6 +37,11 @@ Power_Management:
   low_power_mode: "Deep sleep <10µA"
   
 Sensor_Array:
+  # NOTE: The currently implemented MVP firmware (src/hardware/esp32/saci_sensor_node.py)
+  # primarily utilizes the DHT22 for temperature/humidity and an analog gas sensor
+  # (like MQ-2 or MQ-135, referred to as MQ-2 in this section's original list) for air quality/smoke.
+  # The sensors listed below represent the full planned specification for the SACI node
+  # or future MVP iterations. The initial MVP focuses on core fire detection capabilities.
   temperature_humidity: "DHT22"
   smoke_detection: "MQ-2 gas sensor" 
   co2_measurement: "MH-Z19B NDIR"
