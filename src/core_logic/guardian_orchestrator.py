@@ -47,32 +47,45 @@ class MetaLearningEngine:
         # Placeholder for initialization (e.g., loading models, connecting to databases)
         pass
     
-    async def suggest_response_strategies(self, correlated_events: Dict, historical_data: List[Dict]) -> Dict:
+    async def suggest_response_strategies(self, correlated_events: Dict[str, List[str]], historical_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Suggests or refines response strategies based on correlated events and historical data.
 
         Args:
-            correlated_events (Dict): Output from MultiThreatCorrelator, e.g., groups of linked events.
-            historical_data (List[Dict]): Data on past responses and their outcomes.
+            correlated_events (Dict[str, List[str]]): Output from `MultiThreatCorrelator.analyze_correlations()`,
+                                                     detailing groups of correlated event IDs.
+                                                     Example: `{'group_1': [event_id_1, event_id_2]}`
+            historical_data (List[Dict[str, Any]]): A list of dictionaries, where each dictionary
+                                                     represents a past response plan, its execution
+                                                     results, and assessed outcome. Example:
+                                                     `[{'plan_id': 'rp_123', 'actions_taken': [...], 'outcome': {'success': True, 'effectiveness': 0.85}}]`
 
         Returns:
-            Dict: Containing suggested strategies, action priorities, or predicted effectiveness scores.
-                  Example: {'strategic_priority': 'group_1', 'suggested_actions': [...]}
+            Dict[str, Any]: A dictionary containing suggested strategies, action priorities,
+                            or predicted effectiveness scores. Example:
+                            `{'strategic_priority': 'group_1', 'suggested_actions': [{'type': 'deploy_saci_drones', 'urgency': 0.9}], 'predicted_effectiveness': 0.75}`
         """
-        print(f"MetaLearningEngine: Suggesting strategies for correlated events: {correlated_events.keys if isinstance(correlated_events, dict) else 'N/A'}")
+        print(f"MetaLearningEngine: Suggesting strategies for correlated events: {correlated_events.keys() if isinstance(correlated_events, dict) else 'N/A'}")
         # Placeholder: Actual logic would involve complex analysis and machine learning.
         return {"suggested_strategy": "default_containment_protocol", "confidence": 0.6}
 
-    async def learn_from_response(self, response_plan: Dict, action_results: List[Dict], outcome_assessment: Dict) -> None:
+    async def learn_from_response(self, response_plan: Dict[str, Any], action_results: List[Dict[str, Any]], outcome_assessment: Dict[str, Any]) -> None:
         """
         Learns from the effectiveness of a completed response plan and its outcomes.
         This method updates the engine's knowledge based on what worked and what didn't.
 
         Args:
-            response_plan (Dict): The response plan that was executed.
-            action_results (List[Dict]): The results from each subsystem's actions.
-            outcome_assessment (Dict): An overall assessment of the response's success/failure and impact.
-                                      Example: {'success': True, 'impact_achieved': 0.7, 'lessons_learned': '...'}
+            response_plan (Dict[str, Any]): The response plan that was executed. Expected to contain
+                                            keys like 'plan_id', 'target_event_ids',
+                                            'subsystem_actions', 'coordination_strategy'.
+                                            Example: `{'plan_id': 'rp_xyz', 'subsystem_actions': {'saci': [...]}}`
+            action_results (List[Dict[str, Any]]): A list of dictionaries, where each dictionary
+                                                   details the result of a specific action taken
+                                                   by a subsystem. Example:
+                                                   `[{'action_id': 'saci_drone_deploy_1', 'status': 'completed', 'outcome_details': '...'}]`
+            outcome_assessment (Dict[str, Any]): An overall assessment of the response's success and
+                                                 impact. Example:
+                                                 `{'success': True, 'impact_achieved': 0.7, 'lessons_learned': 'Early drone deployment was crucial.', 'effectiveness_score': 0.8}`
         """
         print(f"MetaLearningEngine: Learning from response plan {response_plan.get('plan_id', 'N/A')}")
         # Placeholder: Actual logic would update internal models or databases.
@@ -85,7 +98,7 @@ class MultiThreatCorrelator:
         # Placeholder for initialization
         pass
     
-    async def analyze_correlations(self, events: List[ThreatEvent]) -> Dict:
+    async def analyze_correlations(self, events: List[ThreatEvent]) -> Dict[str, Any]:
         """
         Identifies and scores potential correlations between different threat events.
 
@@ -93,11 +106,9 @@ class MultiThreatCorrelator:
             events (List[ThreatEvent]): A list of threat events to analyze.
 
         Returns:
-            Dict: A dictionary detailing identified correlations.
-                  Example: {'correlation_groups': {'group_1': [event_id_1, event_id_2]},
-                            'correlation_matrix': [...],
-                            'confidence_scores': {'group_1': 0.85}}
-                  Returns an empty dict if no significant correlations are found.
+            Dict[str, Any]: A dictionary detailing identified correlations. Example structure:
+                            `{'correlation_groups': {'group_1': ['event_id_1', 'event_id_2'], 'group_2': ['event_id_3']}, 'correlation_matrix': [[1.0, 0.75, 0.2], [0.75, 1.0, 0.1], [0.2, 0.1, 1.0]], 'confidence_scores': {'group_1': 0.85, 'group_2': 0.6}}`.
+                            Returns an empty dict if no significant correlations are found or if input is empty.
         """
         print(f"MultiThreatCorrelator: Analyzing correlations for {len(events)} events.")
         if not events:
