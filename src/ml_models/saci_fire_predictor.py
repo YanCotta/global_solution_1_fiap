@@ -4,7 +4,7 @@ SACI Fire Prediction Model Training and Prediction Script.
 This script handles the complete lifecycle of a fire risk prediction model, including:
 - Loading data from a CSV file.
 - Preprocessing the data: feature selection and handling missing values (if any).
-- Training two types of classification models: Logistic Regression and Decision Tree.
+- Training a classification model (primarily Logistic Regression, with provisions for others like Decision Trees if fully implemented).
 - Evaluating the trained models using various metrics (accuracy, precision, recall, F1-score, confusion matrix).
 - Saving the trained models to disk using joblib.
 - Loading models from disk.
@@ -17,6 +17,7 @@ The main execution block (`if __name__ == '__main__':`) orchestrates these steps
 # src/ml_models/saci_fire_predictor.py
 # Machine Learning model for SACI Fire Prediction
 
+import os
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -85,6 +86,8 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
 
     X = df[features].copy() # Use .copy() to avoid SettingWithCopyWarning on potential future modifications
     y = df[target].copy()
+    # Assuming 'fire_risk_label' is encoded as: 0 for No Fire, 1 for Fire.
+    # This should be consistent with the dataset generation process.
 
     # If specific imputation for selected features were needed, it would go here.
     # Example:
@@ -228,6 +231,7 @@ if __name__ == '__main__':
     print("\n--- Training Logistic Regression Model ---")
     log_reg_model = train_logistic_regression(X_train, y_train)
     print("Logistic Regression model trained successfully.")
+    os.makedirs(os.path.dirname(LOG_REG_MODEL_PATH), exist_ok=True)
     save_model(log_reg_model, LOG_REG_MODEL_PATH) # Save the trained model
     print("--- Logistic Regression Model Training and Saving Completed ---")
 
