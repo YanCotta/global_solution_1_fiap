@@ -72,7 +72,7 @@ services:
       INFLUXDB_ORG: sistema-guardiao
       INFLUXDB_BUCKET: sensor_data
       REDIS_URL: redis://:guardiao_secure_2024@redis:6379/0
-      ML_MODEL_PATH: /app/models/fire_risk_model.pkl
+      ML_MODEL_PATH: /app/models/saci_fire_risk_model.joblib
     ports:
       - "8000:8000"
     volumes:
