@@ -231,7 +231,9 @@ if __name__ == '__main__':
     print("\n--- Training Logistic Regression Model ---")
     log_reg_model = train_logistic_regression(X_train, y_train)
     print("Logistic Regression model trained successfully.")
-    os.makedirs(os.path.dirname(LOG_REG_MODEL_PATH), exist_ok=True)
+    dir_path = os.path.dirname(LOG_REG_MODEL_PATH)
+    if dir_path:  # Ensure the directory path is non-empty
+        os.makedirs(dir_path, exist_ok=True)
     save_model(log_reg_model, LOG_REG_MODEL_PATH) # Save the trained model
     print("--- Logistic Regression Model Training and Saving Completed ---")
 
