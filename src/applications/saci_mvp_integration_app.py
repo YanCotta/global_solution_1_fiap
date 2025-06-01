@@ -26,8 +26,8 @@ Options:
                              (default: /dev/ttyUSB0 on Linux, COM3 on Windows).
     --baud BAUD_RATE         Baud rate for serial communication (default: 115200).
     --model_path MODEL_FILE  Path to the trained .joblib model file
-                             (default: saci_logistic_regression_model.joblib,
-                             expected in the script's directory or a reachable path).
+                             (default: models/saci_logistic_regression_model.joblib,
+                             expected in the 'models' directory relative to the project root).
 
 Example:
     python src/applications/saci_mvp_integration_app.py --port /dev/ttyS0 --baud 9600 --model_path models/my_saci_model.joblib
@@ -48,6 +48,11 @@ Note:
 import time
 from datetime import datetime
 import argparse # For command-line arguments
+import logging # Import the logging module
+
+# Configure basic logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Assuming the script is run from the root of the project or PYTHONPATH is set up
 # If running from root, 'python -m src.applications.saci_mvp_integration_app' might be needed
@@ -58,7 +63,7 @@ from src.ml_models.saci_fire_predictor import load_model, predict_saci_fire_risk
 # --- Configuration Constants ---
 DEFAULT_SERIAL_PORT = '/dev/ttyUSB0'  # Adjust for your OS (e.g., 'COM3' on Windows)
 DEFAULT_BAUD_RATE = 115200
-DEFAULT_MODEL_PATH = 'saci_logistic_regression_model.joblib' # Ensure this path is correct relative to execution location or use an absolute path.
+DEFAULT_MODEL_PATH = 'models/saci_logistic_regression_model.joblib' # Default path relative to the project root.
 
 def parse_arguments():
     """
@@ -119,13 +124,13 @@ def main():
     # Attempts to establish a connection to the specified serial port.
     # Exits if the connection fails.
     if not reader.connect(): # reader.connect() returns True on success, False on failure
-        print(f"ERROR: Failed to connect to serial port {args.port}. Please check the connection, port settings, and permissions.")
+        logger.error(f"Failed to connect to serial port {args.port}. Please check the connection, port settings, and permissions.")
         return  # Exit application if serial connection fails
 
-    print(f"INFO: Connected to ESP32 on {args.port} at {args.baud} baud.")
-    print("INFO: Starting real-time fire risk prediction...")
-    print("INFO: Press Ctrl+C to stop the application.")
-    print("-" * 70) # Print a separator line for clarity
+    logger.info(f"Connected to ESP32 on {args.port} at {args.baud} baud.")
+    logger.info("Starting real-time fire risk prediction...")
+    logger.info("Press Ctrl+C to stop the application.")
+    logger.info("-" * 70) # Print a separator line for clarity
 
     try:
         # --- 4. Main Processing Loop ---
@@ -163,6 +168,7 @@ def main():
                                         f"Invalid probability_scores shape: expected 2 elements, got {len(probability_scores)}. "
                                         f"Scores: {probability_scores}"
                                     )
+                                # probability_scores[1] corresponds to P(Fire), assuming model classes are ordered [No Fire, Fire].
                                 prob_fire = probability_scores[1]
                                 risk_status = "Fire Detected" if predicted_label == 1 else "No Fire Detected"
 
@@ -173,20 +179,20 @@ def main():
                                     f"Live Data: Temp={temp}°C, Hum={hum}%, Smoke ADC={smoke_adc} -> "
                                     f"Predicted Risk: {risk_status}, P(Fire): {prob_fire:.2f}"
                                 )
-                                print(output_str)
+                                logger.info(output_str)
 
                             except Exception as pred_e: # Handle errors during the prediction step
-                                print(f"ERROR: Prediction failed: {pred_e}. Input data: {parsed_data}")
+                                logger.error(f"Prediction failed: {pred_e}. Input data: {parsed_data}")
                         else:
                             # Log if essential data (temp, hum, smoke) is missing after successful parsing
                             # This can happen if the ESP32 sends "ERROR" for a sensor, which parse_sensor_data might handle by omitting the key.
-                            print(f"INFO: Incomplete sensor data received, skipping prediction. Raw: '{line}', Parsed: {parsed_data}")
+                            logger.info(f"Incomplete sensor data received, skipping prediction. Raw: '{line}', Parsed: {parsed_data}")
                     else:
                         # Log lines that are not successfully parsed as sensor data
                         # These could be ESP32 status messages, boot messages, or noise.
                         # Filter out common, expected non-data messages from ESP32 if necessary.
                         if line and not line.startswith("SACI MVP") and not line.startswith("ESP32:") and not line.startswith("[INFO]"):
-                             print(f"RAW ESP32 Output: {line}")
+                             logger.info(f"RAW ESP32 Output: {line}")
 
 
                 # Main loop delay: controls how frequently the loop checks for serial data.
@@ -195,21 +201,21 @@ def main():
 
             except UnicodeDecodeError as ude: # Handle potential errors decoding serial data
                 # This can happen if baud rates don't match or due to line noise.
-                print(f"WARNING: Unicode decode error for line: '{line if 'line' in locals() else '<unavailable>'}'. Error: {ude}")
+                logger.warning(f"Unicode decode error for line: '{line if 'line' in locals() else '<unavailable>'}'. Error: {ude}")
             except Exception as loop_e: # Catch-all for other unexpected errors within the loop
-                print(f"ERROR: An unexpected error occurred in the processing loop: {loop_e}")
+                logger.error(f"An unexpected error occurred in the processing loop: {loop_e}")
                 time.sleep(1) # Pause briefly before continuing to avoid rapid error messages
 
     except KeyboardInterrupt: # Handle graceful shutdown on Ctrl+C
-        print("\nINFO: KeyboardInterrupt received. Shutting down application...")
+        logger.info("KeyboardInterrupt received. Shutting down application...")
     finally:
         # --- 5. Cleanup ---
         # This block executes regardless of how the try block exits (success or exception).
         # Ensures resources like the serial connection are properly released.
         if reader and reader.serial_conn and reader.serial_conn.is_open:
-            print("INFO: Disconnecting serial reader and closing port.")
+            logger.info("Disconnecting serial reader and closing port.")
             reader.disconnect()
-        print("INFO: SACI MVP Integration Application stopped.")
+        logger.info("SACI MVP Integration Application stopped.")
 
 if __name__ == '__main__':
     # This standard Python construct ensures that main() is called only when the script
