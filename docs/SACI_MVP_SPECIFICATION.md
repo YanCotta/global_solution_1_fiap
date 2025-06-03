@@ -1108,3 +1108,46 @@ Operational_Metrics:
 ---
 
 This comprehensive SACI MVP specification provides the foundation for implementing a functional fire prevention system that can demonstrate the core capabilities of the Sistema Guardião platform.
+
+---
+
+## SACI MVP: Current Limitations and Future Enhancements
+
+This section outlines the known limitations of the current Minimum Viable Product (MVP) for the SACI system and discusses potential enhancements for future development iterations. The MVP is designed to deliver core functionality and validate the system's concept, with the understanding that further improvements will be built upon this foundation.
+
+### Current Limitations
+
+1.  **Simplified Sensor Array:**
+    *   The current MVP implementation, as detailed in `src/hardware/esp32/saci_sensor_node.py`, primarily utilizes a DHT22 sensor for temperature and humidity, and an analog gas sensor (like the MQ-135) for basic air quality and smoke detection. This is a simplified set compared to the full hardware specification which includes specialized sensors like the MH-Z19B (CO2), BH1750 (light intensity), soil moisture sensors, and anemometers.
+
+2.  **Basic Machine Learning Model:**
+    *   Fire risk prediction is currently handled by a Logistic Regression model, as implemented in `src/ml_models/saci_fire_predictor.py`. While functional for demonstrating the prediction pipeline, this is a relatively basic model and may not capture complex environmental interactions as effectively as more advanced algorithms.
+
+3.  **Console-Only Application Interface:**
+    *   The main integration application (`src/applications/saci_mvp_integration_app.py`) provides output and status updates exclusively through the console. It lacks a graphical user interface (GUI) or a web-based dashboard, which would offer more intuitive visualization and interaction for end-users.
+
+4.  **Serial-Based Data Transmission:**
+    *   Data transmission from the ESP32 sensor node to the host machine in the MVP primarily relies on a direct serial (USB) connection. This setup is suitable for development and testing but is not designed for field deployment over wider areas, which would typically require wireless protocols like LoRaWAN or MQTT.
+
+5.  **No Implemented Swarm Intelligence:**
+    *   The current MVP codebase does not include the advanced swarm intelligence features envisioned for the full SACI system. Features such as dynamic sensor coordination based on detected events, distributed data analysis, or optimized alert routing among nodes are not yet implemented.
+
+### Future Enhancements
+
+1.  **Full Sensor Integration:**
+    *   Integrate the complete array of sensors as specified in the hardware design document. This includes incorporating the MH-Z19B for CO2 measurements, BH1750 for light intensity, soil moisture sensors, wind speed and direction sensors, and others. This will provide a richer dataset for more accurate environmental assessment and fire risk prediction.
+
+2.  **Advanced Machine Learning Models:**
+    *   Develop and deploy more sophisticated Machine Learning (e.g., Random Forests, Gradient Boosting Machines, Support Vector Machines) or Deep Learning models (e.g., LSTMs, CNNs for spatio-temporal analysis). This will aim to improve prediction accuracy, reduce false positives/negatives, and provide more nuanced risk assessments.
+
+3.  **Graphical User Interface (GUI) / Web Dashboard:**
+    *   Create a user-friendly GUI (desktop application) or a web-based dashboard. This interface will allow users to visualize real-time sensor data from multiple nodes, view current and historical fire risk levels on a map, receive and manage alerts, and configure system settings.
+
+4.  **Robust Wireless Communication:**
+    *   Implement field-deployable wireless communication protocols such as LoRaWAN (for long-range, low-power communication) or MQTT (for lightweight publish/subscribe messaging over IP networks like Wi-Fi or cellular). This is crucial for deploying sensor nodes across large geographical areas.
+
+5.  **Swarm Intelligence Features:**
+    *   Begin the phased introduction of swarm intelligence capabilities. This could start with features like:
+        *   **Adaptive Sensing:** Allowing sensor nodes to dynamically adjust their sensing frequency or data transmission rates based on detected events or instructions from a central system or other nodes.
+        *   **Collaborative Data Analysis:** Enabling nodes to share data or partial analyses with nearby nodes to improve local decision-making or validate alerts.
+        *   **Optimized Alert Dissemination:** Developing strategies for alerts to propagate efficiently through the network to relevant stakeholders or actuator systems.
