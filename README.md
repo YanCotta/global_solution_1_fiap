@@ -284,20 +284,7 @@ docker-compose logs saci_api
 
 ### **Stack Tecnológico Testado**
 
-#### Backend & IA ✅
-- **Python 3.11+** - FastAPI, Scikit-learn, Pandas, NumPy
-- **Banco de Dados** - PostgreSQL, InfluxDB, Redis (via Docker)
-- **ML Pipeline** - Joblib, modelos persistentes
-
-#### Hardware & IoT ✅  
-- **Microcontrolador** - ESP32-WROOM-32
-- **Sensores** - DHT22, MQ-135/MQ-2
-- **Comunicação** - Serial USB, preparado para LoRaWAN
-
-#### DevOps & Infraestrutura ✅
-- **Containerização** - Docker, Docker Compose
-- **Orquestração** - Kubernetes (configurado)
-- **CI/CD** - GitHub Actions (preparado)
+Key technologies have been validated as part of the MVP. For detailed justifications and a full tech stack breakdown, refer to the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#tech-stack-consolidado).
 
 ---
 
@@ -485,21 +472,7 @@ Model loaded from models/saci_fire_risk_model.joblib
 
 ### Arquitetura Multi-Camadas
 
-```mermaid
-┌─────────────────────────────────────────────────────────┐
-│           COORDENAÇÃO AGÊNTICA CENTRAL                  │
-│        (GuardianCentralOrchestrator + CrewAI)           │
-├─────────────────────────────────────────────────────────┤
-│              SUBSISTEMAS ESPECIALIZADOS                 │
-│     CURUPIRA │ IARA │ SACI │ BOITATÁ │ ANHANGÁ          │
-├─────────────────────────────────────────────────────────┤
-│            CONECTIVIDADE AVANÇADA                       │
-│    (5G/6G, LoRaWAN, Mesh Networks, Satélite)            │
-├─────────────────────────────────────────────────────────┤
-│           SENSORIAMENTO DISTRIBUÍDO                     │
-│         (IoT Edge + AI Distribuída)                     │
-└─────────────────────────────────────────────────────────┘
-```
+The system uses a multi-layered architecture. For a detailed architectural overview and C4 diagrams, please see the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
 
 ---
 
@@ -518,21 +491,7 @@ Model loaded from models/saci_fire_risk_model.joblib
 
 ## 📊 Tech Stack Principal
 
-**Backend & IA:**
-
-- Python 3.11+ (FastAPI, PyTorch, CrewAI)
-- PostgreSQL + Neo4j + InfluxDB
-- Apache Kafka + Redis
-
-**Edge Computing:**
-
-- ESP32-S3 (MicroPython/C++)
-- LoRa E32 (Comunicação longo alcance)
-
-**Frontend:**
-
-- React + TypeScript
-- D3.js (Visualizações especializadas)
+The core technologies include Python, Kubernetes, Kafka, and a multi-modal database approach. For detailed justifications and a full tech stack breakdown, refer to the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#tech-stack-consolidado).
 
 ---
 
@@ -660,15 +619,6 @@ Model loaded from models/saci_fire_risk_model.joblib
 2.  **Revise a [documentação principal](./MASTER_DOCUMENTATION.md)**
 3.  **Explore os [diagramas C4](./sistema_guardiao_c4_diagrams.html)**
 4.  **Acompanhe o progresso via Issues e Projects**
-
-### **Global Solution FIAP 2025.1 - Desenvolvido por Yan Cotta**
-
-- **IA/ML:** PyTorch, Scikit-learn, HuggingFace Transformers, TensorFlow Lite, Pandas, NumPy.
-- **Bancos de Dados:** PostgreSQL + TimescaleDB (relacional e séries temporais), Neo4j (grafos), InfluxDB (métricas IoT), Redis (cache).
-- **Infraestrutura & Mensageria:** Kubernetes, Docker, Apache Kafka, RabbitMQ.
-- **IoT & Edge:** ESP32 (com MicroPython/C++), Raspberry Pi, LoRaWAN, MQTT.
-- **Frontend (Conceitual):** React, D3.js.
-- **API:** FastAPI.
 
 ---
 
