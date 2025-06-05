@@ -118,7 +118,6 @@ class SACISerialReader:
 
     def parse_sensor_data(self, line: str) -> Optional[Dict[str, any]]:
         """
-        """
         Parses a single line of sensor data received from the ESP32.
 
         The expected format is:
@@ -172,8 +171,8 @@ class SACISerialReader:
         Continuously reads data from the serial port. For each line read,
         it attempts to parse it as sensor data. If successful, the parsed
         data is printed (if verbose) and logged to a file (if specified).
-        If parsing fails, the raw line is printed (if verbose and it's not
-        one of this script's own log messages).
+        If parsing fails, the raw line is printed (if verbose and it is not
+        one of this script own log messages).
 
         The loop handles serial communication errors, unicode decoding errors,
         and file I/O errors gracefully. It terminates on KeyboardInterrupt (Ctrl+C)
@@ -266,7 +265,6 @@ class SACISerialReader:
                     print(f"[ERROR] Error closing log file '{output_file_path}': {e}")
 
     def print_formatted_data(self, data: Dict[str, any]) -> None:
-        """
         """
         Prints parsed sensor data to the console in a structured, human-readable format.
 
