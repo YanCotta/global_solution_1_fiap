@@ -305,32 +305,33 @@ O Sistema Guardião emprega um conjunto diversificado de protocolos de comunica�
 
 ### GuardianCentralOrchestrator: Fluxo de Dados e Decisão
 
-O `GuardianCentralOrchestrator` é o cérebro estratégico do Sistema Guardião. Seu fluxo de dados e processo decisório são complexos e iterativos:
+O `GuardianCentralOrchestrator` é o cérebro estratégico do Sistema Guardião. Seu fluxo de dados e processo decisório seguem um processo de cinco estágios principais, inspirado no fluxo conceitual detalhado em `docs/DESIGN_NOTES.md`:
 
-1.  **Ingestão de Eventos e Inteligência:**
-    *   Recebe fluxos contínuos de eventos, alertas e dados processados dos cinco subsistemas (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) via tópicos dedicados no Kafka. Esses eventos são padronizados (por exemplo, como objetos ThreatEvent, conforme definido em `guardian_orchestrator.py`) e podem incluir detalhes granulares como `origin_sensor_id` para rastreabilidade precisa da origem do dado.
-    *   Consome dados de fontes externas (meteorologia, inteligência de ameaças globais, dados governamentais) através de adaptadores específicos.
+1.  **Ingestão e Contextualização Inicial de Eventos:**
+    *   Recebe fluxos contínuos de `ThreatEvent` (eventos de ameaça padronizados, conforme `src/core_logic/guardian_orchestrator.py`) dos cinco subsistemas (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) via Kafka, podendo incluir `origin_sensor_id` para rastreabilidade.
+    *   Consome dados de fontes externas (meteorologia, inteligência de ameaças globais, dados governamentais).
+    *   Realiza o enriquecimento inicial buscando contextos em bases de dados como **Pinecone (VectorDB)** para padrões históricos, **PostgreSQL** para dados relacionais de ativos e políticas, e **Neo4j** para interdependências de infraestrutura.
 
-2.  **Enriquecimento e Contextualização:**
-    *   Utiliza o **Pinecone (VectorDB)** para buscar contextos semânticos relevantes, como padrões históricos de eventos, perfis de ameaças similares e documentos de procedimentos operacionais.
-    *   Consulta o **PostgreSQL** para dados relacionais estruturados, como inventário de ativos críticos, políticas de segurança, e status de recursos.
-    *   Acessa o **Neo4j** para entender interdependências complexas entre infraestruturas e potenciais efeitos cascata.
+2.  **Correlação de Ameaças e Geração de Estratégia de Resposta (Inteligência Agêntica):**
+    *   **Correlação de Ameaças:** Utiliza o `MultiThreatCorrelator` para examinar os eventos recebidos em busca de relações espaciais, temporais, causais ou padrões conhecidos. O objetivo é agrupar ou vincular eventos que possam ser parte de um incidente maior ou ter impactos em cascata.
+    *   **Geração de Estratégia de Resposta:** Com base nos eventos correlacionados e no histórico de respostas anteriores (`self.response_history`), o `MetaLearningEngine` propõe estratégias de resposta otimizadas. Ele visa prever a eficácia de diferentes ações, priorizar respostas e adaptar táticas com base no aprendizado de incidentes passados.
+    *   Este estágio emprega um framework de IA agêntica (inspirado em **CrewAI/LangGraph**) onde agentes especializados colaboram para avaliar severidade, simular cenários e otimizar tarefas. Para detalhes sobre o `MetaLearningEngine` e `ThreatCorrelationEngine`, consulte [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md). Modelos de ML são continuamente refinados.
 
-3.  **Análise e Tomada de Decisão Agêntica:**
-    *   Emprega um framework de IA agêntica (inspirado em **CrewAI/LangGraph**) onde agentes especializados dentro do Orchestrator analisam a situação multifacetada.
-    *   Estes agentes colaboram para: avaliar a severidade e o impacto potencial do evento; simular cenários de resposta; identificar conflitos de recursos; e otimizar a alocação de tarefas.
-    *   Para capacidades analíticas e de aprendizado ainda mais profundas, o GuardianCentralOrchestrator incorpora e gerencia motores de IA avançados, como o **MetaLearningEngine** (responsável pelo aprendizado evolutivo do sistema e descoberta de padrões emergentes) e o **ThreatCorrelationEngine** (especializado na identificação de conexões ocultas entre eventos e orquestração de respostas complexas). Esses motores são fundamentais para a inteligência estratégica e adaptativa do sistema. Para uma exploração aprofundada destes componentes de IA avançada, consulte o documento [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
-    *   Modelos de aprendizado de máquina (predição, classificação, otimização) são continuamente atualizados e refinados com novos dados.
+3.  **Formulação do Plano de Resposta Detalhado:**
+    *   Com base nos eventos brutos, nos insights do `MultiThreatCorrelator` e nas estratégias do `MetaLearningEngine`, o Orchestrator constrói um `response_plan` detalhado.
+    *   Este plano é um dicionário estruturado que especifica o `plan_id`, os `target_event_ids`, as `subsystem_actions` (detalhando `action_type`, `target_area`, `parameters` para cada subsistema como SACI, CURUPIRA, IARA, etc.), a `coordination_strategy` e a `overall_priority`.
 
-4.  **Disseminação de Comandos e Coordenação:**
-    *   Com base no plano de ação gerado, o Orchestrator dissemina tarefas coordenadas e comandos para os subsistemas relevantes:
-        *   Via **Kafka** para ações assíncronas e atualizações de estado.
-        *   Via **gRPC** para comandos diretos e de baixa latência que exigem confirmação imediata.
-    *   Atualiza dashboards executivos e painéis de controle com a situação em tempo real e as ações em curso.
+4.  **Execução Coordenada e Assíncrona das Ações nos Subsistemas:**
+    *   O Orchestrator dissemina as partes relevantes do `response_plan` para cada subsistema envolvido.
+    *   As chamadas aos métodos dos subsistemas (ex: `subsystem_instance.execute_response_plan(actions_for_subsystem)`) são executadas de forma concorrente usando `asyncio.gather` para eficiência e operação não bloqueante.
+        *   Comandos e atualizações de estado são comunicados via **Kafka** (assíncrono) ou **gRPC** (síncrono para confirmações imediatas).
+    *   Os subsistemas retornam o status e os resultados das ações executadas.
+    *   Dashboards executivos são atualizados com a situação em tempo real.
 
-5.  **Monitoramento e Aprendizado Contínuo:**
-    *   Monitora a execução das tarefas pelos subsistemas, recebendo feedback e ajustando o plano conforme necessário.
-    *   Registra todos os eventos, decisões e resultados para análise post-mortem e aprendizado contínuo (RLHF - Reinforcement Learning from Human Feedback e análise de logs).
+5.  **Monitoramento, Registro e Aprendizado Contínuo:**
+    *   Os resultados das ações dos subsistemas são coletados, registrados e monitorados.
+    *   Esses dados de resultado, juntamente com o `response_plan` original, são realimentados no `MetaLearningEngine` (via `learn_from_response`) para atualizar sua base de conhecimento e refinar futuras sugestões de estratégia.
+    *   O `response_history` é atualizado com o plano, ações tomadas, e seus resultados para análise post-mortem e aprendizado contínuo (ex: RLHF).
 
 ### Segurança, Soberania de Dados e Conformidade
 

@@ -183,15 +183,103 @@ A implementação detalhada destes mecanismos de segurança está fora do escopo
 
 ## 4. Requisitos Adicionais da API para Suporte ao Dashboard Detalhado
 
-A análise das `DASHBOARD_SPECIFICATIONS.md` (Dia 6) indica a necessidade de expansão ou detalhamento de endpoints da API para suportar plenamente as visualizações de dados ricas propostas. Embora os endpoints existentes (ex: `/api/v1/events`, `/api/v1/saci/risks`) forneçam uma base, os seguintes aspectos deverão ser considerados para futuras iterações da API:
+Nota: Os modelos de dados detalhados para as respostas da API, utilizando Pydantic, são definidos em `src/api/schemas.py`. As descrições de payload abaixo fornecem uma visão conceitual da estrutura esperada.
 
--   **Detalhes Completos do Evento:** Endpoints como `GET /api/v1/events/{event_id}/details` devem ser capazes de retornar informações granulares, incluindo detalhes técnicos, impacto estimado, fatores contribuintes e ações sugeridas, conforme especificado no painel de detalhes do evento do dashboard.
--   **Key Performance Indicators (KPIs) por Subsistema:** A API precisará expor KPIs específicos para cada subsistema (SACI, IARA, etc.) para popular o painel `SystemStatus` do dashboard (ex: `GET /api/v1/subsystems/{subsistema_nome}/kpis`).
--   **Dados para Mapas de Calor:** Endpoints como `GET /api/v1/saci/heatmap` ou `GET /api/v1/iara/heatmap` devem suportar a consulta de dados agregados de risco, potencialmente com filtros espaço-temporais, para a geração dos mapas de calor de risco.
--   **Dados de Grafos de Dependência (BOITATÁ):** Para a visualização de dependências urbanas do BOITATÁ, a API deve fornecer dados estruturados de grafos (lista de nós e arestas), por exemplo, via `GET /api/v1/boitata/dependency_graph`.
--   **Timelines de Eventos Correlacionados:** A API deve ser capaz de fornecer sequências de eventos que foram identificados como correlacionados pelo `ThreatCorrelationEngine`, alimentando a visualização da timeline (ex: `GET /api/v1/events/correlated_timeline`).
+A análise das `DASHBOARD_SPECIFICATIONS.md` (Dia 6) indica a necessidade de expansão ou detalhamento de endpoints da API para suportar plenamente as visualizações de dados ricas propostas. Embora os endpoints existentes (ex: `/api/v1/events`, `/api/v1/saci/risks`) forneçam uma base, os seguintes endpoints e suas especificações são propostos:
 
-Os schemas de resposta associados (potencialmente em `src/api/schemas.py` ou um local similar) também precisarão ser expandidos para acomodar esses conjuntos de dados detalhados. Esta nota serve como um reconhecimento desses requisitos para o desenvolvimento futuro da API.
+1.  **`GET /api/v1/events/{event_id}/details`**
+    *   **Descrição:** Retorna detalhes completos de um evento específico para exibição no painel de detalhes do evento do ThreatMap.
+    *   **Path Parameters:** `event_id` (string, ID do evento).
+    *   **Query Parameters:** Nenhum.
+    *   **Response Payload Concept:** Um objeto JSON contendo chaves principais como `Informações_Basicas` (com `event_id`, `timestamp`, `subsistema_origem`, `tipo_ameaca`, `localizacao_precisa`, `severidade_atual`, `status_evento`), `Detalhes_Tecnicos` (com `dados_sensores_relevantes`, `assinaturas_detectadas`, `modelos_preditivos_usados`), `Impacto_Estimado` (com `impacto_populacao`, `impacto_infraestrutura`, `impacto_ambiental`, `impacto_economico`, `propagacao_risco_potencial`), e `Acoes_Sugeridas` (com `protocolos_recomendados`, `recursos_necessarios`, `comunicacoes_estrategicas`). A estrutura interna de cada chave deve seguir o detalhamento da seção 1.2 ("Painel de Detalhes do Evento") do `docs/DASHBOARD_SPECIFICATIONS.md`.
+
+2.  **`GET /api/v1/subsystems/{subsistema_nome}/kpis`**
+    *   **Descrição:** Retorna os Key Performance Indicators (KPIs) para um subsistema específico, para popular o painel `SystemStatus`.
+    *   **Path Parameters:** `subsistema_nome` (string, e.g., "SACI", "IARA", "CURUPIRA", "BOITATA", "ANHANGA").
+    *   **Query Parameters:** Nenhum.
+    *   **Response Payload Concept:** Um objeto JSON com `indicador_visual` (string, e.g., "verde", "amarelo", "vermelho"), `status_operacional` (string, e.g., "Operacional", "Degradado", "Falha Crítica"), `alertas_ativas` (integer), `kpi_principal` (um objeto com `metrica` (string, nome do KPI), `valor` (string ou float), `tendencia` (string, e.g., "estavel", "melhorando", "piorando")), `ultima_atualizacao` (datetime string), e opcionalmente `detalhes_degradacao` (string, presente se status não for "Operacional"). A estrutura deve seguir o detalhamento da seção 2.1 ("Painel de Status do Sistema (SystemStatus)") do `docs/DASHBOARD_SPECIFICATIONS.md`.
+
+3.  **`GET /api/v1/saci/heatmap`**
+    *   **Descrição:** Fornece dados agregados de risco de incêndio para a geração do mapa de calor do SACI.
+    *   **Path Parameters:** Nenhum.
+    *   **Query Parameters:**
+        *   `temporal` (string, opcional, e.g., "tempo_real", "ultima_hora", "12h", "24h", "proximas_6h_preditivo"). Default: "tempo_real".
+        *   `tipos_vegetacao` (string, opcional, lista separada por vírgulas, e.g., "mata_atlantica,cerrado,campo_aberto").
+        *   `fatores_risco` (string, opcional, e.g., "apenas_climatico", "combinado_climatico_historico", "atividade_humana_recente"). Default: "combinado_climatico_historico".
+        *   `bbox` (string, opcional, coordenadas da bounding box para filtrar geograficamente, e.g., "minLon,minLat,maxLon,maxLat").
+    *   **Response Payload Concept:** Uma lista de pontos de dados. Cada ponto é um objeto JSON com:
+        *   `geolocalizacao`: Objeto contendo `latitude` (float) e `longitude` (float), ou um objeto GeoJSON Point.
+        *   `risco_incendio_score`: Float, variando de 0.0 a 1.0, representando a intensidade do risco.
+        *   `direcao_vento_predominante`: String (opcional, e.g., "NNE", "SW"), se aplicável e disponível.
+        *   `umidade_relativa_media`: Float (opcional), percentual.
+        *   `temperatura_media`: Float (opcional), em Celsius.
+
+4.  **`GET /api/v1/iara/heatmap`**
+    *   **Descrição:** Fornece dados agregados de risco epidemiológico para a geração do mapa de calor do IARA.
+    *   **Path Parameters:** Nenhum.
+    *   **Query Parameters:**
+        *   `temporal` (string, opcional, e.g., "ultimas_24h", "ultimos_7_dias", "tendencia_proximos_14_dias_preditivo"). Default: "ultimas_24h".
+        *   `demograficos_faixa_etaria` (string, opcional, lista separada por vírgulas, e.g., "0-5_anos,60_mais_anos,todos").
+        *   `demograficos_vulnerabilidade` (string, opcional, e.g., "alta_comorbidades", "media_densidade_populacional", "baixa").
+        *   `patogenos` (string, opcional, lista separada por vírgulas de nomes de patógenos ou síndromes, e.g., "influenza_h1n1,dengue_tipo2,sindrome_respiratoria_aguda"). Default: "todos_relevantes".
+        *   `bbox` (string, opcional, coordenadas da bounding box para filtrar geograficamente, e.g., "minLon,minLat,maxLon,maxLat").
+    *   **Response Payload Concept:** Uma lista de pontos de dados. Cada ponto é um objeto JSON com:
+        *   `geolocalizacao`: Objeto contendo `latitude` (float) e `longitude` (float), ou um objeto GeoJSON Point.
+        *   `risco_epidemiologico_score`: Float, variando de 0.0 a 1.0, representando a intensidade do risco.
+        *   `patogeno_predominante`: String (opcional), nome do patógeno com maior contribuição para o risco na área.
+        *   `velocidade_propagacao_estimada`: String (opcional, e.g., "baixa", "moderada", "alta").
+
+5.  **`GET /api/v1/boitata/dependency_graph`**
+    *   **Description:** Fornece dados estruturados (nós e arestas) para a visualização de grafos de dependências urbanas do BOITATÁ.
+    *   **Path Parameters:** Nenhum.
+    *   **Query Parameters:**
+        *   `sector` (string, opcional, para focar em um setor específico da cidade ou tipo de infraestrutura, e.g., "energia_centro_sul", "agua_zona_norte", "hospital_principal").
+        *   `depth` (integer, opcional, para limitar a profundidade das dependências retornadas a partir de um nó central, se `sector` for um nó específico). Default: 3.
+        *   `node_filter_type` (string, opcional, para filtrar nós por tipo, e.g., "hospital,subestacao_energia").
+    *   **Response Payload Concept:** Um objeto JSON com duas chaves principais: `nodes` e `edges`.
+        *   `nodes`: Uma lista de objetos. Cada nó deve conter:
+            *   `id`: string (ID único do nó/ativo).
+            *   `label`: string (nome legível do nó, e.g., "Hospital Central").
+            *   `type`: string (tipo de infraestrutura, e.g., "hospital", "subestacao_energia", "rede_telecom").
+            *   `data`: Um objeto contendo informações detalhadas como:
+                *   `informacoes_basicas`: `nome_ativo`, `tipo_ativo`, `localizacao_geografica`.
+                *   `status_operacional`: `estado_atual` ("Operacional", "Alerta", "Falha"), `ultima_manutencao`, `proxima_manutencao_agendada`.
+                *   `dependencias_diretas_resumidas`: Lista de IDs de nós dos quais este nó depende diretamente.
+                *   `capacidade_operacional_percentual`: float (0-100).
+                *   `risco_impacto_falha`: string ("Baixo", "Médio", "Alto", "Crítico").
+        *   `edges`: Uma lista de objetos. Cada aresta deve conter:
+            *   `source`: string (ID do nó de origem).
+            *   `target`: string (ID do nó de destino).
+            *   `type`: string (descreve a natureza da dependência, e.g., "dependencia_eletrica_critica", "fluxo_agua_essencial", "link_comunicacao_fibra").
+            *   `data` (opcional): Um objeto com atributos adicionais da aresta, como `latencia_impacto_horas` (float) ou `forca_dependencia_score` (float).
+
+6.  **`GET /api/v1/events/correlated_timeline`**
+    *   **Descrição:** Fornece sequências de eventos que foram identificados como correlacionados, para alimentar a visualização da timeline de eventos complexos.
+    *   **Path Parameters:** Nenhum.
+    *   **Query Parameters:**
+        *   `severidade_minima` (string, opcional, e.g., "ALTO", "CRITICO"). Filtra cenários cujo evento inicial ou qualquer evento na propagação atinja esta severidade.
+        *   `subsistemas_envolvidos` (string, opcional, lista separada por vírgulas de nomes de subsistemas, e.g., "SACI,CURUPIRA,BOITATA"). Filtra cenários que envolvam pelo menos um dos subsistemas listados.
+        *   `tipo_correlacao_primaria` (string, opcional, e.g., "cascata_falhas_infra", "ataque_coordenado_ciberfisico", "desastre_natural_com_impacto_multiplo").
+        *   `time_range_start` (datetime string, opcional, formato ISO 8601).
+        *   `time_range_end` (datetime string, opcional, formato ISO 8601).
+        *   `limit` (integer, opcional, número máximo de cenários a retornar). Default: 10.
+    *   **Response Payload Concept:** Uma lista de "cenários de correlação". Cada cenário é um objeto JSON com:
+        *   `scenario_id`: string (ID único para o cenário/sequência correlacionada).
+        *   `scenario_title`: string (opcional, título descritivo, e.g., "Cascata de Falha Elétrica na Zona Oeste").
+        *   `evento_inicial`: Objeto representando o primeiro evento da sequência, contendo `event_id`, `timestamp`, `subsistema_origem`, `tipo_ameaca`, `descricao_curta`, `severidade`, `localizacao_geografica` (lat, lon).
+        *   `propagacao_eventos`: Uma lista de objetos, cada um representando um evento subsequente na correlação. Cada evento na lista deve ter:
+            *   `event_id`: string.
+            *   `timestamp`: datetime string.
+            *   `subsistema_origem`: string.
+            *   `tipo_ameaca`: string.
+            *   `descricao_curta`: string.
+            *   `severidade`: string.
+            *   `localizacao_geografica`: (lat, lon).
+            *   `correlacao_com_anterior`: objeto descrevendo o link com o evento anterior, e.g., `tipo_link` ("causal", "temporal_proximo", "gatilho_condicional"), `descricao_link` ("Queda de energia causou falha de comunicação").
+            *   `informacoes_tecnicas_link`: string (opcional, link para buscar detalhes técnicos completos do evento, e.g., `/api/v1/events/{event_id}/details`).
+        *   `resolucao_estimada_ou_atual`: Objeto opcional, com `status_resolucao` ("Em Andamento", "Contido", "Resolvido", "Escalonado"), `proximos_passos_sugeridos`, `timestamp_ultima_acao_relevante`.
+
+Os schemas de resposta associados em `src/api/schemas.py` precisarão ser expandidos para acomodar esses conjuntos de dados detalhados.
 
 ## Considerações Futuras
 
