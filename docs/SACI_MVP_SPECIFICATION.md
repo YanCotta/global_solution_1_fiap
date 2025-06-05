@@ -116,6 +116,7 @@ graph TD
 ## 3. SOFTWARE ARCHITECTURE
 
 ### 3.1 ESP32 Firmware Specification
+_Nota: O código de firmware abaixo é uma representação funcional e detalhada do que está implementado em `src/hardware/esp32/saci_sensor_node.py` para o MVP, focando nos sensores DHT22 e MQ-135._
 ```python
 # SACI MVP - ESP32 Sensor Node (MicroPython)
 # Sistema Guardião - Fire Prevention and Detection
@@ -491,23 +492,38 @@ class SACICloudProcessor:
             await self.send_swarm_command(sensor_id, coordination_message)
     
     def load_ml_model(self):
-        """Load pre-trained fire risk prediction model"""
+        """
+        Load pre-trained fire risk prediction model.
+        NOTE: The current MVP uses a Logistic Regression model saved as
+        'saci_fire_risk_logistic_regression_model.joblib'.
+        The path 'models/saci_fire_risk_model.pkl' and the model type
+        (e.g. RandomForestRegressor) in this conceptual cloud processing script
+        represent a more advanced future state. Refer to
+        `src/ml_models/saci_fire_predictor.py` for the actual MVP implementation.
+        """
         try:
+            # Path for the actual MVP model:
+            # return joblib.load('models/saci_fire_risk_logistic_regression_model.joblib')
+            # Path for the conceptual advanced model:
             return joblib.load('models/saci_fire_risk_model.pkl')
         except FileNotFoundError:
-            # Return a simple baseline model if trained model not available
             print("Warning: Using baseline model. Train proper model for production.")
-            return self._create_baseline_model()
+            return self._create_baseline_model() # Fallback for conceptual example
     
     def _create_baseline_model(self):
-        """Create a simple baseline model for testing"""
-        # This is a placeholder - replace with proper trained model
-        from sklearn.dummy import DummyRegressor
+        """Create a simple baseline model for testing (illustrative)."""
+        from sklearn.dummy import DummyRegressor # Placeholder for a simple model
         model = DummyRegressor(strategy='constant', constant=0.2)
-        # Fit with dummy data
-        X_dummy = np.random.random((100, 8))
+        X_dummy = np.random.random((100, 8)) # 8 features as in predict_fire_risk
         y_dummy = np.random.random(100)
         model.fit(X_dummy, y_dummy)
+        # Add predict_proba for compatibility with the calling code in this example
+        def predict_proba_dummy(X):
+            # Simulate probabilities, ensuring it sums to 1 per instance
+            # For a constant model, probas would also be constant.
+            # Example: P(class 0) = 0.8, P(class 1) = 0.2
+            return np.array([[0.8, 0.2]] * X.shape[0])
+        model.predict_proba = predict_proba_dummy
         return model
     
     def _clamp(self, value: float, min_val: float, max_val: float) -> float:
@@ -561,6 +577,7 @@ class SACICloudProcessor:
 ## 4. MACHINE LEARNING MODEL
 
 ### 4.1 Fire Risk Prediction Model
+_Nota: O script Python abaixo (`saci_ml_model.py`) é uma representação conceitual de um pipeline de treinamento para modelos mais avançados (RandomForest, GradientBoosting) como planejado para evoluções futuras do SACI. O MVP atual, implementado em `src/ml_models/saci_fire_predictor.py`, utiliza um modelo de Regressão Logística, que é mais simples mas funcional para a validação inicial. A estrutura de dados e o processo de treinamento aqui ilustrados servem como um guia para o desenvolvimento futuro e para a compreensão do pipeline de ML desejado._
 ```python
 # saci_ml_model.py
 import pandas as pd

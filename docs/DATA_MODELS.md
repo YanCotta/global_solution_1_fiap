@@ -6,6 +6,7 @@
 ## 1. CURUPIRA - CYBERSECURITY DATA MODELS
 
 ### 1.1 Threat Detection Schema (PostgreSQL)
+_Note: The `sql/init.sql` script provides a foundational `curupira.threat_events` table for the MVP. The models below (`physical_anomalies`, `network_events`, `threat_correlations`) represent a more detailed conceptual design for future expansion and comprehensive threat analysis within CURUPIRA._
 ```sql
 -- Physical anomaly detection
 CREATE TABLE physical_anomalies (
@@ -95,6 +96,7 @@ curupira_network = {
 ## 2. IARA - EPIDEMIOLOGICAL DATA MODELS
 
 ### 2.1 Health Surveillance Schema (PostgreSQL)
+_Note: The `sql/init.sql` script includes a basic `iara.health_events` table for the MVP. The models detailed below (`environmental_health`, `disease_surveillance`, `seir_model_state`) provide the full conceptual data structure for IARA's comprehensive epidemiological analysis._
 ```sql
 -- Environmental health factors
 CREATE TABLE environmental_health (
@@ -177,6 +179,9 @@ iara_health_metrics = {
 ### 3.1 Fire Detection Schema (PostgreSQL)
 ```sql
 -- Sensor network data
+-- Note: `sql/init.sql` implements this as `saci.sensor_devices`.
+-- It includes `firmware_version` and `updated_at` fields not listed here.
+-- Fields like `network_quality`, `elevation`, `vegetation_type` are part of the broader conceptual model.
 CREATE TABLE fire_sensors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     device_id VARCHAR(255) UNIQUE NOT NULL,
@@ -185,48 +190,56 @@ CREATE TABLE fire_sensors (
     installation_date DATE NOT NULL,
     last_maintenance DATE,
     battery_level DECIMAL(3,0) CHECK (battery_level BETWEEN 0 AND 100),
-    network_quality INTEGER CHECK (network_quality BETWEEN 1 AND 5),
-    elevation DECIMAL(6,2),
-    vegetation_type VARCHAR(100),
+    network_quality INTEGER CHECK (network_quality BETWEEN 1 AND 5), -- Conceptual
+    elevation DECIMAL(6,2), -- Conceptual
+    vegetation_type VARCHAR(100), -- Conceptual
     status VARCHAR(20) DEFAULT 'active',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Fire risk assessment
+-- Note: `sql/init.sql` implements this as `saci.fire_risk_predictions`.
+-- It links risk to `device_id` (which has a location) rather than a separate `grid_cell_id` and `location` for the risk point itself.
+-- Detailed risk components (weather, vegetation, etc.) are conceptually stored in JSONB fields (`contributing_factors`, `environmental_data`) in `sql/init.sql`.
 CREATE TABLE fire_risk_assessment (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     timestamp TIMESTAMPTZ NOT NULL,
-    grid_cell_id VARCHAR(50) NOT NULL, -- 1km x 1km grid reference
-    location GEOGRAPHY(POINT, 4326) NOT NULL,
+    grid_cell_id VARCHAR(50) NOT NULL, -- 1km x 1km grid reference (Conceptual for gridded risk)
+    location GEOGRAPHY(POINT, 4326) NOT NULL, -- Location of the risk assessment point/grid cell
     risk_score DECIMAL(3,2) CHECK (risk_score BETWEEN 0 AND 1),
-    weather_risk DECIMAL(3,2),
-    vegetation_risk DECIMAL(3,2),
-    human_activity_risk DECIMAL(3,2),
-    historical_risk DECIMAL(3,2),
-    ml_prediction DECIMAL(3,2),
-    confidence_interval DECIMAL(3,2),
-    alert_level INTEGER CHECK (alert_level BETWEEN 0 AND 4),
+    weather_risk DECIMAL(3,2), -- Component of risk
+    vegetation_risk DECIMAL(3,2), -- Component of risk
+    human_activity_risk DECIMAL(3,2), -- Component of risk
+    historical_risk DECIMAL(3,2), -- Component of risk
+    ml_prediction DECIMAL(3,2), -- Raw ML model output
+    confidence_interval DECIMAL(3,2), -- Confidence of the prediction
+    alert_level INTEGER CHECK (alert_level BETWEEN 0 AND 4), -- Derived from risk_score
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Fire incidents
+-- Note: `sql/init.sql` implements this as `saci.fire_incidents` and includes additional fields
+-- like `incident_id` (a string ID), `confirmed_at`, `response_teams` (JSONB), `status`, and `updated_at`.
+-- The `response_time` (INTERVAL) and `cause` fields here are not explicitly in the current `sql/init.sql`.
 CREATE TABLE fire_incidents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    incident_id VARCHAR(50) UNIQUE, -- Added for consistency with common practice, present in init.sql
     detection_timestamp TIMESTAMPTZ NOT NULL,
     location GEOGRAPHY(POINT, 4326) NOT NULL,
     incident_type VARCHAR(50), -- wildfire, urban, industrial
     severity INTEGER CHECK (severity BETWEEN 1 AND 5),
     affected_area DECIMAL(10,2), -- hectares
     detection_method VARCHAR(100), -- sensor, satellite, human_report
-    response_time INTERVAL,
+    response_time INTERVAL, -- Conceptual
     extinguished_timestamp TIMESTAMPTZ,
     damage_assessment JSONB,
-    cause VARCHAR(200),
+    cause VARCHAR(200), -- Conceptual
     weather_conditions JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Swarm coordination
+-- Note: This table is conceptual for future SACI enhancements and is not part of the current MVP `sql/init.sql` schema.
 CREATE TABLE swarm_agents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     agent_id VARCHAR(100) UNIQUE NOT NULL,
@@ -294,6 +307,7 @@ saci_weather = {
 ## 4. BOITATÁ - URBAN INFRASTRUCTURE DATA MODELS
 
 ### 4.1 Infrastructure Monitoring Schema (PostgreSQL)
+_Note: The `sql/init.sql` script includes a very basic `boitata.infrastructure_elements` table for the MVP. The models detailed below (`infrastructure_assets`, `cascade_scenarios`, `digital_twin_state`) represent the full conceptual data structure for BOITATÁ's advanced infrastructure monitoring and analysis capabilities._
 ```sql
 -- Urban infrastructure assets
 CREATE TABLE infrastructure_assets (
@@ -376,6 +390,7 @@ RETURN path
 ## 5. ANHANGÁ - RESILIENT COMMUNICATIONS DATA MODELS
 
 ### 5.1 Communication Networks Schema (PostgreSQL)
+_Note: The `sql/init.sql` script includes a foundational `anhanga.communication_channels` table for the MVP. The models detailed below (`communication_nodes`, `network_resilience`, `emergency_messages`) provide the comprehensive conceptual data architecture for ANHANGÁ._
 ```sql
 -- Communication nodes
 CREATE TABLE communication_nodes (
@@ -435,6 +450,7 @@ CREATE TABLE emergency_messages (
 ## 6. CROSS-SYSTEM INTEGRATION MODELS
 
 ### 6.1 Central Orchestrator Schema (PostgreSQL)
+_Note: The tables `guardian_events` and `coordination_matrix` described below are conceptual models for cross-system integration and are not yet implemented in the current `sql/init.sql` MVP schema. The `sql/init.sql` does include a `guardian_core.cross_system_events` table that serves as a more developed starting point for system-wide event tracking, which should be considered the current implemented direction for this concept._
 ```sql
 -- System-wide events
 CREATE TABLE guardian_events (

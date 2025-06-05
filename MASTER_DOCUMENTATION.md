@@ -12,9 +12,13 @@
 
 ## 🎯 SUMÁRIO EXECUTIVO EXPANDIDO
 
-O **Sistema Guardião** transcende a gestão de crises tradicional, estabelecendo-se como uma **plataforma nacional de inteligência simbiótica**, onde a mais avançada **Inteligência Artificial agêntica** se entrelaça com a **sabedoria ancestral do folclore brasileiro**. Esta fusão não é meramente nominal; ela inspira a arquitetura de agentes autônomos especializados (os "Guardiões Digitais"), cada um ecoando as características protetoras de suas contrapartes lendárias. O sistema é projetado com um **foco dual e indissociável**: por um lado, a **prevenção proativa**, antecipando e mitigando ameaças antes de sua materialização; por outro, a **resposta ágil e coordenada**, orquestrando recursos de forma otimizada quando eventos extremos ocorrem.
+O **Sistema Guardião** é uma iniciativa estratégica que redefine a prevenção e resposta a eventos extremos no Brasil. Ele se estabelece como uma **plataforma nacional de inteligência simbiótica**, onde a mais avançada **Inteligência Artificial (IA) agêntica** se funde com a **sabedoria ancestral do folclore brasileiro**. Esta integração cultural não é apenas simbólica; ela inspira a arquitetura de cinco subsistemas autônomos e especializados – os "Guardiões Digitais" – cada um refletindo as qualidades protetoras de figuras lendárias nacionais.
 
-A **inovação central** reside na aplicação de **IA agêntica em escala nacional para infraestruturas críticas**. Diferentemente de sistemas centralizados e monolíticos, o Guardião opera como um ecossistema de agentes inteligentes e colaborativos. Esta abordagem permite uma **coordenação descentralizada, resiliente e emergente**, capaz de se adaptar dinamicamente a cenários complexos e imprevistos, garantindo a continuidade operacional e a segurança da nação.
+O projeto possui um **foco dual e indissociável**:
+1.  **Prevenção Proativa:** Antecipar e mitigar ameaças (naturais, tecnológicas, sanitárias, ciberfísicas) antes que se concretizem, utilizando modelagem preditiva e análise de dados em tempo real.
+2.  **Resposta Ágil e Coordenada:** Orquestrar recursos de forma eficiente e otimizada quando eventos extremos ocorrem, minimizando impactos e acelerando a recuperação.
+
+A **inovação central** do Sistema Guardião reside na aplicação de **IA agêntica em escala nacional, com foco especial na proteção de infraestruturas críticas e na segurança pública**. Em contraste com abordagens tradicionais, muitas vezes centralizadas e monolíticas, o Guardião opera como um **ecossistema distribuído de agentes inteligentes e colaborativos**. Esta arquitetura promove uma **coordenação descentralizada, resiliente e emergente**, capaz de se adaptar dinamicamente a cenários complexos e imprevistos. O objetivo final é garantir a continuidade operacional de serviços essenciais e a segurança da população brasileira, mesmo diante de desafios multifacetados e de grande escala. A plataforma visa aumentar drasticamente a capacidade do país de prever, preparar-se e responder a uma vasta gama de riscos, desde desastres ambientais até crises de saúde pública e ameaças à segurança de infraestruturas vitais.
 
 ### Proposta de Valor Multifacetada
 
@@ -157,7 +161,9 @@ PPPs estratégicas são vitais para alavancar expertise especializada do setor p
 
 ## 🏗️ ARQUITETURA SISTÊMICA CONSOLIDADA
 
-A arquitetura do Sistema Guardião é concebida para ser robusta, escalável e resiliente, integrando múltiplos subsistemas especializados sob uma coordenação central inteligente. Ela se baseia em princípios de microsserviços, computação de borda (edge computing), e inteligência artificial distribuída.
+A arquitetura do **Sistema Guardião** é projetada para ser **robusta, escalável, resiliente e adaptável**, integrando múltiplos subsistemas especializados sob uma coordenação central inteligente e distribuída. Fundamenta-se em princípios modernos como **microsserviços, computação de borda (edge computing), inteligência artificial (IA) agêntica e distribuída, e segurança por design (security by design)**. O objetivo é criar um sistema nervoso digital para a nação, capaz de perceber, analisar, decidir e agir de forma coordenada frente a eventos extremos.
+
+Esta seção oferece uma visão geral da arquitetura sistêmica. Para uma exploração aprofundada dos motores de inteligência artificial avançada que capacitam o Guardião, como o `MetaLearningEngine` e o `ThreatCorrelationEngine` (componentes internos do `GuardianCentralOrchestrator`), consulte o documento [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
 
 ### Princípios Arquiteturais Chave
 
@@ -239,7 +245,7 @@ Uma gestão de custos eficaz é crucial para a viabilidade a longo prazo do Sist
 │     CURUPIRA │ IARA │ SACI │ BOITATÁ │ ANHANGÁ        │
 └─────────────────────────────────────────────────────────┘
 
-O `GuardianCentralOrchestrator` é o componente central que gerencia e coordena as atividades dos Guardiões Digitais. Suas capacidades avançadas de inteligência são impulsionadas principalmente por dois sofisticados componentes internos: o `MetaLearningEngine`, responsável pelo aprendizado contínuo e evolução de estratégias, e o `ThreatCorrelationEngine`, que identifica padrões complexos de ameaças.
+O `GuardianCentralOrchestrator` é o componente central que gerencia e coordena as atividades dos Guardiões Digitais. Suas capacidades avançadas de inteligência são impulsionadas principalmente por **componentes internos especializados**, como o `MetaLearningEngine` (responsável pelo aprendizado contínuo e evolução de estratégias) e o `ThreatCorrelationEngine` (que identifica padrões complexos de ameaças). Estes motores são funcionalidades avançadas *dentro* do `GuardianCentralOrchestrator`, e não entidades separadas. Para detalhes aprofundados sobre estes e outros mecanismos de IA, consulte [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
 ```text
 ┌─────────────────────────────────────────────────────────┐
 │           CAMADA DE DADOS E PERSISTÊNCIA                │
@@ -261,45 +267,44 @@ A seguir são apresentados os diagramas C4 que detalham a arquitetura do Sistema
 
 #### Nível 1: Contexto do Sistema
 
-O diagrama de Contexto do Sistema (Nível 1) mostra o Sistema Guardião como uma caixa preta e suas interações com usuários e outros sistemas.
+O diagrama de Contexto do Sistema (Nível 1) mostra o Sistema Guardião como uma caixa preta e suas interações com usuários e outros sistemas. Este diagrama é consistente com o apresentado em `sistema_guardiao_c4_diagrams.html`.
 
 ```mermaid
 graph TB
-    subgraph "External Systems"
-        WEATHER[Weather APIs]
-        SATELLITE[Satellite Data]
-        EMERGENCY[Emergency Services]
-        CITIZENS[Citizens & Mobile Apps]
-    end
+    %% External Actors
+    Citizens[👥 Citizens<br/>Population of Brazil<br/>200M+ people]
+    GovAgencies[🏛️ Government Agencies<br/>Civil Defense, Health Ministry<br/>Security Forces]
+    Emergency[🚨 Emergency Services<br/>Fire Departments<br/>Medical Services, Police]
+    Utilities[⚡ Utility Companies<br/>CEMIG, COPASA<br/>Telecom Providers]
+    International[🌎 International Systems<br/>WHO, UN Disaster Relief<br/>Regional Cooperation]
 
-    subgraph "Sistema Guardião"
-        GUARDIAN[Guardian Central Orchestrator]
-        CURUPIRA[CURUPIRA - Cybersecurity]
-        IARA[IARA - Health Surveillance]
-        SACI[SACI - Fire Prevention]
-        BOITATA[BOITATÁ - Infrastructure]
-        ANHANGA[ANHANGÁ - Communications]
-    end
+    %% Sistema Guardião (Main System)
+    Guardian[🛡️ Sistema Guardião<br/>National Resilience Platform<br/>Agentic AI Coordination]
 
-    subgraph "Infrastructure"
-        SENSORS[IoT Sensor Network]
-        CLOUD[Cloud Platform]
-        NETWORKS[Communication Networks]
-    end
+    %% Relationships
+    Citizens -->|Emergency Reports<br/>Health Data<br/>Location Data| Guardian
+    Guardian -->|Alerts & Warnings<br/>Safety Instructions<br/>Resource Coordination| Citizens
 
-    WEATHER --> GUARDIAN
-    SATELLITE --> GUARDIAN
-    GUARDIAN --> EMERGENCY
-    GUARDIAN --> CITIZENS
+    GovAgencies -->|Policy Directives<br/>Resource Authorization<br/>Coordination Requests| Guardian
+    Guardian -->|Threat Intelligence<br/>Response Recommendations<br/>Status Reports| GovAgencies
 
-    GUARDIAN <--> CURUPIRA
-    GUARDIAN <--> IARA
-    GUARDIAN <--> SACI
-    GUARDIAN <--> BOITATA
-    GUARDIAN <--> ANHANGA
+    Emergency -->|Response Capabilities<br/>Field Reports<br/>Resource Status| Guardian
+    Guardian -->|Emergency Coordination<br/>Resource Deployment<br/>Tactical Intelligence| Emergency
 
-    SENSORS --> CLOUD
-    CLOUD --> NETWORKS
+    Utilities -->|Infrastructure Status<br/>Capacity Data<br/>Maintenance Schedules| Guardian
+    Guardian -->|Protection Alerts<br/>Load Balancing<br/>Priority Routing| Utilities
+
+    International -->|Global Threat Intel<br/>Best Practices<br/>Emergency Aid| Guardian
+    Guardian -->|Regional Status<br/>Cooperation Requests<br/>Shared Intelligence| International
+
+    %% Styling
+    classDef primarySystem fill:#1976d2,stroke:#0d47a1,stroke-width:3px,color:#fff
+    classDef externalActor fill:#4caf50,stroke:#2e7d32,stroke-width:2px,color:#fff
+    classDef criticalActor fill:#f44336,stroke:#c62828,stroke-width:2px,color:#fff
+
+    class Guardian primarySystem
+    class Citizens,GovAgencies,International externalActor
+    class Emergency,Utilities criticalActor
 ```
 
 #### Nível 2: Arquitetura de Contêineres
@@ -315,115 +320,176 @@ graph TB
     end
 
     subgraph "Application Layer"
-        ORCHESTRATOR[Central Orchestrator]
-        SACI_API[SACI API Service]
-        CURUPIRA_API[CURUPIRA API Service]
-        IARA_API[IARA API Service]
-        BOITATA_API[BOITATÁ API Service]
-        ANHANGA_API[ANHANGÁ API Service]
+        ORCHESTRATOR[🎯 Agentic AI Orchestrator<br/>CrewAI + LangGraph<br/>Multi-Agent Coordination]
+        SACI_API[🔥 SACI<br/>Fire & Natural Disasters<br/>Python + PyTorch]
+        CURUPIRA_API[🦶 CURUPIRA<br/>Cyber & Physical Security<br/>Python + TensorFlow]
+        IARA_API[🏥 IARA<br/>Health & Epidemiology<br/>Python + Scikit-Learn]
+        BOITATA_API[⚡ BOITATÁ<br/>Critical Infrastructure<br/>Go + Kubernetes]
+        ANHANGA_API[📡 ANHANGÁ<br/>Resilient Emergency Comms<br/>Specialized Protocols]
     end
 
     subgraph "Processing Layer"
-        ML_ENGINE[ML Processing Engine]
+        ML_ENGINE[ML Processing Engine] %% This seems like a general capability, specific ML engines are within subsystems or Orchestrator
         STREAM_PROC[Stream Processor]
         ALERT_SVC[Alert Service]
         COORD_SVC[Coordination Service]
     end
 
     subgraph "Data Layer"
-        POSTGRES[(PostgreSQL)]
-        INFLUXDB[(InfluxDB)]
-        REDIS[(Redis Cache)]
-        NEO4J[(Neo4j Graph)]
+        POSTGRES[🗃️ PostgreSQL<br/>Operational Data<br/>User & Configuration]
+        INFLUXDB[📊 InfluxDB<br/>Time Series Data<br/>Sensor & Metrics Storage]
+        REDIS[(Redis Cache)] %% Retained as per original, though not in HTML C2 explicitly
+        NEO4J[🕸️ Neo4j<br/>Relationship Mapping<br/>Infrastructure Dependencies]
+        VECTORDB[🧠 Pinecone<br/>Vector Database<br/>AI Context & Similarity] %% Added from HTML C2
     end
 
     subgraph "Infrastructure"
-        MQTT[MQTT Broker]
-        KAFKA[Kafka Streams]
-        MONITORING[Monitoring Stack]
+        MQTT[MQTT Broker] %% Retained, though not in HTML C2 explicitly, common for IoT
+        KAFKA[📨 Guardian Message Bus<br/>Apache Kafka<br/>Event Streaming Platform]
+        MONITORING[Monitoring Stack] %% Retained, common infrastructure
     end
 
-    WEB --> API_GW
-    MOBILE --> API_GW
+    %% User Interactions (as per HTML C2: WebApp, MobileApp, PublicAPI)
+    WEB[🌐 Guardian Web Application<br/>React + TypeScript<br/>Real-time Dashboard] --> API_GW[🔌 Public API Gateway<br/>GraphQL + REST<br/>Rate Limited & Secured]
+    MOBILE[📱 Guardian Mobile App<br/>React Native<br/>Emergency Interface] --> API_GW
+
+    %% API Gateway to Orchestrator
     API_GW --> ORCHESTRATOR
 
-    ORCHESTRATOR --> SACI_API
-    ORCHESTRATOR --> CURUPIRA_API
-    ORCHESTRATOR --> IARA_API
-    ORCHESTRATOR --> BOITATA_API
-    ORCHESTRATOR --> ANHANGA_API
+    %% Orchestrator to Message Bus (Kafka)
+    ORCHESTRATOR --> KAFKA
 
-    SACI_API --> ML_ENGINE
-    SACI_API --> STREAM_PROC
-    STREAM_PROC --> ALERT_SVC
-    ORCHESTRATOR --> COORD_SVC
+    %% Message Bus to Subsystems
+    KAFKA --> SACI_API
+    KAFKA --> CURUPIRA_API
+    KAFKA --> IARA_API
+    KAFKA --> BOITATA_API
+    KAFKA --> ANHANGA_API
 
-    ML_ENGINE --> POSTGRES
-    ML_ENGINE --> INFLUXDB
-    STREAM_PROC --> KAFKA
-    ALERT_SVC --> REDIS
-    COORD_SVC --> NEO4J
+    %% Subsystem interactions with Data Layer (examples, not exhaustive from HTML)
+    SACI_API --> INFLUXDB
+    CURUPIRA_API --> INFLUXDB %% Assuming CURUPIRA also uses TimeSeries for some data
+    IARA_API --> INFLUXDB    %% Assuming IARA also uses TimeSeries
+    BOITATA_API --> NEO4J
+    ORCHESTRATOR --> VECTORDB
+    API_GW --> POSTGRES %% For user/config data
 
-    MQTT --> KAFKA
-    KAFKA --> STREAM_PROC
+    %% External Integration (example from HTML C2)
+    GovIntegration[🏛️ Government Integration<br/>SOA + REST APIs<br/>Secure Communication]
+    ORCHESTRATOR --> GovIntegration
+
+    %% Styling (taken from HTML C2 for consistency)
+    classDef webapp fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+    classDef core fill:#ff9800,stroke:#f57c00,stroke-width:3px,color:#fff
+    classDef subsystem fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+    classDef database fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+
+    class WEB,MOBILE,API_GW webapp
+    class ORCHESTRATOR,KAFKA core
+    class SACI_API,CURUPIRA_API,IARA_API,BOITATA_API,ANHANGA_API subsystem
+    class POSTGRES,INFLUXDB,NEO4J,VECTORDB,REDIS database
+    class GovIntegration external
+    %% Removed specific processing layer connections like SACI_API --> ML_ENGINE,
+    %% as the HTML C2 is more abstract. ML processing is now implied within subsystems or Orchestrator.
+    %% STREAM_PROC, ALERT_SVC, COORD_SVC are also abstracted in HTML C2, likely part of Orchestrator or subsystems.
 ```
 
 #### Nível 3: Arquitetura de Componentes (Exemplo: SACI)
 
-O diagrama de Arquitetura de Componentes (Nível 3) detalha os componentes internos de um contêiner ou serviço específico. Como exemplo, segue o detalhamento do subsistema SACI.
+O diagrama de Arquitetura de Componentes (Nível 3) detalha os componentes internos de um contêiner ou serviço específico. Como exemplo, segue o detalhamento do subsistema SACI, consistente com o apresentado em `sistema_guardiao_c4_diagrams.html`.
 
 ```mermaid
 graph TB
-    subgraph "SACI Fire Prevention System"
-        subgraph "Data Ingestion"
-            SENSOR_MGR[Sensor Manager]
-            DATA_VAL[Data Validator]
-            WEATHER_INT[Weather Integrator]
-        end
-
-        subgraph "Processing Engine"
-            RISK_CALC[Risk Calculator]
-            ML_PRED[ML Predictor]
-            PATTERN_DET[Pattern Detector]
-        end
-
-        subgraph "Swarm Intelligence"
-            SWARM_COORD[Swarm Coordinator]
-            AGENT_MGR[Agent Manager]
-            CONSENSUS[Consensus Engine]
-        end
-
-        subgraph "Alert System"
-            ALERT_GEN[Alert Generator]
-            NOTIF_SVC[Notification Service]
-            ESCAL_MGR[Escalation Manager]
-        end
-
-        subgraph "Data Storage"
-            SENSOR_DB[(Sensor Data)]
-            RISK_DB[(Risk Assessments)]
-            INCIDENT_DB[(Fire Incidents)]
-        end
+    %% Main SACI Container
+    subgraph "SACI - Fire Prevention & Response"
+        SwarmCoordinator[🐝 Swarm Intelligence Coordinator<br/>Distributed Decision Making<br/>Emergence-based Coordination]
+        FireRiskEngine[🔥 Fire Risk Prediction Engine<br/>ML-based Risk Assessment<br/>Weather-Vegetation Correlation]
+        ResponsePlanner[📋 Autonomous Response Planner<br/>Resource Optimization<br/>Multi-objective Planning]
+        CommunicationHub[📡 Emergency Communication Hub<br/>Multi-channel Broadcasting<br/>Priority Message Routing]
     end
 
-    SENSOR_MGR --> DATA_VAL
-    DATA_VAL --> RISK_CALC
-    WEATHER_INT --> RISK_CALC
+    %% Sensor Network Layer
+    subgraph "Distributed Sensor Network"
+        TempHumiditySensors[🌡️ Temperature & Humidity<br/>DHT22, BME280<br/>Microclimate Monitoring]
+        SmokeSensors[💨 Smoke Detection<br/>MQ-2, MQ-135<br/>Particle & Gas Detection]
+        WindSensors[💨 Wind Monitoring<br/>Anemometer, Direction<br/>Fire Spread Prediction]
+        CameraSensors[📷 Computer Vision<br/>Thermal & Optical<br/>Early Fire Detection]
+        VibrationSensors[📳 Seismic Sensors<br/>ADXL345<br/>Equipment Vibration Detection]
+    end
 
-    RISK_CALC --> ML_PRED
-    ML_PRED --> PATTERN_DET
-    PATTERN_DET --> ALERT_GEN
+    %% AI/ML Components
+    subgraph "Fire Intelligence Engine"
+        SwarmAI[🧠 Swarm Intelligence AI<br/>Ant Colony Optimization<br/>Distributed Coordination]
+        FireSpreadModel[🔥 Fire Spread Predictor<br/>Cellular Automata<br/>Physics-based Simulation]
+        WeatherIntegration[🌤️ Weather Correlation AI<br/>Meteorological Analysis<br/>Risk Factor Weighting]
+        EvacuationOptimizer[🚶 Evacuation Route AI<br/>Pathfinding Algorithms<br/>Dynamic Route Optimization]
+    end
 
-    SWARM_COORD --> AGENT_MGR
-    AGENT_MGR --> CONSENSUS
-    CONSENSUS --> ALERT_GEN
+    %% Response Coordination
+    subgraph "Response Coordination Layer"
+        FireBrigadeAPI[🚒 Fire Brigade Integration<br/>Resource Coordination<br/>Real-time Communication]
+        AerialCoordination[🚁 Aerial Resource Mgmt<br/>Drone & Aircraft<br/>Water Drop Coordination]
+        EvacuationManagement[🏃 Evacuation Coordinator<br/>Population Movement<br/>Safe Zone Management]
+        SupplyChainCoord[📦 Supply Chain Coordination<br/>Equipment & Personnel<br/>Logistics Optimization]
+    end
 
-    ALERT_GEN --> NOTIF_SVC
-    NOTIF_SVC --> ESCAL_MGR
+    %% External Integrations
+    subgraph "External Data Sources"
+        WeatherServices[🌦️ Weather APIs<br/>INMET, Weather.gov<br/>Real-time Meteorology]
+        SatelliteImagery[🛰️ Satellite Data<br/>INPE, NASA FIRMS<br/>Fire Hotspot Detection]
+        VegetationMaps[🌲 Vegetation Database<br/>IBGE, MapBiomas<br/>Fuel Load Assessment]
+        TopographyData[⛰️ Topography Services<br/>Elevation Models<br/>Terrain Analysis]
+    end
 
-    DATA_VAL --> SENSOR_DB
-    RISK_CALC --> RISK_DB
-    ALERT_GEN --> INCIDENT_DB
+    %% Sensor Data Flow
+    TempHumiditySensors --> SwarmCoordinator
+    SmokeSensors --> SwarmCoordinator
+    WindSensors --> SwarmCoordinator
+    CameraSensors --> SwarmCoordinator
+    VibrationSensors --> SwarmCoordinator
+
+    %% AI Processing Flow
+    SwarmCoordinator --> SwarmAI
+    SwarmAI --> FireSpreadModel
+    FireRiskEngine --> WeatherIntegration
+    WeatherIntegration --> EvacuationOptimizer
+
+    %% Response Coordination Flow
+    ResponsePlanner --> FireBrigadeAPI
+    ResponsePlanner --> AerialCoordination
+    ResponsePlanner --> EvacuationManagement
+    ResponsePlanner --> SupplyChainCoord
+
+    %% External Data Integration
+    WeatherServices --> WeatherIntegration
+    SatelliteImagery --> FireRiskEngine
+    VegetationMaps --> FireSpreadModel
+    TopographyData --> EvacuationOptimizer
+
+    %% Cross-system Communication
+    CommunicationHub -.->|Infrastructure Protection| BOITATA[⚡ BOITATÁ<br/>Infrastructure Coordination]
+    CommunicationHub -.->|Emergency Communications| ANHANGA[📡 ANHANGÁ<br/>Mesh Communications]
+
+    %% Data and Intelligence Flow
+    FireRiskEngine --> SwarmCoordinator
+    SwarmAI --> ResponsePlanner
+    FireSpreadModel --> CommunicationHub
+
+    %% Styling
+    classDef mainComponent fill:#ff5722,stroke:#d84315,stroke-width:3px,color:#fff
+    classDef sensorComponent fill:#4caf50,stroke:#388e3c,stroke-width:2px,color:#fff
+    classDef aiComponent fill:#9c27b0,stroke:#7b1fa2,stroke-width:2px,color:#fff
+    classDef responseComponent fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
+    classDef external fill:#607d8b,stroke:#455a64,stroke-width:2px,color:#fff
+    classDef crossSystem fill:#ff9800,stroke:#f57c00,stroke-width:2px,color:#fff
+
+    class SwarmCoordinator,FireRiskEngine,ResponsePlanner,CommunicationHub mainComponent
+    class TempHumiditySensors,SmokeSensors,WindSensors,CameraSensors,VibrationSensors sensorComponent
+    class SwarmAI,FireSpreadModel,WeatherIntegration,EvacuationOptimizer aiComponent
+    class FireBrigadeAPI,AerialCoordination,EvacuationManagement,SupplyChainCoord responseComponent
+    class WeatherServices,SatelliteImagery,VegetationMaps,TopographyData external
+    class BOITATA,ANHANGA crossSystem
 ```
 ```
 
@@ -456,12 +522,12 @@ O `GuardianCentralOrchestrator` é o cérebro estratégico do Sistema Guardião.
     *   Realiza o enriquecimento inicial buscando contextos em bases de dados como **Pinecone (VectorDB)** para padrões históricos, **PostgreSQL** para dados relacionais de ativos e políticas, e **Neo4j** para interdependências de infraestrutura.
 
 2.  **Correlação de Ameaças e Geração de Estratégia de Resposta (Inteligência Agêntica):**
-    *   **Correlação de Ameaças:** O `GuardianCentralOrchestrator` utiliza seu componente interno, o `ThreatCorrelationEngine`, para examinar os eventos recebidos em busca de relações espaciais, temporais, causais ou padrões conhecidos. O objetivo é agrupar ou vincular eventos que possam ser parte de um incidente maior ou ter impactos em cascata.
-    *   **Geração de Estratégia de Resposta:** Com base nos eventos correlacionados e no histórico de respostas anteriores (`self.response_history`), outro componente chave do Orchestrator, o `MetaLearningEngine`, propõe estratégias de resposta otimizadas. Ele visa prever a eficácia de diferentes ações, priorizar respostas e adaptar táticas com base no aprendizado de incidentes passados.
-    *   Este estágio emprega um framework de IA agêntica (inspirado em **CrewAI/LangGraph**) onde agentes especializados colaboram para avaliar severidade, simular cenários e otimizar tarefas. O `MetaLearningEngine` e o `ThreatCorrelationEngine` são os motores centrais de IA dentro do `GuardianCentralOrchestrator`. Para detalhes adicionais sobre suas especificações, consulte [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md). Modelos de ML são continuamente refinados.
+    *   **Correlação de Ameaças:** O `GuardianCentralOrchestrator` utiliza seu componente interno especializado, o `ThreatCorrelationEngine`, para examinar os eventos recebidos em busca de relações espaciais, temporais, causais ou padrões conhecidos. O objetivo é agrupar ou vincular eventos que possam ser parte de um incidente maior ou ter impactos em cascata.
+    *   **Geração de Estratégia de Resposta:** Com base nos eventos correlacionados e no histórico de respostas anteriores (`self.response_history`), outro componente interno chave do Orchestrator, o `MetaLearningEngine`, propõe estratégias de resposta otimizadas. Ele visa prever a eficácia de diferentes ações, priorizar respostas e adaptar táticas com base no aprendizado de incidentes passados.
+    *   Este estágio emprega um framework de IA agêntica (inspirado em **CrewAI/LangGraph**) onde agentes especializados colaboram para avaliar severidade, simular cenários e otimizar tarefas. O `MetaLearningEngine` e o `ThreatCorrelationEngine` são funcionalidades avançadas *dentro* do `GuardianCentralOrchestrator`, atuando como seus motores centrais de IA. Para um detalhamento completo de suas arquiteturas e funcionalidades, consulte o documento [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md). Modelos de ML são continuamente refinados.
 
 3.  **Formulação do Plano de Resposta Detalhado:**
-    *   Com base nos eventos brutos, nos insights do `ThreatCorrelationEngine` e nas estratégias do `MetaLearningEngine` (ambos componentes do `GuardianCentralOrchestrator`), o Orchestrator constrói um `response_plan` detalhado.
+    *   Com base nos eventos brutos, nos insights fornecidos pelo `ThreatCorrelationEngine` e nas estratégias sugeridas pelo `MetaLearningEngine` (ambos componentes internos e especializados do `GuardianCentralOrchestrator`), o Orchestrator constrói um `response_plan` detalhado.
     *   Este plano é um dicionário estruturado que especifica o `plan_id`, os `target_event_ids`, as `subsystem_actions` (detalhando `action_type`, `target_area`, `parameters` para cada subsistema como SACI, CURUPIRA, IARA, etc.), a `coordination_strategy` e a `overall_priority`.
 
 4.  **Execução Coordenada e Assíncrona das Ações nos Subsistemas:**
@@ -550,11 +616,11 @@ A abordagem de IA agêntica é central para a inteligência e adaptabilidade do 
     *   **Ação:** Capacidade de executar ações dentro de seu escopo (e.g., SACI despachando drones, CURUPIRA isolando um segmento de rede).
 
 *   **GuardianCentralOrchestrator como Meta-Agente Coordenador:**
-    *   **Gerenciamento da Inteligência Coletiva:** O Orchestrator não apenas comanda, mas facilita a colaboração entre os subsistemas-agentes. Esta coordenação é potencializada por seus motores internos de IA, o `MetaLearningEngine` e o `ThreatCorrelationEngine`.
-    *   **Delegação de Tarefas Dinâmica:** Baseado na situação global, nas análises do `ThreatCorrelationEngine`, e nas sugestões estratégicas do `MetaLearningEngine`, o Orchestrator delega tarefas de forma otimizada.
-    *   **Resolução de Conflitos:** Implementa mecanismos para resolver conflitos de objetivos ou recursos entre subsistemas, informado pelas análises de seus componentes de IA.
-    *   **Aprendizado Emergente e Adaptativo:** O sistema aprende tanto a nível de subsistema quanto a nível de orquestração. O `GuardianCentralOrchestrator` utiliza o `MetaLearningEngine` para adaptar suas estratégias com base em novas informações e no sucesso/falha de ações passadas. Frameworks como CrewAI e LangGraph são explorados para definir e gerenciar esses agentes e suas interações complexas, permitindo a criação de workflows de decisão sofisticados e dinâmicos, orquestrados centralmente.
-    *   **Consciência Situacional Compartilhada:** O Orchestrator, através de seus mecanismos de processamento e correlação de dados (incluindo o `ThreatCorrelationEngine`), mantém e dissemina uma visão consolidada do estado operacional e das ameaças, garantindo que todos os subsistemas operem com base em informações consistentes.
+    *   **Gerenciamento da Inteligência Coletiva:** O Orchestrator não apenas comanda, mas facilita a colaboração entre os subsistemas-agentes. Esta coordenação é potencializada por seus **componentes internos especializados de IA**, como o `MetaLearningEngine` e o `ThreatCorrelationEngine`.
+    *   **Delegação de Tarefas Dinâmica:** Baseado na situação global, nas análises do `ThreatCorrelationEngine` (componente interno), e nas sugestões estratégicas do `MetaLearningEngine` (componente interno), o Orchestrator delega tarefas de forma otimizada.
+    *   **Resolução de Conflitos:** Implementa mecanismos para resolver conflitos de objetivos ou recursos entre subsistemas, informado pelas análises de seus componentes internos de IA.
+    *   **Aprendizado Emergente e Adaptativo:** O sistema aprende tanto a nível de subsistema quanto a nível de orquestração. O `GuardianCentralOrchestrator` utiliza seu componente `MetaLearningEngine` para adaptar suas estratégias com base em novas informações e no sucesso/falha de ações passadas. Frameworks como CrewAI e LangGraph são explorados para definir e gerenciar esses agentes e suas interações complexas, permitindo a criação de workflows de decisão sofisticados e dinâmicos, orquestrados centralmente. Para um aprofundamento nestes mecanismos, veja [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
+    *   **Consciência Situacional Compartilhada:** O Orchestrator, através de seus mecanismos de processamento e correlação de dados (incluindo seu componente interno `ThreatCorrelationEngine`), mantém e dissemina uma visão consolidada do estado operacional e das ameaças, garantindo que todos os subsistemas operem com base em informações consistentes.
 
 ---
 
@@ -655,7 +721,7 @@ O Sistema Guardião depende de uma rede distribuída de sensores sofisticados e 
 * **React + TypeScript** (Dashboard web)
 * **D3.js** (Visualizações especializadas)
 * **React Native** (App móvel)
-* *Nota: As especificações detalhadas para os dashboards executivos e especializados, que guiam o design e funcionalidade deste frontend, podem ser encontradas em [Especificações de Dashboard](./docs/DASHBOARD_SPECIFICATIONS.md).*
+* *Nota: As especificações detalhadas para os dashboards executivos e especializados, incluindo arquitetura de interface, componentes visuais e fluxos de usuário, que guiam o design e funcionalidade deste frontend, podem ser encontradas em [Especificações de Dashboard](./docs/DASHBOARD_SPECIFICATIONS.md).*
 
 ### Justificativas Detalhadas do Tech Stack
 

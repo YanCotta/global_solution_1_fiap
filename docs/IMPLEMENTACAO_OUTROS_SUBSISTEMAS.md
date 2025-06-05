@@ -18,8 +18,8 @@ Este documento detalha o plano de implementação conceitual para os Produtos M�
 
 ### Objetivos Principais para um MVP
 
-* **Funcionalidade Central Mínima:** Demonstrar a capacidade de correlacionar um evento físico simulado (ex: um alerta de sensor de vibração não autorizado em um data center crítico) com um evento cibernético simulado (ex: múltiplas tentativas de login malsucedidas nos servidores desse mesmo data center) ocorrendo em uma janela de tempo próxima.
-* **Problema Principal a Validar:** A viabilidade de um sistema básico de regras para identificar potenciais ameaças híbridas (físico-digitais) que, isoladamente, poderiam não ser consideradas de alta criticidade.
+* **Funcionalidade Central Mínima:** Correlacionar um evento físico simulado (ex: alerta de sensor de vibração em data center) com um evento cibernético simulado (ex: múltiplas tentativas de login malsucedidas nos servidores do mesmo data center) ocorrendo em uma janela de tempo próxima.
+* **Problema Principal a Validar:** Viabilidade de um sistema básico de regras para identificar potenciais ameaças híbridas (físico-digitais). Isoladamente, tais eventos poderiam não ser considerados de alta criticidade, mas sua correlação pode indicar uma ameaça maior.
 
 ### Componentes/Módulos de Software Chave (Conceitual)
 
@@ -85,7 +85,7 @@ Este documento detalha o plano de implementação conceitual para os Produtos M�
 ### Objetivos Principais para um MVP
 
 * **Funcionalidade Central Mínima:** Calcular e exibir um "Nível de Risco de Surto" (ex: Baixo, Médio, Alto) para uma doença infecciosa fictícia (ou uma doença real simplificada como gripe) em uma ou mais regiões geográficas simuladas. Este cálculo se baseará em dados simulados de fatores ambientais (ex: temperatura, umidade, qualidade do ar) e um número simulado de casos reportados.
-* **Problema Principal a Validar:** A viabilidade de integrar dados ambientais e de saúde simulados para gerar um indicador de risco epidemiológico, mesmo que de forma básica, validando o conceito central da IARA.
+* **Problema Principal a Validar:** Viabilidade de integrar dados ambientais e de saúde simulados para gerar um indicador de risco epidemiológico básico, validando o conceito central da IARA.
 
 ### Componentes/Módulos de Software Chave (Conceitual)
 
@@ -156,7 +156,7 @@ Este documento detalha o plano de implementação conceitual para os Produtos M�
 ### Objetivos Principais para um MVP
 
 * **Funcionalidade Central Mínima:** Simular o impacto de uma falha em um componente de infraestrutura crítica (ex: uma subestação de energia principal) em outros componentes diretamente dependentes (ex: um hospital que depende dessa subestação, uma estação de bombeamento de água).
-* **Problema Principal a Validar:** A capacidade de modelar dependências simples entre infraestruturas e identificar o primeiro nível de um efeito cascata.
+* **Problema Principal a Validar:** Capacidade de modelar dependências simples entre infraestruturas e identificar o primeiro nível de um efeito cascata simulado.
 
 ### Componentes/Módulos de Software Chave (Conceitual)
 
@@ -220,7 +220,7 @@ Este documento detalha o plano de implementação conceitual para os Produtos M�
 ### Objetivos Principais para um MVP
 
 * **Funcionalidade Central Mínima:** Simular a detecção da falha de uma rede de comunicação principal (ex: internet fixa e rede celular primária) e, conceitualmente, "ativar" um canal de comunicação de emergência alternativo (ex: uma rede mesh simulada ou um sistema de rádio de emergência) para transmitir uma mensagem crítica.
-* **Problema Principal a Validar:** O conceito de switching para uma rede de backup e o roteamento básico de uma mensagem prioritária quando a infraestrutura primária falha.
+* **Problema Principal a Validar:** Conceito de comutação para uma rede de backup e o roteamento básico de uma mensagem prioritária quando a infraestrutura primária falha.
 
 ### Componentes/Módulos de Software Chave (Conceitual)
 
