@@ -1,0 +1,4 @@
+# TC2: Dados válidos - Risco alto/fogo detectado  
+Temp: 38.0 C, Hum: 25.0 %, Smoke: 700, Risk: HIGH
+Temp: 45.2 C, Hum: 15.0 %, Smoke: 850, Risk: CRITICAL
+Temp: 42.0 C, Hum: 20.0 %, Smoke: 600, Risk: HIGH
