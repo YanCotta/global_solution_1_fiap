@@ -220,42 +220,13 @@ docker-compose logs saci_api
 
 ## 🛡️ Os Cinco Guardiões Digitais
 
-### 🔥 **SACI** - Prevenção de Incêndios (MVP IMPLEMENTADO)
-**Status:** ✅ **100% Funcional e Testado**
+O Sistema Guardião é composto por cinco subsistemas inteligentes, cada um inspirado em uma figura do folclore brasileiro e especializado em um domínio crítico. Para uma descrição detalhada de todos os guardiões, suas missões e componentes de IA, consulte a seção 'Os Cinco Guardiões Digitais' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#os-cinco-guardiões-digitais).
 
-- **Sensores Implementados:** DHT22 (temperatura/umidade), MQ-135 (fumaça)
-- **ML Model:** Regressão Logística treinada e validada
-- **Predição:** Risco de incêndio em tempo real
-- **Hardware:** ESP32 com comunicação serial
-- **Alertas:** Sistema de logging estruturado
-
-### 🦶 **CURUPIRA** - Proteção Cibernética
-**Status:** 🔄 Especificado (Documentação Completa)
-
-- Proteção de infraestruturas críticas
-- Detecção de ameaças avançadas
-- Resposta automatizada a incidentes
-
-### 🏥 **IARA** - Vigilância Epidemiológica  
-**Status:** 🔄 Especificado (Documentação Completa)
-
-- Monitoramento de saúde pública
-- Predição de surtos
-- Coordenação de recursos médicos
-
-### ⚡ **BOITATÁ** - Resiliência Urbana
-**Status:** 🔄 Especificado (Documentação Completa)
-
-- Sistemas urbanos interdependentes
-- Gestão inteligente de recursos
-- Resposta a blackouts e falhas
-
-### 📡 **ANHANGÁ** - Comunicações de Emergência
-**Status:** 🔄 Especificado (Documentação Completa)
-
-- Redes resilientes de comunicação
-- Protocolos de emergência
-- Coordenação multiagência
+-   🔥 **SACI (Sistema de Alerta e Combate a Incêndios):** Focado na detecção ultra-precoce de incêndios florestais e na coordenação autônoma da resposta. (MVP Implementado e Testado)
+-   🦶 **CURUPIRA (Centro Unificado de Resposta e Proteção de Infraestruturas Críticas):** Especializado na proteção híbrida físico-digital de infraestruturas críticas, correlacionando ameaças cibernéticas com sensores físicos.
+-   🏥 **IARA (Inteligência Artificial para Resposta e Alerta Epidemiológico):** Voltado para a predição precoce de surtos epidêmicos através do monitoramento ambiental e análise biométrica distribuída.
+-   ⚡ **BOITATÁ (Bloco Operacional Integrado para Tratamento de Anomalias Urbanas):** Dedicado à prevenção de efeitos cascata em sistemas urbanos interdependentes, utilizando digital twins e análise de dependências.
+-   📡 **ANHANGÁ (Aliança Nacional Híbrida para Garantia de Atividades de Comunicação):** Garante comunicações resilientes durante colapsos de infraestrutura, utilizando redes mesh auto-organizáveis e roteamento inteligente.
 
 ---
 
@@ -280,11 +251,11 @@ docker-compose logs saci_api
 
 ---
 
-## 📊 Especificações Técnicas Validadas
+## 💻 Stack Tecnológico Principal
 
-### **Stack Tecnológico Testado**
+O Sistema Guardião emprega uma arquitetura moderna e robusta, utilizando tecnologias como Python para o desenvolvimento do backend e dos modelos de Inteligência Artificial, Kubernetes para orquestração de contêineres, e Apache Kafka para o streaming de eventos em tempo real. A persistência de dados é realizada através de uma abordagem multi-modal, incluindo PostgreSQL com TimescaleDB para séries temporais, Neo4j para grafos de dependências, InfluxDB para métricas de IoT, e Pinecone como banco vetorial para IA. A computação de borda (Edge Computing) utiliza microcontroladores ESP32 e dispositivos como Raspberry Pi 4.
 
-Key technologies have been validated as part of the MVP. For detailed justifications and a full tech stack breakdown, refer to the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#tech-stack-consolidado).
+Para um detalhamento completo da stack tecnológica, incluindo justificativas para cada escolha e as bibliotecas específicas utilizadas, consulte a seção 'TECH STACK CONSOLIDADO' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#tech-stack-consolidado).
 
 ---
 
@@ -472,7 +443,7 @@ Model loaded from models/saci_fire_risk_model.joblib
 
 ### Arquitetura Multi-Camadas
 
-The system uses a multi-layered architecture. For a detailed architectural overview and C4 diagrams, please see the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
+O sistema utiliza uma arquitetura multi-camadas robusta e escalável. Para uma visão geral detalhada da arquitetura, incluindo os diagramas C4, por favor, consulte a seção 'ARQUITETURA SISTÊMICA CONSOLIDADA' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
 
 ---
 
@@ -486,12 +457,6 @@ The system uses a multi-layered architecture. For a detailed architectural overv
 - Modelo de Machine Learning para predição de risco
 - Dashboard em tempo real
 - Coordenação com outros subsistemas (simulado)
-
----
-
-## 📊 Tech Stack Principal
-
-The core technologies include Python, Kubernetes, Kafka, and a multi-modal database approach. For detailed justifications and a full tech stack breakdown, refer to the [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#tech-stack-consolidado).
 
 ---
 
@@ -551,61 +516,50 @@ The core technologies include Python, Kubernetes, Kafka, and a multi-modal datab
 
 ## 📚 Estrutura do Repositório
 
+A estrutura do projeto está organizada da seguinte forma:
+
 ```plaintext
 📁 global_solution_1_fiap/
-├── 📄 README.md                           # Este documento de visão geral
-├── 📄 MASTER_DOCUMENTATION.md             # Documentação técnica consolidada
-├── 📄 sistema_guardiao_c4_diagrams.html   # Diagramas C4 interativos
-├── 📄 10_day_implementation_plan.md       # Plano detalhado de implementação
-├── 📁 src/
-│   └── 📁 saci_mvp/                      # MVP do subsistema SACI
-│       ├── 📄 README.md                  # Documentação do MVP SACI
-│       ├── 📁 esp32_firmware/            # Firmware para os sensores ESP32
-│       │   ├── 📄 main.py                # Código principal MicroPython
-│       │   └── 📄 config.json            # Configurações do dispositivo
-│       ├── 📁 ml_model/                  # Modelos de predição de incêndio
-│       │   ├── 📄 train.py               # Script de treinamento do modelo
-│       │   └── 📄 predict.py             # Script de predição
-│       ├── 📁 api/                       # Backend FastAPI
-│       │   ├── 📄 main.py                # Ponto de entrada da API
-│       │   └── 📁 models/                # Modelos de dados
-│       └── 📁 dashboard/                 # Frontend do sistema
-│           ├── 📄 index.html             # Página principal
-│           └── 📁 assets/                # Recursos estáticos
-├── 📁 data/                              # Datasets e dados
-│   └── 📁 synthetic/                     # Dados sintéticos para testes
-│       └── 📄 fire_risk_dataset.csv      # Dataset de treino para ML
-├── 📁 docker/                            # Configurações Docker
-│   └── 📁 api/                           # Docker config para API
-│       └── 📄 Dockerfile                 # Dockerfile da API SACI
-├── 📁 kubernetes/                        # Configurações K8s
-│   └── 📄 saci_api_deployment.yaml       # Deployment da API SACI
-├── 📁 sql/                              # Scripts SQL
-│   └── 📄 init.sql                      # Inicialização do banco
-├── 📁 docs/                              # Documentação adicional
-│   ├── 📄 DATA_MODELS.md                # Esquemas de banco de dados
-│   ├── 📄 ARCHITECTURE_SPECIFICATION.md # Arquitetura técnica
-│   ├── 📄 SACI_MVP_SPECIFICATION.md     # Especificação detalhada do MVP
-│   ├── 📄 DATA_FLOWS.md                # Fluxos de dados entre subsistemas
-│   ├── 📄 TECH_DEPENDENCIES.md         # Matriz de dependências tecnológicas
-│   ├── 📄 API_SPECIFICATION.md          # Especificação da API
-│   ├── 📄 IOT_PROTOCOLS.md             # Protocolos de comunicação IoT
-│   ├── 📄 DASHBOARD_SPECIFICATIONS.md   # ✅ Especificações completas de dashboards
-│   ├── 📄 ADVANCED_AI_SPECIFICATIONS.md # ✅ Motores de IA avançada
-│   └── 📄 DAY_6_COMPLETION_SUMMARY.md   # ✅ Resumo do Dia 6
-├── 📁 hardware/                          # Especificações de hardware
-│   ├── 📄 bom.csv                       # Lista de materiais (BOM)
-│   ├── 📁 schematics/                   # Esquemáticos de circuito
-│   └── 📁 3d_models/                    # Modelos 3D para cases 
-├── 📁 assets/                           # Recursos do projeto
-│   ├── 📁 images/                       # Imagens e diagramas
-│   ├── 📁 presentations/                # Apresentações do projeto
-│   └── 📁 videos/                       # Vídeos demonstrativos
-├── 📁 .github/workflows/                # Pipelines CI/CD
-├── 📄 requirements.txt                   # Dependências Python
-├── 📄 docker-compose.yml                 # Configuração de containers
-└── 📄 LICENSE                           # Licença do projeto
+├── 📄 README.md                                    # Este documento (português)
+├── 📄 MASTER_DOCUMENTATION.md                      # Documentação técnica completa e centralizada
+├── 📄 sistema_guardiao_c4_diagrams.html           # 🎨 Diagramas C4 Interativos da arquitetura
+├── 📄 10_day_implementation_plan.md               # Plano de implementação detalhado para a Global Solution
+├── 📁 src/                                        # Código fonte principal
+│   ├── 📁 ml_models/                             # Scripts para treinamento e predição de modelos de IA/ML
+│   │   └── 📄 saci_fire_predictor.py              # Ex: Modelo de predição de incêndio do SACI
+│   ├── 📁 applications/                           # Aplicações de integração e serviços principais
+│   │   └── 📄 saci_mvp_integration_app.py         # Ex: Aplicação de integração do MVP SACI
+│   ├── 📁 hardware/esp32/                       # Firmware para dispositivos ESP32
+│   │   └── 📄 saci_sensor_node.py                 # Ex: Nó sensor do SACI para ESP32
+│   ├── 📁 data_collection/                      # Scripts para coleta e leitura de dados de sensores
+│   │   └── 📄 saci_serial_reader.py               # Ex: Leitor serial para dados do SACI
+│   └── 📁 core_logic/                           # Lógica central e orquestração do sistema
+│       └── 📄 guardian_orchestrator.py            # Componente GuardianCentralOrchestrator
+├── 📁 models/                                     # Modelos de Machine Learning treinados e serializados
+│   └── 📄 saci_fire_risk_model.joblib            # Ex: Modelo SACI salvo
+├── 📁 data/                                       # Dados utilizados pelo projeto
+│   └── 📁 synthetic/                             # Dados sintéticos para desenvolvimento e testes
+│       └── 📄 fire_risk_dataset.csv              # Ex: Dataset sintético para o SACI
+├── 📁 docs/                                      # Documentação técnica detalhada e complementar
+│   ├── 📄 DATA_MODELS.md                         # Modelos de dados, esquemas de BD
+│   ├── 📄 ARCHITECTURE_SPECIFICATION.md          # Especificações da arquitetura (deprecado em favor do MASTER_DOCUMENTATION)
+│   ├── 📄 SACI_MVP_SPECIFICATION.md              # Especificações detalhadas do MVP SACI
+│   ├── 📄 DATA_FLOWS.md                         # Diagramas e descrição de fluxos de dados
+│   ├── 📄 TECH_DEPENDENCIES.md                  # Matriz de dependências tecnológicas
+│   ├── 📄 API_SPECIFICATION.md                   # Especificação das APIs do sistema
+│   ├── 📄 IOT_PROTOCOLS.md                      # Protocolos de comunicação IoT utilizados
+│   ├── 📄 DASHBOARD_SPECIFICATIONS.md            # Especificações para os dashboards visuais
+│   ├── 📄 ADVANCED_AI_SPECIFICATIONS.md          # Detalhamento dos motores de IA avançada
+│   └── 📄 DAY_6_COMPLETION_SUMMARY.md            # Resumo das entregas do Dia 6
+├── 📁 docker/                                    # Arquivos de configuração Docker específicos por serviço
+├── 📁 kubernetes/                                # Manifestos e configurações para deployment em Kubernetes
+├── 📄 docker-compose.yml                         # Arquivo Docker Compose para orquestração local
+├── 📄 requirements.txt                           # Dependências Python do projeto
+├── 📁 assets/                                    # Recursos como imagens, apresentações (não código)
+├── 📁 .github/workflows/                         # Workflows para CI/CD com GitHub Actions
+└── 📄 .gitignore                                 # Especifica arquivos e diretórios ignorados pelo Git
 ```
+Uma descrição mais detalhada da arquitetura e dos componentes pode ser encontrada em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
 
 ---
 
@@ -619,38 +573,6 @@ The core technologies include Python, Kubernetes, Kafka, and a multi-modal datab
 2.  **Revise a [documentação principal](./MASTER_DOCUMENTATION.md)**
 3.  **Explore os [diagramas C4](./sistema_guardiao_c4_diagrams.html)**
 4.  **Acompanhe o progresso via Issues e Projects**
-
----
-
-## 📁 Estrutura Técnica Detalhada
-
-```text
-📁 global_solution_1_fiap/
-├── 📄 README.md                           # Documentação principal (este arquivo)
-├── 📄 MASTER_DOCUMENTATION.md             # Especificações técnicas completas
-├── 📄 sistema_guardiao_c4_diagrams.html   # Diagramas C4 interativos
-├── 📄 10_day_implementation_plan.md       # Roadmap detalhado
-├── 📁 src/
-│   └── 📁 saci_mvp/                      # MVP do SACI (código implementado)
-│       ├── 📄 README.md                  # Documentação específica do MVP
-│       ├── 📁 esp32_firmware/            # Firmware para sensores
-│       ├── 📁 ml_model/                  # Modelos de Machine Learning
-│       ├── 📁 api/                       # API FastAPI
-│       └── 📁 dashboard/                 # Interface React
-├── 📁 docs/                              # Documentação adicional
-│   ├── 📄 DATA_MODELS.md                # Esquemas de banco de dados
-│   ├── 📄 ARCHITECTURE_SPECIFICATION.md # Arquitetura técnica
-│   ├── 📄 SACI_MVP_SPECIFICATION.md     # Especificação detalhada do MVP
-│   ├── 📄 DATA_FLOWS.md                # Fluxos de dados entre subsistemas
-│   ├── 📄 TECH_DEPENDENCIES.md         # Matriz de dependências tecnológicas
-│   ├── 📄 API_SPECIFICATION.md          # Especificação da API
-│   └── 📄 IOT_PROTOCOLS.md             # Protocolos de comunicação IoT
-├── 📁 hardware/                          # Configurações de hardware
-├── 📁 .github/workflows/                 # CI/CD Pipeline
-├── 📄 requirements.txt                   # Dependências Python
-├── 📄 docker-compose.yml                 # Orquestração de containers
-└── 📄 LICENSE                           # Licença MIT
-```
 
 ---
 
