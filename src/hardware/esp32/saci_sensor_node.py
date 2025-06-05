@@ -1,5 +1,34 @@
-# SACI MVP - ESP32 Sensor Node (MicroPython)
-# Sistema Guardião - Fire Prevention and Detection
+"""
+SACI MVP - ESP32 Sensor Node (MicroPython)
+------------------------------------------
+
+This MicroPython script is designed for an ESP32 microcontroller to function as a
+sensor node for the Sistema Guardião - Fire Prevention and Detection project.
+
+Key functionalities:
+- Reads temperature and humidity from a DHT22 sensor.
+- Reads smoke/gas levels from an MQ-135 analog sensor.
+- Calculates a simplified fire risk level based on these sensor inputs.
+- Formats the sensor data and risk level into a string.
+- Prints the formatted string to the serial console at regular intervals.
+- Includes basic error handling for sensor readings.
+- Manages memory with periodic garbage collection.
+
+The script is intended for continuous operation, providing real-time (or near
+real-time) environmental data that can be read by a connected host system
+(e.g., a Raspberry Pi or PC running the SACI MVP Integration Application).
+
+Pin Configuration:
+- DHT22 Sensor: Connected to GPIO2 (configurable via DHT22_PIN_NUM).
+- MQ-135 Sensor: Connected to GPIO36 (ADC1_CH0, configurable via MQ135_PIN_NUM).
+
+Output Format (Serial Print):
+  "Temp:XX.XC, Hum:XX.X%, Smoke:XXXX, Risk:LEVEL"
+  (e.g., "Temp:25.5C, Hum:45.0%, Smoke:150, Risk:LOW")
+  "ERROR" is used for values if a sensor reading fails.
+
+This script forms the hardware data collection part of the SACI MVP.
+"""
 # Author: Yan Cotta
 # Date: May 30, 2025
 
@@ -122,6 +151,9 @@ def calculate_fire_risk(temperature, humidity, smoke_level):
     if temperature is None or smoke_level is None:
         return "UNKNOWN"
     
+    # The risk_score is an empirical value derived from sensor readings.
+    # Thresholds and score contributions are based on general observations and may
+    # require calibration and tuning for specific environments and accuracy needs.
     risk_score = 0 # Initialize risk score
     
     # Temperature Factor:
@@ -184,6 +216,7 @@ def format_sensor_data(temperature, humidity, smoke_level):
     # Example: "Temp:25.5C, Hum:45.0%, Smoke:150, Risk:LOW"
     return f"Temp:{temp_str}C, Hum:{hum_str}%, Smoke:{smoke_str}, Risk:{risk_level}"
 
+# --- Main Loop ---
 def main_loop():
     """
     Main sensor reading and data processing loop.
@@ -240,7 +273,8 @@ def main_loop():
             time.sleep(READING_INTERVAL * 2)
 
 # --- Placeholder Functions for Future Expansion ---
-# These functions define intended future capabilities but are not implemented in the MVP.
+# These functions define intended future capabilities but are currently not implemented
+# or called in the main MVP loop. They serve as placeholders for future development.
 
 def send_alert(risk_level, temperature, humidity, smoke_level):
     """

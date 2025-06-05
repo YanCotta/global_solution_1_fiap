@@ -4,9 +4,9 @@ SACI Fire Prediction Model Training and Prediction Script.
 This script handles the complete lifecycle of a fire risk prediction model, including:
 - Loading data from a CSV file.
 - Preprocessing the data: feature selection and handling missing values (if any).
-- Training a classification model (primarily Logistic Regression, with provisions for others like Decision Trees if fully implemented).
-- Evaluating the trained models using various metrics (accuracy, precision, recall, F1-score, confusion matrix).
-- Saving the trained models to disk using joblib.
+- Training a Logistic Regression classification model.
+- Evaluating the trained model using various metrics (accuracy, precision, recall, F1-score, confusion matrix).
+- Saving the trained model to disk using joblib.
 - Loading models from disk.
 - Providing a function to predict fire risk based on live sensor data.
 - Demonstrating the training, evaluation, saving, loading, and prediction processes.
@@ -246,14 +246,9 @@ def save_model(model: any, file_path: str) -> None:
         Exception: For other errors that might occur during model serialization by joblib.
     """
     try:
-        # Ensure the directory for storing the model exists.
-        # os.path.dirname() gets the directory part of the file_path.
-        model_dir = os.path.dirname(file_path)
-        if model_dir: # Check if model_dir is not an empty string (i.e., not saving in current dir)
-            # exist_ok=True prevents an error if the directory already exists.
-            os.makedirs(model_dir, exist_ok=True)
-            print(f"[INFO] Ensured directory exists for model saving: '{model_dir}'")
-
+        dir_name = os.path.dirname(file_path)
+        if dir_name:  # Only create the directory if the path is non-empty
+            os.makedirs(dir_name, exist_ok=True)
         # Serialize and save the model using joblib.dump
         joblib.dump(model, file_path)
         print(f"[INFO] Model successfully saved to '{file_path}'")
@@ -335,7 +330,9 @@ def predict_saci_fire_risk(model: LogisticRegression,
     try:
         # Get the predicted class label (e.g., 0 or 1)
         predicted_label = model.predict(input_data)[0]
-        # Get the probabilities for each class
+        # Get the probabilities for each class. For a binary classification model
+        # trained with labels 0 (No Fire) and 1 (Fire), predict_proba typically returns
+        # an array like [P(No Fire), P(Fire)].
         predicted_probabilities = model.predict_proba(input_data)[0]
         # Ensure label is a standard Python int, as some models might return numpy int types
         return int(predicted_label), predicted_probabilities
