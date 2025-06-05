@@ -73,30 +73,36 @@ class SaciManualAlertRequest(BaseModel):
 
 # 1. EventDetailsResponse Model
 class EventDetailsInformacoesBasicas(BaseModel):
-    event_id: str = Field(..., example="evt_fire_001")
-    timestamp: datetime = Field(..., example="2024-05-15T10:30:00Z")
-    subsistema: str = Field(..., example="SACI")
-    tipo_evento: str = Field(..., example="Alerta de Incêndio")
-    severidade: str = Field(..., example="Crítico")
-    coordenadas: Tuple[float, float] = Field(..., example=(-19.9174, -43.9343))
-    endereco: str = Field(..., example="Próximo à Rua Principal, Bairro Floresta, Belo Horizonte")
+    event_id: str = Field(..., example="SACI-2025060601-001")
+    timestamp: datetime # Field(..., example="2025-06-01 14:23:45 BRT") # Example will be shown by FastAPI
+    subsistema_origem: str = Field(..., alias="subsistema", example="SACI") # Matching dashboard spec
+    tipo_ameaca: str = Field(..., alias="tipo_evento", example="Risco Alto de Incêndio") # Matching dashboard spec
+    severidade_atual: str = Field(..., alias="severidade", example="ALTO") # Matching dashboard spec
+    localizacao_precisa: Tuple[float, float] = Field(..., alias="coordenadas", example=(-23.5505, -46.6333))
+    endereco_aproximado: Optional[str] = Field(None, alias="endereco", example="Parque Ibirapuera, São Paulo - SP")
+    status_evento: Optional[str] = Field(None, example="Ativo")
+
 
 class EventDetailsDetalhesTecnicos(BaseModel):
-    origem_sensor: str = Field(..., example="Sensor Óptico SAT-002 e Sensor Térmico TER-004")
-    confiabilidade: str = Field(..., example="Alta (95%)")
-    correlacao_historica: str = Field(..., example="Similar a 3 eventos anteriores na mesma região em épocas de seca.")
-    fatores_contribuintes: Dict[str, str] = Field(..., example={"clima": "Seca prolongada, ventos fortes", "vegetacao": "Mata seca adjacente"})
+    dados_sensores_relevantes: Optional[Union[Dict[str, Any], str]] = Field(None, example="SACI-SP-IBR-001") # Simplified to match example if complex object not needed
+    assinaturas_detectadas: Optional[str] = Field(None, alias="assinaturas_detectadas", example="94.2%") # Updated alias to match dashboard spec
+    modelos_preditivos_usados: Optional[str] = Field(None, alias="correlacao_historica", example="12 eventos similares") # Re-alias for clarity
+    fatores_contribuintes: Optional[Dict[str, str]] = Field(None, example={"temperatura": "32.5°C (+8°C normal)", "umidade": "25% (-40% normal)"})
+
 
 class EventDetailsImpactoEstimado(BaseModel):
-    raio_afetado: str = Field(..., example="5 km")
-    populacao_em_risco: str = Field(..., example="Aproximadamente 2.000 habitantes")
-    infraestrutura_critica: str = Field(..., example="Linha de transmissão de energia LT-003, Hospital Regional a 7km")
-    tempo_resposta_necessario: str = Field(..., example="Imediato, < 15 minutos para contenção inicial")
+    impacto_populacao: Optional[str] = Field(None, alias="populacao_em_risco", example="~45.000 pessoas")
+    impacto_infraestrutura: Optional[str] = Field(None, alias="infraestrutura_critica", example="Hospital Sírio-Libanês")
+    impacto_ambiental: Optional[str] = Field(None, example="Risco para área de preservação adjacente")
+    impacto_economico: Optional[str] = Field(None, example="Potencial interrupção de atividades comerciais locais")
+    propagacao_risco_potencial: Optional[str] = Field(None, alias="raio_afetado", example="2.5 km")
+    tempo_resposta_necessario: Optional[str] = Field(None, example="< 15 minutos")
+
 
 class EventDetailsAcoesSugeridas(BaseModel):
-    primaria: str = Field(..., example="Despachar 3 equipes de combate a incêndio (Corpo de Bombeiros)")
-    secundaria: str = Field(..., example="Emitir alerta de evacuação para áreas residenciais em raio de 2km")
-    preventiva: str = Field(..., example="Revisar aceiros na região e monitorar focos secundários via drone")
+    protocolos_recomendados: Optional[str] = Field(None, alias="primaria", example="Notificar Corpo de Bombeiros")
+    recursos_necessarios: Optional[str] = Field(None, alias="secundaria", example="Ativar protocolo evacuação preventiva")
+    comunicacoes_estrategicas: Optional[str] = Field(None, alias="preventiva", example="Aumentar monitoramento área adjacente")
 
 class EventDetailsResponse(BaseModel):
     informacoes_basicas: EventDetailsInformacoesBasicas
@@ -111,73 +117,89 @@ class KpiPrincipal(BaseModel):
     tendencia: str = Field(..., example="Aumentando") # e.g., "estavel", "melhorando", "piorando"
 
 class SubsystemKpiResponse(BaseModel):
-    subsistema_nome: str = Field(..., example="SACI")
-    indicador_visual: str = Field(..., example="vermelho") # e.g., "verde", "amarelo", "vermelho"
-    status_operacional: str = Field(..., example="Alerta Elevado") # e.g., "Operacional", "Degradado", "Falha Crítica"
+    # subsistema_nome: str = Field(..., example="SACI") # This will be part of the path, not response body
+    indicador_visual: str = Field(..., example="vermelho")
+    status_operacional: str = Field(..., example="Alerta Elevado")
     alertas_ativas: int = Field(..., example=12)
     kpi_principal: KpiPrincipal
-    ultima_atualizacao: datetime = Field(..., example="2024-05-15T10:30:00Z") # Changed to datetime for consistency
+    ultima_atualizacao: datetime
     detalhes_degradacao: Optional[str] = Field(None, example="Alguns sensores offline na Zona Oeste")
 
-# 3. HeatmapDataPoint Models (Specific for Saci and Iara)
+# 3. HeatmapDataPoint Models
 
-# 4. SaciHeatmapResponse Model
+# SACI Heatmap
 class SaciHeatmapDataPoint(BaseModel):
     geolocalizacao: Tuple[float, float] = Field(..., example=(-19.9174, -43.9343))
     risco_incendio_score: float = Field(..., example=0.92, ge=0.0, le=1.0)
-    direcao_vento: Optional[str] = Field(None, example="NNE")
+    direcao_vento_predominante: Optional[str] = Field(None, example="NNE")
+    umidade_relativa_media: Optional[float] = Field(None, example=25.5)
+    temperatura_media: Optional[float] = Field(None, example=32.5)
+
 
 class SaciHeatmapResponse(BaseModel):
-    data_points: List[SaciHeatmapDataPoint] = Field(..., example=[
-        SaciHeatmapDataPoint(geolocalizacao=(-19.9174, -43.9343), risco_incendio_score=0.92, direcao_vento="NNE"),
-        SaciHeatmapDataPoint(geolocalizacao=(-19.9274, -43.9443), risco_incendio_score=0.75, direcao_vento="N"),
-    ])
+    data_points: List[SaciHeatmapDataPoint]
 
-# 5. IaraHeatmapResponse Model
+# IARA Heatmap
 class IaraHeatmapDataPoint(BaseModel):
     geolocalizacao: Tuple[float, float] = Field(..., example=(-20.0000, -44.0000))
     risco_epidemiologico_score: float = Field(..., example=0.65, ge=0.0, le=1.0)
-    # patogeno_predominante: Optional[str] = Field(None, example="Influenza A") # As per API spec
+    patogeno_predominante: Optional[str] = Field(None, example="Influenza A")
+    velocidade_propagacao_estimada: Optional[str] = Field(None, example="moderada")
+
 
 class IaraHeatmapResponse(BaseModel):
-    data_points: List[IaraHeatmapDataPoint] = Field(..., example=[
-        IaraHeatmapDataPoint(geolocalizacao=(-20.0000, -44.0000), risco_epidemiologico_score=0.65),
-        IaraHeatmapDataPoint(geolocalizacao=(-20.0100, -44.0100), risco_epidemiologico_score=0.40),
-    ])
+    data_points: List[IaraHeatmapDataPoint]
 
-# 6. DependencyGraphResponse Model
+# 4. DependencyGraphResponse Model (NodeData sub-models need careful alignment with dashboard spec)
 class NodeDataInformacoesBasicas(BaseModel):
-    nome: str = Field(..., example="Hospital Central de BH")
-    tipo: str = Field(..., example="Hospital")
-    codigo: str = Field(..., example="HOSP-BH-001")
-    coordenadas: Tuple[float, float] = Field(..., example=(-19.9167, -43.9459))
+    nome_ativo: str = Field(..., alias="nome", example="Hospital Central de BH") # Matching dashboard spec
+    tipo_ativo: str = Field(..., alias="tipo", example="Hospital")
+    localizacao_geografica: Union[Tuple[float, float], str] = Field(..., alias="coordenadas", example=(-19.9167, -43.9459))
+    codigo_ativo: Optional[str] = Field(None, alias="codigo", example="HOSP-BH-001")
+
 
 class NodeDataStatusOperacional(BaseModel):
-    energia: str = Field(..., example="Estável (Rede Principal)") # e.g., "Estável", "Alerta Gerador", "Falha"
-    agua: str = Field(..., example="Estável")
-    telecomunicacoes: str = Field(..., example="Operacional com redundância")
-    equipamentos_criticos: str = Field(..., example="Todos operacionais") # e.g. "Tomógrafo X em manutenção"
+    estado_atual: str = Field(..., example="Operacional") # e.g., "Operacional", "Alerta Gerador", "Falha"
+    ultima_manutencao: Optional[datetime] = Field(None)
+    proxima_manutencao_agendada: Optional[datetime] = Field(None)
+    capacidade_operacional_percentual: Optional[float] = Field(None, example=95.5)
+    # Custom fields from example
+    energia: Optional[str] = Field(None, example="Estável (Rede Principal)")
+    agua: Optional[str] = Field(None, example="Estável")
+    telecomunicacoes: Optional[str] = Field(None, example="Operacional com redundância")
+    equipamentos_criticos: Optional[str] = Field(None, example="Todos operacionais")
 
-class NodeDataDependencias(BaseModel): # Simplified based on prompt
-    energia: List[str] = Field(..., example=["SUB-ENERGIA-003", "GERADOR-HOSP-01"])
-    agua: List[str] = Field(..., example=["RESERVATORIO-CENTRAL-02"])
-    telecomunicacoes: List[str] = Field(..., example=["FIBRA-OPERADORA-A", "SAT-LINK-BKP"])
+
+class NodeDataDependencias(BaseModel):
+    dependencias_diretas_resumidas: Optional[List[str]] = Field(None, example=["SUB-ENERGIA-003", "GERADOR-HOSP-01"])
+    # Detailed dependencies from example
+    energia: Optional[List[Dict[str,str]]] = Field(None, example=[{"fonte_principal": "Subestação Vila Madalena"}, {"backup_nivel1": "Gerador diesel 2000kVA"}])
+    agua: Optional[List[Dict[str,str]]] = Field(None, example=[{"fonte_principal": "Reservatório Consolação"}])
+    telecomunicacoes: Optional[List[Dict[str,str]]] = Field(None, example=[{"internet_principal": "Fibra óptica Vivo"}])
+
 
 class NodeDataImpactoFalha(BaseModel):
-    populacao_diretamente_afetada: str = Field(..., example="500 pacientes internados, 2000 atendimentos/dia")
-    servicos_criticos_interrompidos: List[str] = Field(..., example=["UTI", "Centro Cirúrgico"])
-    tempo_backup_disponivel: Dict[str, str] = Field(..., example={"energia_gerador": "8 horas", "agua_reservatorio": "24 horas"})
+    risco_impacto_falha: Optional[str] = Field(None, example="Crítico") # e.g., "Baixo", "Médio", "Alto", "Crítico"
+    populacao_diretamente_afetada: Optional[str] = Field(None, example="500 pacientes internados, 2000 atendimentos/dia")
+    servicos_criticos_interrompidos: Optional[List[str]] = Field(None, example=["UTI", "Centro Cirúrgico"])
+    tempo_backup_disponivel: Optional[Dict[str, str]] = Field(None, example={"energia_gerador": "8 horas", "agua_reservatorio": "24 horas"})
 
 class NodeData(BaseModel):
-    informacoes_basicas: NodeDataInformacoesBasicas
-    status_operacional: NodeDataStatusOperacional
-    dependencias_diretas: NodeDataDependencias # Field name from prompt
-    impacto_falha: NodeDataImpactoFalha
+    # Matching the structure from docs/DASHBOARD_SPECIFICATIONS.md (section 2.2 "Informações Detalhadas por Nó")
+    informacoes_basicas: Optional[NodeDataInformacoesBasicas] = None
+    status_operacional: Optional[NodeDataStatusOperacional] = None
+    dependencias_diretas: Optional[NodeDataDependencias] = Field(None, alias="dependencias_diretas_detalhadas") # Alias if needed for clarity
+    impacto_falha: Optional[NodeDataImpactoFalha] = None
+    # Adding fields from the direct `data` object in API spec
+    dependencias_diretas_resumidas: Optional[List[str]] = Field(None, description="Simplified list of direct dependency IDs")
+    capacidade_operacional_percentual: Optional[float] = Field(None, ge=0.0, le=100.0)
+    risco_impacto_falha: Optional[str] = Field(None, description="Overall failure impact risk")
+
 
 class GraphNode(BaseModel):
     id: str = Field(..., example="HOSP-BH-001")
     label: str = Field(..., example="Hospital Central")
-    type: str = Field(..., example="Hospital") # Consistent with NodeDataInformacoesBasicas.tipo
+    type: str = Field(..., example="Hospital")
     data: NodeData
 
 class GraphEdge(BaseModel):
@@ -192,40 +214,44 @@ class DependencyGraphResponse(BaseModel):
 
 # 7. CorrelatedEventTimelineResponse Model
 class TimelineEvent(BaseModel):
-    event_id: Optional[str] = Field(None, example="evt_fire_001_sub_01")
-    timestamp: datetime = Field(..., example="2024-05-15T10:30:00Z")
-    subsistema: str = Field(..., example="SACI")
-    tipo: str = Field(..., example="Foco de Incêndio Detectado") # threat_type from ThreatEvent
-    descricao: str = Field(..., example="Detecção inicial de fumaça e aumento de temperatura.")
-    severidade: str = Field(..., example="Médio")
-    localizacao: Optional[Union[Tuple[float, float], str]] = Field(None, example=(-19.9174, -43.9343))
-    # Optional detailed fields for direct embedding if needed, or use event_id to link
-    # detalhes_tecnicos: Optional[Dict[str, Any]] = None
-    # acoes_tomadas: Optional[List[str]] = None
+    event_id: str # Matching dashboard spec
+    timestamp: datetime
+    subsistema_origem: str = Field(..., alias="subsistema") # Matching dashboard spec
+    tipo_ameaca: str = Field(..., alias="tipo") # Matching dashboard spec
+    descricao_curta: str = Field(..., alias="descricao")
+    severidade: str
+    localizacao_geografica: Optional[Union[Tuple[float, float], str]] = Field(None, alias="localizacao")
 
-class PropagationStep(BaseModel): # Similar to TimelineEvent but with correlation context
-    event_id: Optional[str] = Field(None, example="evt_power_fail_002")
-    timestamp: datetime = Field(..., example="2024-05-15T10:45:00Z")
-    subsistema: str = Field(..., example="BOITATA")
-    tipo: str = Field(..., example="Falha de Energia")
-    descricao: str = Field(..., example="Subestação X desligada devido ao incêndio nas proximidades.")
-    severidade: str = Field(..., example="Alto") # Severity of this propagated event
-    localizacao: Optional[Union[Tuple[float, float], str]] = Field(None, example="Subestação Elétrica Zona Leste")
-    correlacao_tipo: str = Field(..., example="Causal Direta (Incêndio -> Falha Elétrica)") # e.g., "causal_direta"
-    # target_event_id: Optional[str] = Field(None, description="ID of the event this step is correlated from, if different from a direct sequence")
+
+class PropagationStep(BaseModel):
+    event_id: str
+    timestamp: datetime
+    subsistema_origem: str = Field(..., alias="subsistema")
+    tipo_ameaca: str = Field(..., alias="tipo")
+    descricao_curta: str = Field(..., alias="descricao")
+    severidade: str
+    localizacao_geografica: Optional[Union[Tuple[float, float], str]] = Field(None, alias="localizacao")
+    correlacao_com_anterior: Dict[str, str] = Field(..., example={"tipo_link": "causal", "descricao_link": "Queda de energia causou falha de comunicação"})
+    informacoes_tecnicas_link: Optional[str] = Field(None, example="/api/v1/events/evt_power_fail_002/details")
+
 
 class ResolutionInfo(BaseModel):
-    timestamp: datetime = Field(..., example="2024-05-15T14:00:00Z")
-    acao_coordenada: str = Field(..., example="Contenção do incêndio e restabelecimento parcial da energia.")
-    subsistemas_envolvidos: List[str] = Field(..., example=["SACI", "BOITATA", "Corpo de Bombeiros"])
-    tempo_total_evento: str = Field(..., example="3 horas e 30 minutos") # Duration as string
+    status_resolucao: str = Field(..., example="Resolvido")
+    proximos_passos_sugeridos: Optional[str] = Field(None)
+    timestamp_ultima_acao_relevante: datetime = Field(..., alias="timestamp")
+    # Adding fields from dashboard spec example for "resolucao"
+    acao_coordenada: Optional[str] = Field(None, example="Ativação protocolo recuperação distribuída")
+    subsistemas_envolvidos: Optional[List[str]] = Field(None, example=["CURUPIRA", "BOITATA", "ANHANGA"])
+    tempo_total_evento: Optional[str] = Field(None, example="5h 30min")
+
 
 class CorrelatedScenario(BaseModel):
-    scenario_id: str = Field(..., example="scenario_fire_power_cascade_001")
-    title: Optional[str] = Field(None, example="Cascata de Incêndio e Falha Elétrica na Zona Industrial")
+    scenario_id: str
+    scenario_title: Optional[str] = Field(None, example="Cascata de Falha Elétrica na Zona Oeste")
     evento_inicial: TimelineEvent
-    propagacao: List[PropagationStep] = Field(default_factory=list)
-    resolucao: Optional[ResolutionInfo] = None
+    propagacao_eventos: List[PropagationStep] = Field(default_factory=list, alias="propagacao")
+    resolucao_estimada_ou_atual: Optional[ResolutionInfo] = Field(None, alias="resolucao")
+
 
 class CorrelatedEventTimelineResponse(BaseModel):
     scenarios: List[CorrelatedScenario]

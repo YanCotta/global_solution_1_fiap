@@ -5,6 +5,14 @@
 **Equipe:** Yan Cotta  
 **Última Atualização:** Junho 2025
 
+**Para uma visão completa e detalhada do projeto, arquitetura, e especificações técnicas, consulte nosso [MASTER_DOCUMENTATION.md](./MASTER_DOCUMENTATION.md).**
+
+---
+
+## 🎬 Demonstração em Vídeo
+
+**[ASSISTA NOSSA DEMONSTRAÇÃO EM VÍDEO](LINK_YOUTUBE_AQUI)**
+
 ---
 
 ## 🎯 Estado Atual do Projeto
@@ -65,7 +73,73 @@ Especificações completas desenvolvidas para:
 
 ---
 
-## 🚀 Guia de Instalação e Teste Completo
+## 🚀 Guia de Instalação e Execução do MVP SACI (Simulado e Hardware Real)
+
+Esta seção fornece instruções para configurar e executar o MVP do subsistema SACI. Para um guia mais abrangente cobrindo todos os aspectos do projeto, incluindo setup de ambiente, treinamento de modelo, testes Docker e visualização de diagramas C4, por favor, consulte a seção "Guia de Instalação e Teste Completo" mais abaixo neste documento ou a [MASTER_DOCUMENTATION.md](./MASTER_DOCUMENTATION.md).
+
+### Executando o MVP SACI (Simulação de Dados Seriais)
+
+Este modo permite testar a aplicação de integração do SACI sem a necessidade do hardware ESP32 físico. Ele simula o recebimento de dados via porta serial.
+
+1.  **Clone o repositório e configure o ambiente Python** (siga os passos 1 do "Guia de Instalação e Teste Completo" abaixo, se ainda não o fez).
+2.  **Treine o modelo de Machine Learning** (siga o passo 2 do "Guia de Instalação e Teste Completo" abaixo, se ainda não o fez).
+3.  **Execute a aplicação de integração SACI em modo simulado:**
+    ```bash
+    python src/applications/saci_mvp_integration_app.py --port COM999
+    ```
+    (Substitua `COM999` por uma porta serial virtual ou qualquer nome de porta que não esteja em uso, se necessário. A aplicação irá reportar um erro de conexão, o que é esperado neste modo, mas carregará o modelo e estará pronta para lógica de simulação futura, se implementada).
+
+    **Saída Esperada (Demonstração de Carregamento de Modelo e Falha Controlada de Porta Serial):**
+    ```
+    Model loaded from models/saci_fire_risk_model.joblib
+    2025-06-01 18:02:32,114 - INFO - Successfully loaded ML model from: models/saci_fire_risk_model.joblib
+    2025-06-01 18:02:32,116 - ERROR - Failed to connect to serial port COM999. Please check the connection, port settings, and permissions.
+    ```
+
+### Executando o MVP SACI (Com Hardware ESP32 Real)
+
+Este modo utiliza um ESP32 físico com os sensores DHT22 e MQ-135/MQ-2 para enviar dados reais para a aplicação.
+
+1.  **Hardware Necessário:**
+    *   ESP32-WROOM-32 ou similar
+    *   DHT22 (sensor de temperatura e umidade)
+    *   MQ-135 ou MQ-2 (sensor de gases/fumaça)
+    *   Protoboard, jumpers e cabo USB
+
+2.  **Conexões do Hardware:**
+    ```
+    ESP32     | DHT22        ESP32     | MQ-135/MQ-2
+    ----------|--------      ----------|--------
+    3.3V      | VCC          3.3V      | VCC
+    GND       | GND          GND       | GND
+    GPIO 4    | DATA         GPIO 34   | AOUT (Pino Analógico)
+    ```
+    *Consulte `MASTER_DOCUMENTATION.md` para diagramas de conexão detalhados, se necessário.*
+
+3.  **Programação do ESP32:**
+    *   Carregue o firmware `src/hardware/esp32/saci_sensor_node.py` no seu ESP32.
+        *   **Ambiente Recomendado:** Thonny IDE para MicroPython.
+        *   Certifique-se que o ESP32 está enviando dados no formato esperado pela `saci_mvp_integration_app.py`.
+        *   A porta serial correta (`serial_port_name`) pode precisar ser ajustada no `saci_sensor_node.py` se você estiver usando uma configuração específica ou depurando via UART diferente.
+
+4.  **Execute a Aplicação de Integração SACI:**
+    *   Certifique-se que o ambiente Python está configurado e o modelo treinado (passos 1 e 2 do "Guia de Instalação e Teste Completo").
+    *   Execute o script, substituindo `COM3` (Windows) ou `/dev/ttyUSB0` (Linux) pela porta serial correta do seu ESP32:
+        ```bash
+        python src/applications/saci_mvp_integration_app.py --port COM3
+        ```
+
+    **Saída Esperada com Hardware Real (Exemplo):**
+    ```
+    Model loaded from models/saci_fire_risk_model.joblib
+    2025-06-01 18:02:32 - INFO - Successfully loaded ML model
+    2025-06-01 18:02:33 - INFO - Connected to ESP32 on COM3
+    2025-06-01 18:02:34 - INFO - Timestamp: 2025-06-01 18:02:34 | Live Data: Temp=25.3°C, Hum=60.2%, Smoke ADC=420 -> Predicted Risk: No Fire Detected, P(Fire): 0.15
+    ```
+
+---
+
+## 🚀 Guia de Instalação e Teste Completo (Geral)
 
 ### Pré-requisitos
 
@@ -220,13 +294,37 @@ docker-compose logs saci_api
 
 ## 🛡️ Os Cinco Guardiões Digitais
 
-O Sistema Guardião é composto por cinco subsistemas inteligentes, cada um inspirado em uma figura do folclore brasileiro e especializado em um domínio crítico. Para uma descrição detalhada de todos os guardiões, suas missões e componentes de IA, consulte a seção 'Os Cinco Guardiões Digitais' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#os-cinco-guardiões-digitais).
+O Sistema Guardião é composto por cinco subsistemas inteligentes, cada um inspirado em uma figura do folclore brasileiro e especializado em um domínio crítico. As descrições abaixo estão alinhadas com a [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#os-cinco-guardiões-digitais).
 
--   🔥 **SACI (Sistema de Alerta e Combate a Incêndios):** Focado na detecção ultra-precoce de incêndios florestais e na coordenação autônoma da resposta. (MVP Implementado e Testado)
--   🦶 **CURUPIRA (Centro Unificado de Resposta e Proteção de Infraestruturas Críticas):** Especializado na proteção híbrida físico-digital de infraestruturas críticas, correlacionando ameaças cibernéticas com sensores físicos. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#curupira-mvp)**
--   🏥 **IARA (Inteligência Artificial para Resposta e Alerta Epidemiológico):** Voltado para a predição precoce de surtos epidêmicos através do monitoramento ambiental e análise biométrica distribuída. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#iara-mvp)**
--   ⚡ **BOITATÁ (Bloco Operacional Integrado para Tratamento de Anomalias Urbanas):** Dedicado à prevenção de efeitos cascata em sistemas urbanos interdependentes, utilizando digital twins e análise de dependências. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#boitata-mvp)**
--   📡 **ANHANGÁ (Aliança Nacional Híbrida para Garantia de Atividades de Comunicação):** Garante comunicações resilientes durante colapsos de infraestrutura, utilizando redes mesh auto-organizáveis e roteamento inteligente. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#anhanga-mvp)**
+-   🦶 **CURUPIRA (Centro Unificado de Resposta e Proteção de Infraestruturas Críticas):**
+    *   **Missão:** Proteção híbrida físico-digital de infraestruturas críticas.
+    *   **Especialização:** Correlação de ameaças cibernéticas com sensores físicos.
+    *   **IA:** Detector híbrido com redes neurais ensemble.
+    *   **Plano de Implementação MVP:** Conceito detalhado em [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#curupira-mvp).
+
+-   🏥 **IARA (Inteligência Artificial para Resposta e Alerta Epidemiológico):**
+    *   **Missão:** Predição precoce de surtos através de monitoramento ambiental.
+    *   **Especialização:** Modelos epidemiológicos adaptativos (SEIR + RL).
+    *   **IA:** Análise biométrica distribuída e correlação comportamental.
+    *   **Plano de Implementação MVP:** Conceito detalhado em [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#iara-mvp).
+
+-   🔥 **SACI (Sistema de Alerta e Combate a Incêndios Florestais):**
+    *   **Missão:** Detecção ultra-precoce e coordenação autônoma de resposta.
+    *   **Especialização:** Inteligência de enxame (swarm intelligence).
+    *   **IA:** Algoritmos inspirados em colônia de formigas para coordenação distribuída.
+    *   **Status:** MVP Implementado e Testado.
+
+-   ⚡ **BOITATÁ (Bloco Operacional Integrado para Tratamento de Anomalias Urbanas):**
+    *   **Missão:** Prevenção de efeitos cascata em sistemas urbanos interdependentes.
+    *   **Especialização:** Digital twin urbano e análise de dependências.
+    *   **IA:** Modelagem de sistemas complexos e predição de falhas em cascata.
+    *   **Plano de Implementação MVP:** Conceito detalhado em [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#boitata-mvp).
+
+-   📡 **ANHANGÁ (Aliança Nacional Híbrida para Garantia de Atividades de Comunicação):**
+    *   **Missão:** Comunicações resilientes durante colapso de infraestrutura.
+    *   **Especialização:** Redes mesh auto-organizáveis.
+    *   **IA:** Roteamento inteligente e priorização de mensagens por NLP.
+    *   **Plano de Implementação MVP:** Conceito detalhado em [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#anhanga-mvp).
 
 ---
 
@@ -344,40 +442,20 @@ python -m http.server 8080
 
 ## 🚀 Como Testar com ESP32 Real
 
-### **Hardware Necessário:**
-- **ESP32-WROOM-32** ou similar
-- **DHT22** - Sensor de temperatura e umidade
-- **MQ-135 ou MQ-2** - Sensor de gases/fumaça
-- **Protoboard e jumpers**
-- **Cabo USB** para programação
+### **Hardware Necessário (Detalhado na seção MVP SACI acima):**
+- ESP32-WROOM-32 ou similar
+- DHT22
+- MQ-135 ou MQ-2
+- Protoboard, jumpers, cabo USB
 
-### **Conexões:**
-```
-ESP32     | DHT22
-----------|--------
-3.3V      | VCC
-GND       | GND  
-GPIO 4    | DATA
+### **Conexões (Detalhado na seção MVP SACI acima):**
+*Consulte a seção "Executando o MVP SACI (Com Hardware ESP32 Real)" para o diagrama de conexões.*
 
-ESP32     | MQ-135
-----------|--------  
-3.3V      | VCC
-GND       | GND
-GPIO 34   | AOUT
-```
+### **Programação (Detalhado na seção MVP SACI acima):**
+*Consulte a seção "Executando o MVP SACI (Com Hardware ESP32 Real)" para as instruções de programação do ESP32 e execução da aplicação.*
 
-### **Programação:**
-1. Carregue `src/hardware/esp32/saci_sensor_node.py` no ESP32
-2. Configure a porta serial no código
-3. Execute: `python src/applications/saci_mvp_integration_app.py --port COM3` (Windows) ou `--port /dev/ttyUSB0` (Linux)
-
-### **Saída Esperada com Hardware Real:**
-```
-Model loaded from models/saci_fire_risk_model.joblib
-2025-06-01 18:02:32 - INFO - Successfully loaded ML model
-2025-06-01 18:02:33 - INFO - Connected to ESP32 on COM3
-2025-06-01 18:02:34 - INFO - Timestamp: 2025-06-01 18:02:34 | Live Data: Temp=25.3°C, Hum=60.2%, Smoke ADC=420 -> Predicted Risk: No Fire Detected, P(Fire): 0.15
-```
+### **Saída Esperada com Hardware Real (Exemplo):**
+*Consulte a seção "Executando o MVP SACI (Com Hardware ESP32 Real)" para um exemplo da saída esperada.*
 
 ---
 
