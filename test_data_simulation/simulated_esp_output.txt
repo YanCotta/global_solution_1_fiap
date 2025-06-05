@@ -1,0 +1,23 @@
+# Dados simulados do ESP32 para testes do SACI MVP
+# Formato: "Temp: XX.X C, Hum: XX.X %, Smoke: XXX, Risk: LEVEL"
+
+# TC1: Dados válidos - Risco baixo/sem fogo
+Temp: 22.0 C, Hum: 65.0 %, Smoke: 150, Risk: MINIMAL
+Temp: 20.5 C, Hum: 70.0 %, Smoke: 100, Risk: LOW
+Temp: 18.0 C, Hum: 75.0 %, Smoke: 80, Risk: MINIMAL
+
+# TC2: Dados válidos - Risco alto/fogo detectado  
+Temp: 38.0 C, Hum: 25.0 %, Smoke: 700, Risk: HIGH
+Temp: 45.2 C, Hum: 15.0 %, Smoke: 850, Risk: CRITICAL
+Temp: 42.0 C, Hum: 20.0 %, Smoke: 600, Risk: HIGH
+
+# TC3: Dados com ERROR - Tratamento de sensor com falha
+Temp: ERROR C, Hum: 45.0 %, Smoke: 300, Risk: N/A
+Temp: 25.0 C, Hum: ERROR %, Smoke: ERROR, Risk: MEDIUM
+Temp: ERROR C, Hum: ERROR %, Smoke: 200, Risk: UNKNOWN
+
+# TC4: Linhas malformadas/não parseáveis
+Isto e uma linha completamente invalida
+Temp: C, Hum: %, Smoke: , Risk:
+Random text without any structure
+Temp: 25.0 C Hum: 50.0 % Smoke: 300 Risk: MEDIUM
