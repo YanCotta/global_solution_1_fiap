@@ -1,0 +1,5 @@
+# TC4: Linhas malformadas/não parseáveis
+Isto e uma linha completamente invalida
+Temp: C, Hum: %, Smoke: , Risk:
+Random text without any structure
+Temp: 25.0 C Hum: 50.0 % Smoke: 300 Risk: MEDIUM
