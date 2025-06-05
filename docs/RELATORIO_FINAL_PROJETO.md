@@ -1,3 +1,5 @@
+**Nota Importante:** Este documento (`docs/RELATORIO_FINAL_PROJETO.md`) serve como material de base e rascunho para a elaboração de um relatório final consolidado do projeto (possivelmente em formato PDF). Ele pode não refletir o estado mais atualizado da documentação técnica detalhada, que é mantida primariamente em `MASTER_DOCUMENTATION.md` e outros documentos referenciados.
+---
 # MÉTRICAS DE SUCESSO E KPIs
 
 Esta seção define os Indicadores Chave de Performance (KPIs) para avaliar o sucesso do projeto Global Solution de 10 dias, incluindo o MVP do SACI e a documentação abrangente desenvolvida.
