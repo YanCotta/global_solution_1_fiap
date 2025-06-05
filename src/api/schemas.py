@@ -84,7 +84,7 @@ class EventDetailsInformacoesBasicas(BaseModel):
 
 
 class EventDetailsDetalhesTecnicos(BaseModel):
-    dados_sensores_relevantes: Optional[Union[Dict[str, Any], str]] = Field(None, alias="origem_sensor", example="SACI-SP-IBR-001") # Simplified to match example if complex object not needed
+    dados_sensores_relevantes: Optional[Union[Dict[str, Any], str]] = Field(None, example="SACI-SP-IBR-001") # Simplified to match example if complex object not needed
     assinaturas_detectadas: Optional[str] = Field(None, alias="confiabilidade", example="94.2%") # Re-alias for clarity if needed, or keep as is
     modelos_preditivos_usados: Optional[str] = Field(None, alias="correlacao_historica", example="12 eventos similares") # Re-alias for clarity
     fatores_contribuintes: Optional[Dict[str, str]] = Field(None, example={"temperatura": "32.5°C (+8°C normal)", "umidade": "25% (-40% normal)"})
