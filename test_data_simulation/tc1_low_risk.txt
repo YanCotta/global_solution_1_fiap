@@ -1,0 +1,4 @@
+# TC1: Dados Válidos - Risco Baixo/Sem Fogo
+Temp: 22.0 C, Hum: 65.0 %, Smoke: 150, Risk: MINIMAL
+Temp: 20.5 C, Hum: 70.0 %, Smoke: 100, Risk: LOW
+Temp: 18.0 C, Hum: 75.0 %, Smoke: 80, Risk: MINIMAL
