@@ -246,7 +246,9 @@ def save_model(model: any, file_path: str) -> None:
         Exception: For other errors that might occur during model serialization by joblib.
     """
     try:
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        dir_name = os.path.dirname(file_path)
+        if dir_name:  # Only create the directory if the path is non-empty
+            os.makedirs(dir_name, exist_ok=True)
         # Serialize and save the model using joblib.dump
         joblib.dump(model, file_path)
         print(f"[INFO] Model successfully saved to '{file_path}'")
