@@ -40,8 +40,15 @@ SENSOR_DATA_PATTERN = re.compile(
 
 class SACISerialReader:
     """
-    Handles serial communication with an ESP32 device sending sensor data,
-    parses the data, and can log it to a file and/or print to console.
+    Handles serial communication with an ESP32 device that sends sensor data
+    in a specific string format (e.g., "Temp: 25.5 C, Hum: 45.0 %, Smoke: 150, Risk: LOW").
+    This class is responsible for connecting to the serial port, reading lines of data,
+    parsing these lines into structured dictionaries, and optionally logging them
+    to a file or printing them to the console.
+
+    The expected sensor data includes temperature, humidity, and a smoke ADC value.
+    It can also include an optional "Risk" level. The parser is designed to be
+    resilient to "ERROR" values reported by the sensors.
     """
 
     def __init__(self,
@@ -122,16 +129,21 @@ class SACISerialReader:
 
         The expected format is:
         "Temp: XX.X C, Hum: XX.X %, Smoke: XXXX, Risk: LEVEL"
-        "ERROR" can replace any sensor value. Risk level is optional.
+        "ERROR" can replace any sensor value. The "Risk: LEVEL" part is optional.
 
         Args:
             line: The raw string read from the serial port.
 
         Returns:
-            A dictionary containing the parsed sensor data including a timestamp,
-            temperature, humidity, smoke level, risk level (if present), and
-            the original raw line. Returns None if parsing fails or the line
-            does not match the expected pattern.
+            A dictionary containing the parsed sensor data if successful, otherwise None.
+            The dictionary includes the following keys:
+            - 'timestamp': ISO 8601 format string of when the data was parsed.
+            - 'temperature_celsius': Float, temperature in Celsius, or None if "ERROR".
+            - 'humidity_percent': Float, humidity percentage, or None if "ERROR".
+            - 'smoke_adc': Integer, smoke sensor ADC reading, or None if "ERROR".
+            - 'risk_level': String, risk level (e.g., "LOW", "HIGH"), or "N/A" if not provided.
+            - 'raw_line': String, the original stripped line read from serial.
+            Returns None if parsing fails (e.g., line does not match expected format).
         """
         line_stripped = line.strip()
         match = self.data_pattern.search(line_stripped)
