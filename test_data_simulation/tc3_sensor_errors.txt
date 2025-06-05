@@ -1,0 +1,4 @@
+# TC3: Dados com ERROR - Tratamento de sensor com falha
+Temp: ERROR C, Hum: 45.0 %, Smoke: 300, Risk: N/A
+Temp: 25.0 C, Hum: ERROR %, Smoke: ERROR, Risk: MEDIUM
+Temp: ERROR C, Hum: ERROR %, Smoke: 200, Risk: UNKNOWN
