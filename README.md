@@ -223,10 +223,10 @@ docker-compose logs saci_api
 O Sistema Guardião é composto por cinco subsistemas inteligentes, cada um inspirado em uma figura do folclore brasileiro e especializado em um domínio crítico. Para uma descrição detalhada de todos os guardiões, suas missões e componentes de IA, consulte a seção 'Os Cinco Guardiões Digitais' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#os-cinco-guardiões-digitais).
 
 -   🔥 **SACI (Sistema de Alerta e Combate a Incêndios):** Focado na detecção ultra-precoce de incêndios florestais e na coordenação autônoma da resposta. (MVP Implementado e Testado)
--   🦶 **CURUPIRA (Centro Unificado de Resposta e Proteção de Infraestruturas Críticas):** Especializado na proteção híbrida físico-digital de infraestruturas críticas, correlacionando ameaças cibernéticas com sensores físicos.
--   🏥 **IARA (Inteligência Artificial para Resposta e Alerta Epidemiológico):** Voltado para a predição precoce de surtos epidêmicos através do monitoramento ambiental e análise biométrica distribuída.
--   ⚡ **BOITATÁ (Bloco Operacional Integrado para Tratamento de Anomalias Urbanas):** Dedicado à prevenção de efeitos cascata em sistemas urbanos interdependentes, utilizando digital twins e análise de dependências.
--   📡 **ANHANGÁ (Aliança Nacional Híbrida para Garantia de Atividades de Comunicação):** Garante comunicações resilientes durante colapsos de infraestrutura, utilizando redes mesh auto-organizáveis e roteamento inteligente.
+-   🦶 **CURUPIRA (Centro Unificado de Resposta e Proteção de Infraestruturas Críticas):** Especializado na proteção híbrida físico-digital de infraestruturas críticas, correlacionando ameaças cibernéticas com sensores físicos. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#curupira-mvp)**
+-   🏥 **IARA (Inteligência Artificial para Resposta e Alerta Epidemiológico):** Voltado para a predição precoce de surtos epidêmicos através do monitoramento ambiental e análise biométrica distribuída. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#iara-mvp)**
+-   ⚡ **BOITATÁ (Bloco Operacional Integrado para Tratamento de Anomalias Urbanas):** Dedicado à prevenção de efeitos cascata em sistemas urbanos interdependentes, utilizando digital twins e análise de dependências. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#boitata-mvp)**
+-   📡 **ANHANGÁ (Aliança Nacional Híbrida para Garantia de Atividades de Comunicação):** Garante comunicações resilientes durante colapsos de infraestrutura, utilizando redes mesh auto-organizáveis e roteamento inteligente. **[Plano de Implementação MVP](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#anhanga-mvp)**
 
 ---
 
@@ -409,6 +409,7 @@ Model loaded from models/saci_fire_risk_model.joblib
 - **Documentação técnica completa**
 
 ### 🔄 **Próximos Passos**
+- **Implementação dos MVPs de outros subsistemas:** Com base nos planos conceituais detalhados em [IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md), iniciar o desenvolvimento dos MVPs para CURUPIRA, IARA, BOITATÁ e ANHANGÁ.
 - **Teste com hardware ESP32 real**
 - **Dashboard web responsivo**
 - **API REST completa**

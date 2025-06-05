@@ -127,26 +127,31 @@ PPPs estratégicas são vitais para alavancar expertise especializada do setor p
    * **Missão:** Proteção híbrida físico-digital de infraestruturas críticas
    * **Especialização:** Correlação de ameaças cibernéticas com sensores físicos
    * **IA:** Detector híbrido com redes neurais ensemble
+   * **Plano de Implementação MVP:** Para um plano de implementação conceitual detalhado do MVP do CURUPIRA, consulte o documento [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#curupira-mvp).
 
 2. **🏥 IARA** - Inteligência Artificial para Resposta e Alerta Epidemiológico
    * **Missão:** Predição precoce de surtos através de monitoramento ambiental
    * **Especialização:** Modelos epidemiológicos adaptativos (SEIR + RL)
    * **IA:** Análise biométrica distribuída e correlação comportamental
+   * **Plano de Implementação MVP:** Para um plano de implementação conceitual detalhado do MVP do IARA, consulte o documento [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#iara-mvp).
 
 3. **🔥 SACI** - Sistema de Alerta e Combate a Incêndios Florestais
    * **Missão:** Detecção ultra-precoce e coordenação autônoma de resposta
    * **Especialização:** Inteligência de enxame (swarm intelligence)
    * **IA:** Algoritmos inspirados em colônia de formigas para coordenação distribuída
+   * **Status:** MVP Implementado e Testado
 
 4. **⚡ BOITATÁ** - Bloco Operacional Integrado para Tratamento de Anomalias Urbanas
    * **Missão:** Prevenção de efeitos cascata em sistemas urbanos interdependentes
    * **Especialização:** Digital twin urbano e análise de dependências
    * **IA:** Modelagem de sistemas complexos e predição de falhas em cascata
+   * **Plano de Implementação MVP:** Para um plano de implementação conceitual detalhado do MVP do BOITATÁ, consulte o documento [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#boitata-mvp).
 
 5. **📡 ANHANGÁ** - Aliança Nacional Híbrida para Garantia de Atividades de Comunicação
    * **Missão:** Comunicações resilientes durante colapso de infraestrutura
    * **Especialização:** Redes mesh auto-organizáveis
    * **IA:** Roteamento inteligente e priorização de mensagens por NLP
+   * **Plano de Implementação MVP:** Para um plano de implementação conceitual detalhado do MVP do ANHANGÁ, consulte o documento [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md#anhanga-mvp).
 
 ---
 
@@ -852,6 +857,7 @@ A seleção tecnológica do Sistema Guardião segue três princípios fundamenta
 * MicroPython + sensores básicos + Scikit-learn
 * Comunicação serial/WiFi simples
 * Algoritmos de threshold estático
+* Implementação dos MVPs conceituais para CURUPIRA, IARA, BOITATÁ e ANHANGÁ conforme detalhado no [Plano de Implementação dos Outros Subsistemas](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md)
 
 ### Médio Prazo (Piloto - 12 meses)
 * Migração para PyTorch com modelos neurais
