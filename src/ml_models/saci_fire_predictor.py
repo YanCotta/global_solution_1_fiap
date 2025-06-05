@@ -295,7 +295,6 @@ def predict_saci_fire_risk(model: LogisticRegression,
                              live_hum: float,
                              live_smoke_adc: float) -> tuple[int, np.ndarray]:
     """
-    """
     Predicts the fire risk label and associated probabilities for a given set of
     live sensor readings using a trained model.
 
