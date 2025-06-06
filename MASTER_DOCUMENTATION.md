@@ -721,7 +721,7 @@ O Sistema Guardião depende de uma rede distribuída de sensores sofisticados e 
 * **React + TypeScript** (Dashboard web)
 * **D3.js** (Visualizações especializadas)
 * **React Native** (App móvel)
-* *Nota: As especificações detalhadas para os dashboards executivos e especializados, incluindo arquitetura de interface, componentes visuais e fluxos de usuário, que guiam o design e funcionalidade deste frontend, podem ser encontradas em [Especificações de Dashboard](./docs/DASHBOARD_SPECIFICATIONS.md).*
+* *Nota: As especificações detalhadas para os dashboards executivos e especializados, incluindo arquitetura de interface, componentes visuais e fluxos de usuário, que guiam o design e funcionalidade deste frontend, podem ser encontradas em [Especificações de Dashboard](./docs/DASHBOARD_SPECIFICATIONS.md). Para detalhes sobre a API que alimenta estes dashboards, consulte [Especificações de API](./docs/API_SPECIFICATION.md) e o [Sumário de Integração API-Dashboard](./docs/API_DASHBOARD_INTEGRATION_SUMMARY.md).*
 
 ### Justificativas Detalhadas do Tech Stack
 
@@ -916,6 +916,127 @@ A seleção tecnológica do Sistema Guardião segue três princípios fundamenta
 **Justificativa:** Sensor analógico de propósito geral que detecta múltiplos gases (CO2, NH3, fumaça).
 
 **Limitações Aceitáveis:** Requer calibração manual e é sensível a variações ambientais, mas oferece indicação qualitativa suficiente para testes.
+
+## ⚠️ **Limitações Conhecidas do MVP e Estratégia de Evolução**
+
+> **Demonstração de Maturidade de Engenharia: Consciência Arquitetural e Planejamento Estratégico**
+
+O MVP atual do Sistema Guardião, focado no subsistema SACI, foi arquitetado com **limitações intencionais** para possibilitar validação rápida de conceito mantendo simplicidade operacional. Esta seção documenta essas limitações e o roadmap técnico para superá-las, demonstrando a profundidade de planejamento arquitetural.
+
+### 🔒 **Limitações de Segurança e Governança**
+
+#### **Gestão de Segredos e Configurações**
+- **Limitação Atual**: Variáveis de ambiente e configurações sensíveis expostas em `docker-compose.yml`
+- **Impacto**: Adequado para desenvolvimento e demonstração, inadequado para produção
+- **Estratégia de Migração**:
+  - **Fase Piloto**: Kubernetes ConfigMaps e Secrets
+  - **Produção**: HashiCorp Vault integrado com rotação automática de segredos
+  - **Enterprise**: AWS Secrets Manager com auditoria completa
+
+#### **Autenticação e Autorização de Dispositivos**
+- **Limitação Atual**: ESP32 comunica via porta serial sem autenticação mútua
+- **Impacto**: Confiança implícita no dispositivo conectado
+- **Estratégia de Migração**:
+  - **Certificados X.509** para cada dispositivo ESP32
+  - **mTLS (mutual TLS)** para todas as comunicações
+  - **Device Identity Management** com rotação de certificados
+  - **Zero Trust Architecture** com verificação contínua
+
+### 📈 **Limitações de Escalabilidade e Performance**
+
+#### **Arquitetura de Comunicação**
+- **Limitação Atual**: `saci_mvp_integration_app.py` conecta ponto-a-ponto via porta serial
+- **Impacto**: Não escala além de um dispositivo por instância
+- **Arquitetura de Produção Planejada**:
+  ```
+  ESP32 Nodes → MQTT Broker → Apache Kafka → Stream Processing → GuardianOrchestrator
+               (LoRaWAN)      (Clustered)    (Multi-partition)   (Distributed)
+  ```
+
+#### **Processamento de Dados**
+- **Limitação Atual**: Processamento síncrono e sequencial em thread única
+- **Impacto**: Latência acumulativa com múltiplos sensores
+- **Evolução Planejada**:
+  - **Apache Kafka**: Streaming assíncrono com particionamento por região
+  - **Apache Spark Streaming**: Processamento distribuído em micro-batches
+  - **Redis Streams**: Buffer de baixa latência para dados críticos
+  - **Auto-scaling**: Kubernetes HPA baseado em throughput de mensagens
+
+### 🧠 **Limitações de Inteligência Artificial e Aprendizado**
+
+#### **Modelo de Machine Learning Estático**
+- **Limitação Atual**: Modelo scikit-learn carregado uma vez, sem adaptação
+- **Impacto**: Degradação de performance com deriva de dados (data drift)
+- **MLOps Pipeline Planejado**:
+  - **Continuous Training**: Retreinamento automático com novos dados
+  - **A/B Testing**: Comparação de modelos em produção
+  - **Model Versioning**: MLflow para versionamento e rollback
+  - **Drift Detection**: Monitoramento estatístico contínuo
+  - **Federated Learning**: Treinamento distribuído preservando privacidade
+
+#### **Correlação Multi-Subsistema**
+- **Limitação Atual**: SACI opera isoladamente
+- **Impacto**: Perda de sinergia com outros Guardiões Digitais
+- **Integração Planejada**:
+  - **ThreatCorrelationEngine**: Correlação espacial e temporal entre subsistemas
+  - **MetaLearningEngine**: Aprendizado sobre eficácia de estratégias inter-subsistemas
+  - **Shared Context**: Base de conhecimento distribuída entre todos os Guardiões
+
+### 🗄️ **Limitações de Persistência e Governança de Dados**
+
+#### **Armazenamento e Auditoria**
+- **Limitação Atual**: Dados apenas em logs locais e memória
+- **Impacto**: Perda de histórico e impossibilidade de análise retrospectiva
+- **Arquitetura de Dados Planejada**:
+  - **PostgreSQL + TimescaleDB**: Dados relacionais e séries temporais
+  - **InfluxDB**: Métricas de alta frequência de sensores IoT
+  - **Neo4j**: Grafo de dependências entre componentes críticos
+  - **Data Lake (S3/MinIO)**: Dados brutos para análise exploratória
+  - **GDPR Compliance**: Anonymização e direito ao esquecimento
+
+### 🚀 **Roadmap Técnico de Migração**
+
+#### **Fase 1: MVP → Alpha (3-6 meses)**
+```
+Foco: Escalabilidade Horizontal e Segurança Básica
+
+• Migração Serial → MQTT + LoRaWAN
+• Kubernetes deployment com Secrets
+• PostgreSQL para persistência
+• Monitoramento básico (Prometheus + Grafana)
+• Múltiplos ESP32 simultaneamente
+```
+
+#### **Fase 2: Alpha → Beta (6-12 meses)**
+```
+Foco: Inteligência Distribuída e MLOps
+
+• Apache Kafka para streaming
+• MLflow para model management
+• ThreatCorrelationEngine operacional
+• mTLS e autenticação de dispositivos
+• Dashboard web responsivo
+```
+
+#### **Fase 3: Beta → Produção (12-24 meses)**
+```
+Foco: Escala Nacional e Resiliência Crítica
+
+• Data Lake e analytics avançados
+• MetaLearningEngine com federated learning
+• HashiCorp Vault para secrets management
+• Multi-cloud deployment (AWS + GCP)
+• SLA 99.99% e disaster recovery
+```
+
+### 💡 **Justificativa das Limitações Intencionais**
+
+1. **Validação de Valor Rápida**: 10 dias para demonstrar viabilidade técnica completa
+2. **Complexidade Incremental**: Evitar over-engineering prematuro
+3. **Aprendizado Dirigido por Dados**: Cada limitação informa decisões arquiteturais futuras
+4. **Demonstração Focada**: Avaliadores podem focar no valor do negócio e inovação em IA
+
+**🎯 Resultado**: MVP que prova **viabilidade técnica** e **valor de negócio** enquanto estabelece **fundação sólida** para evolução planejada.
 
 ## Roadmap de Evolução Tecnológica
 
