@@ -238,7 +238,7 @@
                     Saci[🔥 SACI<br/>Fire & Natural Disasters<br/>Python + PyTorch]
                     Iara[🏥 IARA<br/>Health & Epidemiology<br/>Python + Scikit-Learn]
                     Boitata[⚡ BOITATÁ<br/>Critical Infrastructure<br/>Go + Kubernetes]
-                    Anhanga[📡 ANHANGÁ<br/>Resilient Emergency Comms<br/>Specialized Protocols] %% MODIFIED: Replaced Caipora and Mula
+                    Anhanga[📡 ANHANGÁ<br/>Resilient Emergency Comms<br/>Specialized Protocols]
                     
                     %% Data Layer
                     TimeSeriesDB[📊 InfluxDB<br/>Time Series Data<br/>Sensor & Metrics Storage]
@@ -260,13 +260,11 @@
                     MessageBus --> Saci
                     MessageBus --> Iara
                     MessageBus --> Boitata
-                    MessageBus --> Anhanga %% MODIFIED: Connection to Anhangá, removed Caipora & Mula
+                    MessageBus --> Anhanga
                     
                     %% Cross-subsystem Communication
                     Curupira -.->|Threat Intelligence| Boitata
                     Boitata -.->|Infrastructure Status| Saci
-                    %% Removed: Saci -.->|Fire Risk Data| Caipora
-                    %% Removed: Iara -.->|Health Logistics| Mula
                     
                     %% Data Access
                     Curupira --> TimeSeriesDB
@@ -288,7 +286,7 @@
                     
                     class WebApp,MobileApp,PublicAPI webapp
                     class Orchestrator,MessageBus core
-                    class Curupira,Saci,Iara,Boitata,Anhanga subsystem %% MODIFIED: Anhangá in, Caipora & Mula out
+                    class Curupira,Saci,Iara,Boitata,Anhanga subsystem
                     class TimeSeriesDB,GraphDB,VectorDB,PostgreSQL database
                     class GovIntegration external
             </div>
@@ -317,8 +315,6 @@
                         FireAgent[🔥 Fire Oracle Agent<br/>Role: Fire Risk Assessment<br/>Tools: WeatherIntegrator, SwarmCoordinator]
                         HealthAgent[🏥 Health Oracle Agent<br/>Role: Epidemic Prediction<br/>Tools: BiometricsAnalyzer, EpidemicModeler]
                         InfraAgent[⚡ Infrastructure Guardian<br/>Role: Critical System Protection<br/>Tools: DependencyMapper, FailurePredictor]
-                        EnviroAgent[🌿 Environmental Sentinel<br/>Role: Ecosystem Monitoring<br/>Tools: SatelliteAnalyzer, ClimateModeler]
-                        LogisticsAgent[🚛 Supply Chain Coordinator<br/>Role: Resource Optimization<br/>Tools: RouteOptimizer, InventoryTracker]
                     end
                     
                     %% AI Tools & Models
@@ -347,16 +343,12 @@
                     AgentRegistry --> FireAgent
                     AgentRegistry --> HealthAgent
                     AgentRegistry --> InfraAgent
-                    AgentRegistry --> EnviroAgent
-                    AgentRegistry --> LogisticsAgent
                     
                     %% Agent Coordination
                     CoordinationCrew --> CyberAgent
                     CoordinationCrew --> FireAgent
                     CoordinationCrew --> HealthAgent
                     CoordinationCrew --> InfraAgent
-                    CoordinationCrew --> EnviroAgent
-                    CoordinationCrew --> LogisticsAgent
                     
                     %% Tool Integration
                     CyberAgent --> LLMService
@@ -381,11 +373,11 @@
                     classDef dataSource fill:#2196f3,stroke:#1976d2,stroke-width:2px,color:#fff
                     
                     class AgentRegistry,CoordinationCrew,TaskPlanner,ConflictResolver,LearningEngine orchestrator
-                    class CyberAgent,FireAgent,HealthAgent,InfraAgent,EnviroAgent,LogisticsAgent agent
+                    class CyberAgent,FireAgent,HealthAgent,InfraAgent agent
                     class LLMService,MLPipeline,VectorStore,ReinforcementLearning aiTool
                     class SensorNetwork,ExternalAPIs,HistoricalData dataSource
             </div>
-            <p class="diagram-caption"><strong>Note on AI Agent Roles:</strong> The agents listed such as 'EnviroAgent' and 'LogisticsAgent' represent internal functional specializations within the GuardianCentralOrchestrator's AI crew. These specialized agents support the primary five folklore-named subsystems (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) by handling specific domains of analysis and task execution. For example, EnviroAgent might provide detailed environmental impact assessments for SACI's fire predictions or BOITATÁ's infrastructure projects, while LogisticsAgent could assist IARA with medical supply chain optimization or ANHANGÁ with resource deployment for communication infrastructure. They can also represent capabilities that might evolve into future, more specialized subsystems.</p>
+            <p class="diagram-caption"><strong>Note on AI Agent Roles:</strong> The specialized agents within the GuardianCentralOrchestrator's AI crew support the five primary folklore-named subsystems (CURUPIRA, IARA, SACI, BOITATÁ, ANHANGÁ) by handling specific domains of analysis and task execution. For example, CyberAgent provides cybersecurity intelligence for CURUPIRA, FireAgent supports SACI's fire prediction capabilities, HealthAgent assists IARA with health emergencies, and InfraAgent helps BOITATÁ monitor critical infrastructure. ANHANGÁ coordinates with all agents for emergency communications and response coordination.</p>
         </div>
 
         <!-- C3: Component Diagram - CURUPIRA Subsystem -->
