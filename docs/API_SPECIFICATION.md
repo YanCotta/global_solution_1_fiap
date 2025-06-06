@@ -181,69 +181,214 @@ Para um ambiente de produção, a API Central do Sistema Guardião exigirá meca
 
 A implementação detalhada destes mecanismos de segurança está fora do escopo da fase conceitual atual do MVP (Minimum Viable Product), mas é um requisito fundamental para implantações futuras. Os "Princípios Gerais da API" sobre segurança (HTTPS, etc.) devem ser observados desde o início.
 
-## 4. Requisitos Adicionais da API para Suporte ao Dashboard Detalhado
+## 4. Requisitos da API para Suporte ao Dashboard
 
-Nota: Os modelos de dados detalhados para as respostas da API, utilizando Pydantic, são definidos em `src/api/schemas.py`. As descrições de payload abaixo fornecem uma visão conceitual da estrutura esperada.
+Esta seção especifica os endpoints e estruturas de dados necessários para popular todas as visualizações detalhadas descritas em `docs/DASHBOARD_SPECIFICATIONS.md`. Cada endpoint é projetado para fornecer dados otimizados para componentes específicos do dashboard executivo e dashboards especializados.
 
-A análise das `DASHBOARD_SPECIFICATIONS.md` (Dia 6) indica a necessidade de expansão ou detalhamento de endpoints da API para suportar plenamente as visualizações de dados ricas propostas. Embora os endpoints existentes (ex: `/api/v1/events`, `/api/v1/saci/risks`) forneçam uma base, os seguintes endpoints e suas especificações são propostos:
+### 4.1. API para ThreatMap (Mapa Principal de Ameaças)
 
-1.  **`GET /api/v1/events/{event_id}/details`**
-    *   **Descrição:** Retorna detalhes completos de um evento específico para exibição no painel de detalhes do evento do ThreatMap.
-    *   **Path Parameters:** `event_id` (string).
-    *   **Query Parameters:** Nenhum.
-    *   **Response Payload Concept:** Um objeto JSON estruturado com chaves como `informacoes_basicas`, `detalhes_tecnicos`, `impacto_estimado`, e `acoes_sugeridas`. A estrutura e os campos dentro de cada uma dessas chaves devem espelhar fielmente as especificações detalhadas na Seção 1.2 ("Painel de Detalhes do Evento") do `docs/DASHBOARD_SPECIFICATIONS.md`.
+#### 4.1.1. Eventos Georreferenciados em Tempo Real
+- `GET /api/v1/dashboard/threat_map/events`
+  - **Query Parameters:**
+    - `subsystems: Optional[str]` - Lista separada por vírgulas (e.g., "SACI,CURUPIRA,IARA")
+    - `severity_levels: Optional[str]` - Lista separada por vírgulas (e.g., "ALTO,CRITICO")
+    - `time_range: Optional[str]` - Período (e.g., "1h", "6h", "24h", "7d", "30d")
+    - `bbox: Optional[str]` - Bounding box "minLon,minLat,maxLon,maxLat"
+    - `include_infrastructure: Optional[bool]` - Include infrastructure context
+  - **Response:** Lista de `ThreatEventResponse` com campos adicionais para visualização no mapa
+  - **Uso no Dashboard:** Popular marcadores no ThreatMap com cores por severidade e ícones por subsistema
 
-2.  **`GET /api/v1/subsystems/{subsistema_nome}/kpis`**
-    *   **Descrição:** Retorna os Key Performance Indicators (KPIs) para um subsistema específico (e.g., SACI, IARA), destinados ao painel `SystemStatus`.
-    *   **Path Parameters:** `subsistema_nome` (string, e.g., "SACI", "IARA", "CURUPIRA", "BOITATA", "ANHANGA").
-    *   **Query Parameters:** Nenhum.
-    *   **Response Payload Concept:** Um objeto JSON com os campos `indicador_visual`, `status_operacional`, `alertas_ativas`, `kpi_principal` (este sendo um objeto com `metrica`, `valor`, `tendencia`), `ultima_atualizacao`, e um campo opcional `detalhes_degradacao`. A estrutura e os campos devem corresponder ao detalhamento da Seção 2.1 ("Painel de Status do Sistema (SystemStatus)") do `docs/DASHBOARD_SPECIFICATIONS.md`.
+#### 4.1.2. Detalhes de Evento Individual
+- `GET /api/v1/dashboard/events/{event_id}/details`
+  - **Path Parameters:** `event_id: str`
+  - **Response:** `EventDetailsResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Painel de detalhes que aparece no hover/click de eventos no mapa
 
-3.  **`GET /api/v1/saci/heatmap`**
-    *   **Descrição:** Fornece dados para a geração do mapa de calor de risco de incêndio do SACI.
-    *   **Path Parameters:** Nenhum.
-    *   **Query Parameters (Conforme especificado na subtask):**
-        *   `temporal` (string, opcional, e.g., "real_time", "last_hour", "12h", "24h", "proximas_6h_preditivo"). Default: "real_time".
-        *   `tipos_vegetacao` (string, opcional, lista separada por vírgulas, e.g., "mata_atlantica,cerrado,campo_aberto").
-        *   `fatores_risco` (string, opcional, e.g., "apenas_climatico", "combinado_climatico_historico", "atividade_humana_recente"). Default: "combinado_climatico_historico".
-        *   `bbox` (string, opcional, coordenadas da bounding box no formato "minLon,minLat,maxLon,maxLat").
-    *   **Response Payload Concept:** Uma lista de objetos JSON. Cada objeto deve conter `geolocalizacao` (com `latitude`, `longitude`), `risco_incendio_score` (float, 0.0-1.0), e opcionalmente `direcao_vento_predominante` (string), `umidade_relativa_media` (float), `temperatura_media` (float).
+#### 4.1.3. Camadas de Contexto do Mapa
+- `GET /api/v1/dashboard/map_layers/infrastructure`
+  - **Query Parameters:**
+    - `layer_types: Optional[str]` - "hospitais,escolas,bombeiros,energia,agua,telecom"
+    - `bbox: Optional[str]` - Bounding box para filtrar por região
+  - **Response:** GeoJSON com pontos de infraestrutura crítica
+  - **Uso no Dashboard:** Camadas opcionais sobre o ThreatMap
 
-4.  **`GET /api/v1/iara/heatmap`**
-    *   **Descrição:** Fornece dados para a geração do mapa de calor de risco epidemiológico do IARA.
-    *   **Path Parameters:** Nenhum.
-    *   **Query Parameters (Conforme especificado na subtask):**
-        *   `temporal` (string, opcional, e.g., "last_24h", "ultimos_7_dias", "tendencia_proximos_14_dias_preditivo"). Default: "last_24h".
-        *   `demograficos_faixa_etaria` (string, opcional, lista separada por vírgulas, e.g., "0-5_anos,60_mais_anos,todos").
-        *   `demograficos_vulnerabilidade` (string, opcional, e.g., "alta_comorbidades", "media_densidade_populacional", "baixa").
-        *   `patogenos` (string, opcional, lista separada por vírgulas, e.g., "influenza_h1n1,dengue_tipo2,sindrome_respiratoria_aguda"). Default: "todos_relevantes".
-        *   `bbox` (string, opcional, coordenadas da bounding box no formato "minLon,minLat,maxLon,maxLat").
-    *   **Response Payload Concept:** Uma lista de objetos JSON. Cada objeto deve conter `geolocalizacao` (com `latitude`, `longitude`), `risco_epidemiologico_score` (float, 0.0-1.0), e opcionalmente `patogeno_predominante` (string), `velocidade_propagacao_estimada` (string).
+### 4.2. API para SystemStatus (Painel de Status dos Subsistemas)
 
-5.  **`GET /api/v1/boitata/dependency_graph`**
-    *   **Descrição:** Fornece dados de nós e arestas para a visualização do grafo de dependências urbanas do BOITATÁ.
-    *   **Path Parameters:** Nenhum.
-    *   **Query Parameters (Conforme especificado na subtask):**
-        *   `sector` (string, opcional, e.g., "energia_centro_sul", "hospital_principal").
-        *   `depth` (integer, opcional, profundidade das dependências). Default: 3.
-        *   `node_filter_type` (string, opcional, para filtrar nós por tipo, e.g., "hospital,subestacao_energia").
-    *   **Response Payload Concept:** Um objeto JSON com chaves `nodes` e `edges`.
-        *   `nodes`: Lista de objetos, cada um com `id`, `label`, `type`, e um objeto `data` detalhado (contendo `informacoes_basicas`, `status_operacional`, `dependencias_diretas_resumidas`, `capacidade_operacional_percentual`, `risco_impacto_falha`), conforme Seção 2.2 ("Grafos de Dependências Urbanas (BOITATÁ)") do `docs/DASHBOARD_SPECIFICATIONS.md`.
-        *   `edges`: Lista de objetos, cada um com `source`, `target`, `type`, e um objeto `data` opcional (com `latencia_impacto_horas`, `forca_dependencia_score`), conforme Seção 2.2 do `docs/DASHBOARD_SPECIFICATIONS.md`.
+#### 4.2.1. Status Consolidado de Todos os Subsistemas
+- `GET /api/v1/dashboard/system/status_overview`
+  - **Response:** `SystemStatusResponse` expandido com KPIs por subsistema
+  - **Uso no Dashboard:** Painel SystemStatus mostrando status operacional de cada Guardian
 
-6.  **`GET /api/v1/events/correlated_timeline`**
-    *   **Descrição:** Fornece sequências de eventos correlacionados para a visualização da timeline.
-    *   **Path Parameters:** Nenhum.
-    *   **Query Parameters (Conforme especificado na subtask):**
-        *   `severidade_minima` (string, opcional, e.g., "ALTO", "CRITICO").
-        *   `subsistemas_envolvidos` (string, opcional, lista separada por vírgulas, e.g., "SACI,CURUPIRA").
-        *   `tipo_correlacao_primaria` (string, opcional, e.g., "cascata_falhas_infra").
-        *   `time_range_start` (datetime string, opcional, ISO 8601).
-        *   `time_range_end` (datetime string, opcional, ISO 8601).
-        *   `limit` (integer, opcional). Default: 10.
-    *   **Response Payload Concept:** Uma lista de "cenários de correlação". Cada cenário (`CorrelatedScenario`) deve ter `scenario_id`, `scenario_title` (opcional), `evento_inicial` (`TimelineEvent`), uma lista `propagacao_eventos` (de `PropagationStep`), e um `resolucao_estimada_ou_atual` opcional (`ResolutionInfo`). As estruturas de `TimelineEvent`, `PropagationStep` e `ResolutionInfo` devem seguir o detalhamento da Seção 2.3 ("Timeline de Eventos Correlacionados") do `docs/DASHBOARD_SPECIFICATIONS.md`, incluindo campos como `correlacao_com_anterior` e `informacoes_tecnicas_link` dentro de `PropagationStep`.
+#### 4.2.2. KPIs Detalhados por Subsistema
+- `GET /api/v1/dashboard/subsystems/{subsystem_name}/kpis`
+  - **Path Parameters:** `subsystem_name: str` (e.g., "SACI", "CURUPIRA")
+  - **Response:** `SubsystemKpiResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Cards detalhados de status com indicadores visuais e métricas principais
 
-Os schemas de resposta associados em `src/api/schemas.py` precisarão ser expandidos para acomodar esses conjuntos de dados detalhados.
+### 4.3. API para Mapas de Calor Especializados
+
+#### 4.3.1. Mapa de Calor de Risco de Incêndio (SACI)
+- `GET /api/v1/dashboard/saci/heatmap`
+  - **Query Parameters:**
+    - `temporal: Optional[str]` - "real_time", "last_hour", "12h", "24h", "proximas_6h_preditivo"
+    - `tipos_vegetacao: Optional[str]` - "mata_atlantica,cerrado,campo_aberto"
+    - `fatores_risco: Optional[str]` - "apenas_climatico", "combinado_climatico_historico"
+    - `bbox: Optional[str]` - Bounding box
+  - **Response:** `SaciHeatmapResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Visualização de calor sobreposta ao mapa com gradientes de risco
+
+#### 4.3.2. Mapa de Calor Epidemiológico (IARA)
+- `GET /api/v1/dashboard/iara/heatmap`
+  - **Query Parameters:**
+    - `temporal: Optional[str]` - "last_24h", "ultimos_7_dias", "tendencia_proximos_14_dias"
+    - `demograficos_faixa_etaria: Optional[str]` - "0-5_anos,60_mais_anos,todos"
+    - `patogenos: Optional[str]` - "influenza_h1n1,dengue_tipo2,sindrome_respiratoria_aguda"
+    - `bbox: Optional[str]` - Bounding box
+  - **Response:** `IaraHeatmapResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Sobreposição de risco epidemiológico com informações de patógenos
+
+### 4.4. API para Grafo de Dependências Urbanas (BOITATÁ)
+
+#### 4.4.1. Dados do Grafo de Dependências
+- `GET /api/v1/dashboard/boitata/dependency_graph`
+  - **Query Parameters:**
+    - `sector: Optional[str]` - "energia_centro_sul", "hospital_principal"
+    - `depth: Optional[int]` - Profundidade das dependências (default: 3)
+    - `node_filter_type: Optional[str]` - "hospital,subestacao_energia,telecom"
+    - `include_failure_simulation: Optional[bool]` - Incluir dados de simulação de falha
+  - **Response:** `DependencyGraphResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Visualização interativa de nós e arestas representando infraestrutura crítica
+
+#### 4.4.2. Simulação de Impacto de Falha
+- `POST /api/v1/dashboard/boitata/failure_simulation`
+  - **Request Body:** 
+    ```json
+    {
+      "target_node_id": "HOSP-BH-001",
+      "failure_type": "complete_shutdown",
+      "propagation_depth": 3
+    }
+    ```
+  - **Response:** Grafo atualizado com impactos simulados
+  - **Uso no Dashboard:** Análise "what-if" em tempo real no grafo de dependências
+
+### 4.5. API para Timeline de Eventos Correlacionados
+
+#### 4.5.1. Cenários de Correlação Temporal
+- `GET /api/v1/dashboard/events/correlated_timeline`
+  - **Query Parameters:**
+    - `severidade_minima: Optional[str]` - "ALTO", "CRITICO"
+    - `subsistemas_envolvidos: Optional[str]` - "SACI,CURUPIRA,BOITATA"
+    - `tipo_correlacao_primaria: Optional[str]` - "cascata_falhas_infra", "propagacao_espacial"
+    - `time_range_start: Optional[datetime]` - ISO 8601 format
+    - `time_range_end: Optional[datetime]` - ISO 8601 format
+    - `limit: Optional[int]` - Máximo de cenários (default: 10)
+  - **Response:** `CorrelatedEventTimelineResponse` (definido em schemas.py)
+  - **Uso no Dashboard:** Timeline interativa mostrando cascatas de eventos e suas correlações
+
+#### 4.5.2. Análise de Propagação de Eventos
+- `GET /api/v1/dashboard/events/{scenario_id}/propagation_analysis`
+  - **Path Parameters:** `scenario_id: str`
+  - **Response:** Análise detalhada de como eventos se propagaram através dos subsistemas
+  - **Uso no Dashboard:** Drill-down detalhado de cenários específicos na timeline
+
+### 4.6. API para Alertas e Notificações (AlertCenter)
+
+#### 4.6.1. Alertas Ativos Priorizados
+- `GET /api/v1/dashboard/alerts/active`
+  - **Query Parameters:**
+    - `priority_level: Optional[str]` - "LOW", "MEDIUM", "HIGH", "CRITICAL"
+    - `subsystems: Optional[str]` - Filtrar por subsistemas
+    - `limit: Optional[int]` - Máximo de alertas (default: 50)
+  - **Response:** Lista de alertas ordenados por prioridade e timestamp
+  - **Uso no Dashboard:** Painel AlertCenter no dashboard executivo
+
+#### 4.6.2. Histórico de Ações de Resposta
+- `GET /api/v1/dashboard/alerts/{alert_id}/response_history`
+  - **Path Parameters:** `alert_id: str`
+  - **Response:** Histórico completo de ações tomadas para um alerta específico
+  - **Uso no Dashboard:** Tracking de resolução de alertas
+
+### 4.7. APIs para Dashboards Especializados por Subsistema
+
+#### 4.7.1. Dashboard Específico do SACI
+- `GET /api/v1/dashboard/saci/overview`
+  - **Response:** Métricas específicas do SACI: índices de risco, sensores ativos, predições
+  - **Uso no Dashboard:** Dashboard especializado para monitoramento de incêndios
+
+#### 4.7.2. Dashboard Específico do CURUPIRA
+- `GET /api/v1/dashboard/curupira/security_overview`
+  - **Response:** Métricas de segurança: tentativas de intrusão, vulnerabilidades, status de proteção
+  - **Uso no Dashboard:** Dashboard especializado para monitoramento de segurança ciberfísica
+
+#### 4.7.3. Dashboard Específico da IARA
+- `GET /api/v1/dashboard/iara/health_overview`
+  - **Response:** Métricas epidemiológicas: surtos ativos, capacidade hospitalar, indicadores de saúde
+  - **Uso no Dashboard:** Dashboard especializado para monitoramento de saúde pública
+
+#### 4.7.4. Dashboard Específico do BOITATÁ
+- `GET /api/v1/dashboard/boitata/infrastructure_overview`
+  - **Response:** Status de infraestrutura crítica: energia, água, telecomunicações, transportes
+  - **Uso no Dashboard:** Dashboard especializado para monitoramento de infraestrutura
+
+#### 4.7.5. Dashboard Específico do ANHANGÁ
+- `GET /api/v1/dashboard/anhanga/communications_overview`
+  - **Response:** Status de comunicações de emergência: cobertura, latência, redundância
+  - **Uso no Dashboard:** Dashboard especializado para monitoramento de comunicações
+
+### 4.8. APIs para Performance e Métricas Operacionais
+
+#### 4.8.1. Métricas de Performance do Sistema
+- `GET /api/v1/dashboard/system/performance_metrics`
+  - **Query Parameters:**
+    - `time_range: Optional[str]` - Período para agregação de métricas
+    - `metrics: Optional[str]` - "latency,throughput,error_rate,resource_usage"
+  - **Response:** Métricas operacionais agregadas
+  - **Uso no Dashboard:** Monitoramento de saúde técnica do sistema
+
+#### 4.8.2. Análise de Capacidade e Escalabilidade
+- `GET /api/v1/dashboard/system/capacity_analysis`
+  - **Response:** Análise de utilização de recursos e projeções de capacidade
+  - **Uso no Dashboard:** Planejamento de capacidade e alertas de resource exhaustion
+
+### 4.9. Estruturas de Resposta Otimizadas para Dashboard
+
+Todos os endpoints utilizam os modelos Pydantic definidos em `src/api/schemas.py`, com as seguintes otimizações para dashboard:
+
+1. **Campos de Visualização Adicionais:**
+   - `display_color`: Cor sugerida para visualização
+   - `icon_type`: Tipo de ícone a ser usado
+   - `priority_score`: Score numérico para ordenação
+   - `formatted_values`: Valores pré-formatados para exibição
+
+2. **Metadados de Cache:**
+   - `cache_timestamp`: Timestamp dos dados para invalidação de cache
+   - `refresh_interval_seconds`: Intervalo sugerido para atualização
+
+3. **Informações de Contexto:**
+   - `related_events`: Links para eventos relacionados
+   - `drill_down_links`: URLs para análises mais detalhadas
+   - `export_options`: Formatos disponíveis para exportação
+
+### 4.10. Considerações de Performance para Dashboard
+
+1. **Pagination e Lazy Loading:**
+   - Todos os endpoints que retornam listas suportam paginação
+   - Implementação de lazy loading para componentes pesados como grafos
+
+2. **WebSocket para Atualizações em Tempo Real:**
+   - `WS /api/v1/dashboard/realtime_updates`
+   - Stream de eventos para atualização automática do dashboard
+
+3. **Caching Estratégico:**
+   - Redis cache para dados frequentemente acessados
+   - Cache invalidation baseado em eventos de mudança de estado
+
+4. **Compression e Otimização:**
+   - Compressão gzip para payloads grandes
+   - Campos opcionais para controle de tamanho de resposta
+
+Esta especificação garante que cada componente visual descrito em `DASHBOARD_SPECIFICATIONS.md` tenha endpoints de API correspondentes bem definidos, criando uma ponte sólida entre o frontend conceitual e o backend implementável.
 
 ## Considerações Futuras
 
