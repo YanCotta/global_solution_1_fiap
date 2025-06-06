@@ -9,6 +9,74 @@
 
 ---
 
+## 🚀 **GUIA RÁPIDO PARA AVALIADORES**
+
+> **⏱️ Tempo estimado de revisão: 20-30 minutos para o essencial**
+
+Este repositório é extenso e rico em detalhes técnicos. Para uma avaliação eficiente e impactante, recomendamos a seguinte **ordem de revisão**:
+
+### 📋 **Roteiro de Avaliação Recomendado**
+
+1. **🎯 [Comece aqui - README.md](./README.md)** *(você está aqui)*
+   - Visão geral do projeto e status funcional
+   - Demonstração do MVP SACI totalmente operacional
+   - Evidências de testes realizados com sucesso
+
+2. **🎬 [Vídeo de Demonstração](#-demonstração-em-vídeo)**
+   - Veja o sistema funcionando em tempo real
+   - Compreenda o fluxo completo: sensores → IA → alertas
+
+3. **🏗️ [Diagramas C4 Interativos](./sistema_guardiao_c4_diagrams.html)**
+   - Abra no navegador para visualização interativa
+   - Arquitetura completa em 4 níveis de detalhamento
+   - Entenda visualmente a complexidade e integração sistêmica
+
+4. **📚 [Documentação Mestra](./MASTER_DOCUMENTATION.md)**
+   - Aprofundamento técnico completo (1100+ linhas)
+   - Modelo de negócios, arquitetura, stack tecnológico
+   - Referência definitiva do projeto
+
+5. **🧠 [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md)**
+   - **NOSSO GRANDE DIFERENCIAL**: MetaLearningEngine e ThreatCorrelationEngine
+   - Arquiteturas de IA únicas e inovadoras
+   - Capacidades emergentes e auto-organizacionais
+
+### 🎯 **Pontos de Destaque para Focar**
+
+- **✅ MVP Funcional**: Sistema SACI totalmente operacional e testado
+- **🧠 IA Avançada**: Motores de meta-aprendizado e correlação de ameaças
+- **🏗️ Arquitetura Robusta**: Design de sistemas distribuídos em escala nacional
+- **📊 Especificações Completas**: Dashboards, APIs, e integrações detalhadas
+- **🎭 Inovação Cultural**: Guardiões digitais inspirados no folclore brasileiro
+
+### ⚡ **Para Revisão Expressa (10 minutos)**
+
+Se o tempo for limitado, focalize nestas seções:
+
+1. **[Estado Atual do Projeto](#-estado-atual-do-projeto)** - Evidências de funcionalidade
+2. **[Testes Realizados](#-testes-realizados-com-sucesso-junho-2025)** - Validação técnica
+3. **[Diagramas C4](./sistema_guardiao_c4_diagrams.html)** - Compreensão visual rápida
+4. **[Sumário Executivo](./MASTER_DOCUMENTATION.md#-sumário-executivo-expandido)** - Visão estratégica
+
+### 📁 **Estrutura de Documentação**
+
+```
+📄 README.md                           ← Você está aqui
+📄 MASTER_DOCUMENTATION.md            ← Documentação principal (1100+ linhas)
+📄 sistema_guardiao_c4_diagrams.html  ← Diagramas arquiteturais interativos
+📁 docs/
+  ├── ADVANCED_AI_SPECIFICATIONS.md   ← ⭐ Diferencial competitivo
+  ├── DASHBOARD_SPECIFICATIONS.md     ← Interface e visualizações
+  ├── API_SPECIFICATION.md           ← Endpoints e integrações
+  └── DAY_6_COMPLETION_SUMMARY.md    ← Resumo de entregáveis
+📁 src/                              ← Código funcional e testado
+📁 test_data_simulation/             ← Casos de teste validados
+```
+
+**💡 Dica:** Este projeto demonstra não apenas funcionalidade técnica, mas também **profundidade de engenharia**, **inovação em IA**, e **aplicação prática para problemas nacionais reais**.
+
+---
+
 ## 🎬 Demonstração em Vídeo
 
 **[ASSISTA NOSSA DEMONSTRAÇÃO EM VÍDEO](LINK_YOUTUBE_AQUI)**
@@ -485,6 +553,74 @@ python -m http.server 8080
 - **Sistema de logging profissional**
 - **Configuração Docker validada**
 - **Documentação técnica completa**
+
+### ⚠️ **Limitações Conhecidas do MVP e Roadmap de Evolução**
+
+> **Demonstrando Maturidade Técnica: Conhecimento das Limitações e Plano de Evolução**
+
+O MVP atual do SACI foi projetado para **validação de conceito e demonstração funcional**. Como toda implementação MVP, possui limitações intencionais que serão endereçadas na evolução para produção:
+
+#### 🔒 **Limitações de Segurança (Intencionais no MVP)**
+
+- **Segredos no docker-compose.yml**: 
+  - **Limitação Atual**: Variáveis de ambiente e configurações expostas no arquivo docker-compose.yml
+  - **Evolução Planejada**: Migração para **Kubernetes Secrets**, **HashiCorp Vault**, ou **AWS Secrets Manager** na arquitetura de produção
+  - **Justificativa**: Simplicidade de setup para validação funcional do MVP
+
+- **Comunicação Serial sem Autenticação**:
+  - **Limitação Atual**: Comunicação ESP32 ↔ Sistema via porta serial sem criptografia
+  - **Evolução Planejada**: **TLS/mTLS** para todas as comunicações, autenticação de dispositivos via certificados
+  - **Justificativa**: Foco na validação do pipeline de dados e modelo ML
+
+#### 📈 **Limitações de Escalabilidade (Arquitetura MVP vs. Produção)**
+
+- **Comunicação Serial Ponto-a-Ponto**:
+  - **Limitação Atual**: `saci_mvp_integration_app.py` conecta diretamente via porta serial
+  - **Evolução Planejada**: Pipeline escalável **MQTT → Kafka → Processamento Distribuído** conforme especificado na arquitetura sistêmica
+  - **Justificativa**: Validação do fluxo completo sensor → ML → alerta de forma controlada
+
+- **Processamento Síncrono e Centralizado**:
+  - **Limitação Atual**: Processamento sequencial de dados de sensores
+  - **Evolução Planejada**: 
+    - **Apache Kafka** para streaming de dados em tempo real
+    - **Apache Spark** para processamento distribuído
+    - **Microserviços** independentes para cada componente
+    - **Kubernetes** para orquestração e auto-scaling
+
+#### 🗄️ **Limitações de Persistência e Dados**
+
+- **Modelo ML Estático**:
+  - **Limitação Atual**: Modelo joblib carregado uma vez, sem retreinamento automático
+  - **Evolução Planejada**: 
+    - **MLOps pipeline** com retreinamento contínuo
+    - **A/B testing** de modelos
+    - **Monitoramento de drift** de dados
+    - **Model versioning** e rollback automático
+
+- **Armazenamento Local**:
+  - **Limitação Atual**: Dados processados apenas em memória/logs locais
+  - **Evolução Planejada**: **PostgreSQL + TimescaleDB**, **InfluxDB**, e **Data Lake** conforme arquitetura
+
+#### 🔄 **Roadmap de Migração MVP → Produção**
+
+```
+FASE 1 (MVP ATUAL) ✅ ────────────► FASE 2 (BETA) ────────────► FASE 3 (PRODUÇÃO)
+                                                                        
+📡 Serial/USB                     📡 MQTT + WiFi/LoRa            📡 MQTT + Kafka + gRPC
+🧠 Joblib Local                   🧠 Model API + Versioning      🧠 MLOps + AutoML + Drift Detection  
+🔐 Docker Compose                 🔐 Kubernetes Secrets          🔐 Vault + mTLS + Zero Trust
+📊 Logs Locais                    📊 PostgreSQL + Monitoring     📊 Data Lake + Analytics Pipeline
+🏗️ Monolítico                     🏗️ Microserviços              🏗️ Arquitetura Distribuída
+```
+
+#### 💡 **Por Que Essas Limitações São Intencionais**
+
+1. **Validação Rápida**: Permitiu demonstrar o valor do sistema em 10 dias
+2. **Complexidade Incremental**: Evitou over-engineering na fase de conceito
+3. **Aprendizado Iterativo**: Cada limitação identificada informa o design de produção
+4. **Apresentação Clara**: Avaliadores podem focar no valor do negócio, não na infraestrutura
+
+**🎯 Resultado**: MVP que demonstra **viabilidade técnica completa** enquanto mantém **simplicidade operacional** para avaliação e teste.
 
 ### 🔄 **Próximos Passos**
 - **Implementação dos MVPs de outros subsistemas:** Com base nos planos conceituais detalhados em [IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md](./docs/IMPLEMENTACAO_OUTROS_SUBSISTEMAS.md), iniciar o desenvolvimento dos MVPs para CURUPIRA, IARA, BOITATÁ e ANHANGÁ.
