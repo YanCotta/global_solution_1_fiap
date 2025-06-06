@@ -255,3 +255,195 @@ class CorrelatedScenario(BaseModel):
 
 class CorrelatedEventTimelineResponse(BaseModel):
     scenarios: List[CorrelatedScenario]
+
+# Dashboard-specific Response Models
+
+class DashboardThreatEvent(ThreatEventResponse):
+    """Extended threat event model with dashboard-specific visualization fields."""
+    display_color: str = Field(..., example="#F44336", description="Hex color for map visualization")
+    icon_type: str = Field(..., example="fire", description="Icon identifier for event type")
+    priority_score: float = Field(..., example=0.85, description="Priority score for ordering (0.0-1.0)")
+    formatted_severity: str = Field(..., example="ALTO", description="Human-readable severity level")
+    estimated_impact_radius_km: Optional[float] = Field(None, example=2.5, description="Estimated impact radius in kilometers")
+
+class MapInfrastructurePoint(BaseModel):
+    """Infrastructure point for map overlay layers."""
+    id: str = Field(..., example="HOSP-SP-001")
+    name: str = Field(..., example="Hospital das Clínicas")
+    type: str = Field(..., example="hospital")
+    location: Tuple[float, float] = Field(..., example=(-23.5505, -46.6333))
+    status: str = Field(..., example="operational")
+    capacity_info: Optional[Dict[str, Any]] = Field(None, example={"beds_available": 50, "icu_capacity": 20})
+
+class MapLayersResponse(BaseModel):
+    """Response for map infrastructure layers."""
+    layer_type: str = Field(..., example="hospitais")
+    points: List[MapInfrastructurePoint]
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+class SubsystemOverviewKpi(BaseModel):
+    """Individual KPI for subsystem overview."""
+    name: str = Field(..., example="Taxa de Detecção")
+    value: str = Field(..., example="94.2%")
+    trend: str = Field(..., example="improving", description="stable, improving, degrading")
+    trend_percentage: Optional[float] = Field(None, example=2.3, description="Percentage change")
+    target_value: Optional[str] = Field(None, example="95%", description="Target/goal value")
+
+class EnhancedSystemStatusResponse(SystemStatusResponse):
+    """Enhanced system status with additional dashboard metrics."""
+    global_threat_level: str = Field(..., example="ELEVATED", description="Overall threat assessment")
+    response_time_avg_minutes: float = Field(..., example=4.2, description="Average response time")
+    system_efficiency_score: float = Field(..., example=0.92, description="Overall efficiency (0.0-1.0)")
+    resource_utilization: Dict[str, float] = Field(..., example={"cpu": 0.65, "memory": 0.73, "network": 0.45})
+    predictions_accuracy: float = Field(..., example=0.89, description="ML model accuracy (0.0-1.0)")
+
+class AlertDashboard(BaseModel):
+    """Alert model optimized for dashboard display."""
+    alert_id: str = Field(..., example="ALT-2025060601-001")
+    event_id: Optional[str] = Field(None, example="SACI-2025060601-001")
+    title: str = Field(..., example="Risco Alto de Incêndio Detectado")
+    description: str = Field(..., example="Condições climáticas extremas na região do Parque Ibirapuera")
+    priority_level: str = Field(..., example="HIGH")
+    subsystem_source: str = Field(..., example="SACI")
+    timestamp: datetime
+    status: str = Field(..., example="ACTIVE", description="ACTIVE, ACKNOWLEDGED, RESOLVED")
+    assigned_to: Optional[str] = Field(None, example="Corpo de Bombeiros SP")
+    estimated_resolution_time: Optional[str] = Field(None, example="15 minutos")
+    action_buttons: List[Dict[str, str]] = Field(default_factory=list, example=[
+        {"label": "Escalar", "action": "escalate", "style": "warning"},
+        {"label": "Resolver", "action": "resolve", "style": "success"}
+    ])
+
+class ActiveAlertsResponse(BaseModel):
+    """Response for active alerts dashboard."""
+    alerts: List[AlertDashboard]
+    total_count: int
+    count_by_priority: Dict[str, int] = Field(..., example={"CRITICAL": 2, "HIGH": 5, "MEDIUM": 12, "LOW": 8})
+    count_by_subsystem: Dict[str, int] = Field(..., example={"SACI": 8, "CURUPIRA": 3, "IARA": 4, "BOITATA": 6, "ANHANGA": 2})
+
+class PerformanceMetrics(BaseModel):
+    """System performance metrics for dashboard."""
+    latency_ms: Dict[str, float] = Field(..., example={"avg": 45.2, "p95": 120.5, "p99": 250.8})
+    throughput_events_per_second: float = Field(..., example=1250.5)
+    error_rate_percentage: float = Field(..., example=0.12)
+    uptime_percentage: float = Field(..., example=99.94)
+    resource_usage: Dict[str, float] = Field(..., example={"cpu": 65.2, "memory": 73.1, "disk": 45.8, "network": 23.4})
+    ml_model_performance: Dict[str, float] = Field(..., example={"accuracy": 94.2, "precision": 92.8, "recall": 96.1})
+
+class CapacityAnalysis(BaseModel):
+    """Capacity analysis for system planning."""
+    current_capacity_usage: Dict[str, float] = Field(..., example={"events_processing": 0.65, "storage": 0.78, "compute": 0.72})
+    projected_capacity_6months: Dict[str, float] = Field(..., example={"events_processing": 0.85, "storage": 0.92, "compute": 0.89})
+    scaling_recommendations: List[str] = Field(..., example=["Adicionar 2 instâncias de processamento", "Expandir storage em 500GB"])
+    bottlenecks_identified: List[str] = Field(..., example=["Processamento de eventos SACI", "Consultas ao grafo BOITATÁ"])
+
+class SubsystemSpecializedOverview(BaseModel):
+    """Base model for specialized subsystem overviews."""
+    subsystem_name: str = Field(..., example="SACI")
+    operational_status: str = Field(..., example="OPERATIONAL")
+    main_kpis: List[SubsystemOverviewKpi]
+    alerts_summary: Dict[str, int] = Field(..., example={"active": 3, "resolved_today": 12, "pending_review": 1})
+    recent_activities: List[str] = Field(..., example=["Novo sensor instalado em Campinas", "Manutenção preventiva concluída"])
+    specialized_metrics: Dict[str, Any] = Field(..., description="Subsystem-specific metrics")
+
+class SaciSpecializedOverview(SubsystemSpecializedOverview):
+    """SACI-specific dashboard overview."""
+    fire_risk_index_national: float = Field(..., example=0.73, description="National fire risk index (0.0-1.0)")
+    active_fire_incidents: int = Field(..., example=5)
+    sensors_operational: int = Field(..., example=1247)
+    sensors_total: int = Field(..., example=1280)
+    weather_stations_active: int = Field(..., example=156)
+    high_risk_regions: List[str] = Field(..., example=["Pantanal Sul", "Cerrado Central", "Mata Atlântica SP"])
+    prediction_accuracy_7days: float = Field(..., example=0.89)
+
+class CurupiraSpecializedOverview(SubsystemSpecializedOverview):
+    """CURUPIRA-specific dashboard overview."""
+    threat_level_cyber: str = Field(..., example="MEDIUM")
+    threat_level_physical: str = Field(..., example="LOW")
+    intrusion_attempts_blocked_24h: int = Field(..., example=1834)
+    vulnerabilities_detected: int = Field(..., example=12)
+    vulnerabilities_patched: int = Field(..., example=8)
+    security_score: float = Field(..., example=0.91, description="Overall security score (0.0-1.0)")
+    monitored_assets: int = Field(..., example=15420)
+
+class IaraSpecializedOverview(SubsystemSpecializedOverview):
+    """IARA-specific dashboard overview."""
+    epidemiological_alert_level: str = Field(..., example="NORMAL")
+    active_outbreaks: int = Field(..., example=2)
+    hospitals_monitored: int = Field(..., example=1156)
+    icu_capacity_national: float = Field(..., example=0.67, description="National ICU occupancy (0.0-1.0)")
+    disease_surveillance_score: float = Field(..., example=0.88)
+    vaccination_coverage_target: float = Field(..., example=0.85)
+    health_data_sources_active: int = Field(..., example=2890)
+
+class BoitataSpecializedOverview(SubsystemSpecializedOverview):
+    """BOITATÁ-specific dashboard overview."""
+    infrastructure_health_score: float = Field(..., example=0.91, description="Overall infrastructure health (0.0-1.0)")
+    energy_grid_stability: str = Field(..., example="STABLE")
+    water_system_status: str = Field(..., example="OPERATIONAL")
+    telecom_network_status: str = Field(..., example="OPERATIONAL")
+    critical_failures_24h: int = Field(..., example=0)
+    maintenance_overdue: int = Field(..., example=3)
+    redundancy_level: float = Field(..., example=0.94, description="System redundancy level (0.0-1.0)")
+
+class AnhangaSpecializedOverview(SubsystemSpecializedOverview):
+    """ANHANGÁ-specific dashboard overview."""
+    emergency_comms_status: str = Field(..., example="FULLY_OPERATIONAL")
+    network_coverage_percentage: float = Field(..., example=98.7)
+    avg_latency_ms: float = Field(..., example=23.4)
+    backup_systems_ready: int = Field(..., example=12)
+    emergency_protocols_active: int = Field(..., example=0)
+    interoperability_score: float = Field(..., example=0.93, description="Cross-system communication score")
+    satellite_links_operational: int = Field(..., example=8)
+
+class PropagationAnalysisResponse(BaseModel):
+    """Detailed propagation analysis for event scenarios."""
+    scenario_id: str
+    analysis_timestamp: datetime = Field(default_factory=datetime.utcnow)
+    propagation_type: str = Field(..., example="cascading_failure")
+    root_cause_analysis: Dict[str, str] = Field(..., example={
+        "primary_cause": "Sobrecarga na subestação central",
+        "contributing_factors": "Alta demanda energética + manutenção adiada",
+        "trigger_event": "Falha em transformador principal"
+    })
+    impact_assessment: Dict[str, Any] = Field(..., example={
+        "affected_population": 45000,
+        "critical_services_impacted": ["Hospital Regional", "Centro de Emergência"],
+        "estimated_recovery_time": "4-6 horas",
+        "economic_impact_estimate": "R$ 2.3M"
+    })
+    prevention_recommendations: List[str] = Field(..., example=[
+        "Implementar monitoramento preditivo de transformadores",
+        "Estabelecer protocolo de load balancing automático",
+        "Acelerar cronograma de manutenção preventiva"
+    ])
+    lessons_learned: List[str] = Field(..., example=[
+        "Necessidade de maior redundância na zona central",
+        "Protocolos de comunicação precisam ser mais rápidos"
+    ])
+
+class RealtimeUpdateMessage(BaseModel):
+    """WebSocket message format for real-time dashboard updates."""
+    message_type: str = Field(..., example="threat_event_new")
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    subsystem_source: str = Field(..., example="SACI")
+    priority_level: str = Field(..., example="HIGH")
+    data: Dict[str, Any] = Field(..., description="Message-specific data payload")
+    requires_ui_refresh: bool = Field(..., example=True, description="Whether UI should refresh affected components")
+    affected_components: List[str] = Field(..., example=["threat_map", "alert_center", "saci_overview"])
+
+# Response wrapper for caching and metadata
+class CachedDashboardResponse(BaseModel):
+    """Wrapper for dashboard responses with caching metadata."""
+    data: Dict[str, Any] = Field(..., description="Actual response data")
+    cache_metadata: Dict[str, Any] = Field(..., example={
+        "cached_at": "2025-06-06T10:30:00Z",
+        "expires_at": "2025-06-06T10:35:00Z",
+        "cache_key": "dashboard_threat_map_1h",
+        "refresh_interval_seconds": 300
+    })
+    visualization_hints: Dict[str, Any] = Field(default_factory=dict, example={
+        "color_scheme": "threat_levels",
+        "default_zoom_level": 10,
+        "auto_refresh_enabled": True
+    })
