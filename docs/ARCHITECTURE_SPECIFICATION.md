@@ -1,3 +1,14 @@
+# ⚠️ **ARQUIVO OBSOLETO - NÃO UTILIZAR**
+
+> **ATENÇÃO**: Este arquivo foi substituído pela documentação consolidada. Para informações arquiteturais atualizadas, consulte:
+> 
+> - **[MASTER_DOCUMENTATION.md](../MASTER_DOCUMENTATION.md)** - Especificação arquitetural completa e atualizada
+> - **[sistema_guardiao_c4_diagrams.html](../sistema_guardiao_c4_diagrams.html)** - Diagramas C4 interativos atualizados
+> 
+> Este arquivo é mantido apenas para referência histórica.
+
+---
+
 # SISTEMA GUARDIÃO - ARCHITECTURE OVERVIEW
 ## Complete System Architecture Specification
 
