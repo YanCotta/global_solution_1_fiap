@@ -48,7 +48,6 @@ Foram revisados os seguintes documentos:
     - `docs/ADVANCED_AI_SPECIFICATIONS.md`
 - **Existentes (Core):**
     - `MASTER_DOCUMENTATION.md`
-    - `docs/ARCHITECTURE_SPECIFICATION.md`
     - `docs/API_SPECIFICATION.md`
 
 ### 3.1. Consistência Terminológica
@@ -56,7 +55,7 @@ Foram revisados os seguintes documentos:
 - **Nomes dos Subsistemas:** SACI, CURUPIRA, IARA, BOITATÁ, ANHANGÁ são usados consistentemente.
 - **Motores de IA:**
     - `ADVANCED_AI_SPECIFICATIONS.md` introduz `MetaLearningEngine` e `ThreatCorrelationEngine`.
-    - Estes motores são vistos como componentes avançados ou especificações detalhadas das capacidades de IA do `GuardianCentralOrchestrator` (mencionado no `MASTER_DOCUMENTATION.md` e `ARCHITECTURE_SPECIFICATION.md`), e não como entidades separadas ou conflitantes. A "Hierarquia_Inteligencia" descrita no documento de IA avançada é compatível com este entendimento.
+    - Estes motores são vistos como componentes avançados ou especificações detalhadas das capacidades de IA do `GuardianCentralOrchestrator` (mencionado no `MASTER_DOCUMENTATION.md`), e não como entidades separadas ou conflitantes. A "Hierarquia_Inteligencia" descrita no documento de IA avançada é compatível com este entendimento.
 - **Conceitos Centrais:** Termos como "eventos", "alertas", "risco" são geralmente consistentes.
 
 ### 3.2. Alinhamento de Funcionalidades e Especificações
