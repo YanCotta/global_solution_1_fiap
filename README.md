@@ -78,7 +78,8 @@ Se o tempo for limitado, focalize nestas seções:
 
 ## 🎬 Demonstração em Vídeo
 
-**[ASSISTA NOSSA DEMONSTRAÇÃO EM VÍDEO](LINK_YOUTUBE_AQUI)**
+**[ASSISTA NOSSA DEMONSTRAÇÃO EM VÍDEO](https://www.youtube.com/watch?v=LX0lHsbRM3c)**
+
 
 ---
 
