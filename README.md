@@ -21,10 +21,9 @@ Este repositório é extenso e rico em detalhes técnicos. Para uma avaliação 
    - Visão geral do projeto e status funcional
    - Demonstração do MVP SACI totalmente operacional
    - Evidências de testes realizados com sucesso
-
-2. **🎬 [Vídeo de Demonstração](#-demonstração-em-vídeo)**
-   - Veja o sistema funcionando em tempo real
-   - Compreenda o fluxo completo: sensores → IA → alertas
+  2. **🎬 [Vídeo de Demonstração](https://www.youtube.com/watch?v=LX0lHsbRM3c)**
+    - Veja o sistema funcionando em tempo real
+    - Compreenda o fluxo completo: sensores → IA → alertas
 
 3. **🏗️ [Diagramas C4 Interativos](./sistema_guardiao_c4_diagrams.html)**
    - Abra no navegador para visualização interativa
