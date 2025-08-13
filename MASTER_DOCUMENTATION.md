@@ -244,8 +244,10 @@ Uma gestão de custos eficaz é crucial para a viabilidade a longo prazo do Sist
 │ CAMADA DE SERVIÇOS DE SUBSISTEMAS (Guardiões Digitais)  │
 │     CURUPIRA │ IARA │ SACI │ BOITATÁ │ ANHANGÁ        │
 └─────────────────────────────────────────────────────────┘
+```
 
 O `GuardianCentralOrchestrator` é o componente central que gerencia e coordena as atividades dos Guardiões Digitais. Suas capacidades avançadas de inteligência são impulsionadas principalmente por **componentes internos especializados**, como o `MetaLearningEngine` (responsável pelo aprendizado contínuo e evolução de estratégias) e o `ThreatCorrelationEngine` (que identifica padrões complexos de ameaças). Estes motores são funcionalidades avançadas *dentro* do `GuardianCentralOrchestrator`, e não entidades separadas. Para detalhes aprofundados sobre estes e outros mecanismos de IA, consulte [Especificações de IA Avançada](./docs/ADVANCED_AI_SPECIFICATIONS.md).
+
 ```text
 ┌─────────────────────────────────────────────────────────┐
 │           CAMADA DE DADOS E PERSISTÊNCIA                │
@@ -260,6 +262,8 @@ O `GuardianCentralOrchestrator` é o componente central que gerencia e coordena 
 │ CAMADA DE SENSORIAMENTO E COMPUTAÇÃO DE BORDA (Edge)    │
 │ (Sensores IoT, Dispositivos Edge com IA Embarcada)      │
 └─────────────────────────────────────────────────────────┘
+
+```
 
 ### Diagramas C4 Detalhados
 
@@ -491,7 +495,7 @@ graph TB
     class WeatherServices,SatelliteImagery,VegetationMaps,TopographyData external
     class BOITATA,ANHANGA crossSystem
 ```
-```
+
 
 ### Protocolos de Comunicação Detalhados
 
@@ -825,7 +829,6 @@ O MVP atual do Sistema Guardião, focado no subsistema SACI, foi arquitetado com
 ### 🚀 **Roadmap Técnico de Migração**
 
 #### **Fase 1: MVP → Alpha (3-6 meses)**
-```
 Foco: Escalabilidade Horizontal e Segurança Básica
 
 • Migração Serial → MQTT + LoRaWAN
@@ -833,10 +836,8 @@ Foco: Escalabilidade Horizontal e Segurança Básica
 • PostgreSQL para persistência
 • Monitoramento básico (Prometheus + Grafana)
 • Múltiplos ESP32 simultaneamente
-```
 
 #### **Fase 2: Alpha → Beta (6-12 meses)**
-```
 Foco: Inteligência Distribuída e MLOps
 
 • Apache Kafka para streaming
@@ -844,10 +845,8 @@ Foco: Inteligência Distribuída e MLOps
 • ThreatCorrelationEngine operacional
 • mTLS e autenticação de dispositivos
 • Dashboard web responsivo
-```
 
 #### **Fase 3: Beta → Produção (12-24 meses)**
-```
 Foco: Escala Nacional e Resiliência Crítica
 
 • Data Lake e analytics avançados
@@ -855,7 +854,6 @@ Foco: Escala Nacional e Resiliência Crítica
 • HashiCorp Vault para secrets management
 • Multi-cloud deployment (AWS + GCP)
 • SLA 99.99% e disaster recovery
-```
 
 ### 💡 **Justificativa das Limitações Intencionais**
 
