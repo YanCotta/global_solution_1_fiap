@@ -82,7 +82,6 @@ Se o tempo for limitado, focalize nestas seções:
 
 **[ASSISTA NOSSA DEMONSTRAÇÃO EM VÍDEO](https://www.youtube.com/watch?v=LX0lHsbRM3c)**
 
-
 ---
 
 ## 🎯 Estado Atual do Projeto
@@ -117,35 +116,6 @@ Especificações completas desenvolvidas incluindo:
 - `docs/ADVANCED_AI_SPECIFICATIONS.md` - Motores de IA avançada
 - `docs/API_SPECIFICATION.md` - Endpoints e integrações
 - `MASTER_DOCUMENTATION.md` - Documentação central com 1100+ linhas
-
-### 🏆 **Testes Realizados com Sucesso (Junho 2025)**
-
-#### ✅ Fase 1: Ambiente e Modelo de ML
-- **Ambiente Virtual**: Criado e configurado
-- **Dependências**: Todas instaladas (pandas, numpy, joblib, pyserial, scikit-learn)
-- **Modelo ML**: Treinado com dataset sintético (F1-score: 1.0000)
-- **Arquivo do Modelo**: `models/saci_fire_risk_model.joblib` criado com sucesso
-
-#### ✅ Fase 2: Aplicação de Integração
-- **Carregamento do Modelo**: ✅ Sucesso total
-- **Logging Estruturado**: ✅ Formatação profissional com timestamps
-- **Tratamento de Erros**: ✅ Gracioso para porta serial e modelo inexistente
-- **Configuração de Paths**: ✅ Imports funcionando corretamente
-
-#### ✅ Fase 3: Configuração Docker
-- **docker-compose.yml**: ✅ Verificado e configurado
-- **Variável ML_MODEL_PATH**: ✅ `/app/models/saci_fire_risk_model.joblib`
-- **Volume Mount**: ✅ `./models:/app/models` configurado corretamente
-
-#### ✅ Fase 4: Documentação
-- **Especificação MVP**: ✅ Clara distinção entre MVP (DHT22, MQ-135) e especificação completa
-- **README SACI**: ✅ Documentação detalhada dos sensores atuais
-- **Docstrings**: ✅ Especificações detalhadas de argumentos/retornos
-- **MASTER_DOCUMENTATION**: ✅ ThreatEvent com origin_sensor_id documentado
-
-#### ✅ Fase 5: Estrutura de Arquivos
-- **`.gitignore`**: ✅ Exclui `models/*.joblib` e `models/*.pkl`
-- **Diretório models/**: ✅ Criado com modelo funcional
 
 ---
 
@@ -432,57 +402,6 @@ Para um detalhamento completo da stack tecnológica, incluindo justificativas pa
 
 ---
 
-## 🔬 Detalhes dos Testes Realizados
-
-### **Teste 1: Ambiente e Dependências**
-```bash
-# Comando executado:
-pip install -r requirements.txt
-
-# Pacotes validados:
-✅ pandas 2.2.3
-✅ numpy 2.2.6  
-✅ joblib 1.5.1
-✅ pyserial 3.5
-✅ scikit-learn 1.6.1
-```
-
-### **Teste 2: Treinamento do Modelo ML**
-```bash
-# Comando executado:
-python src/ml_models/saci_fire_predictor.py
-
-# Resultados obtidos:
-✅ Dataset carregado: data/synthetic/fire_risk_dataset.csv
-✅ Modelo treinado: Regressão Logística
-✅ Acurácia: 100% (dados sintéticos)
-✅ Modelo salvo: models/saci_fire_risk_model.joblib
-✅ Predição demonstrada: Input simulado → Output "Fire Detected"
-```
-
-### **Teste 3: Aplicação de Integração**
-```bash
-# Comando executado:
-python src/applications/saci_mvp_integration_app.py --port COM999
-
-# Comportamento validado:
-✅ Carregamento do modelo ML
-✅ Logging estruturado com timestamps
-✅ Tratamento gracioso de erro de porta serial
-✅ Mensagens informativas para usuário
-```
-
-### **Teste 4: Configuração Docker**
-```yaml
-# Validado em docker-compose.yml:
-✅ Serviço saci_api configurado
-✅ ML_MODEL_PATH: /app/models/saci_fire_risk_model.joblib
-✅ Volume mount: ./models:/app/models
-✅ Dependências de serviços configuradas
-```
-
----
-
 ## 🎨 Como Visualizar os Diagramas C4
 
 Os diagramas de arquitetura estão disponíveis em formato HTML interativo:
@@ -605,30 +524,6 @@ FASE 1 (MVP ATUAL) ✅ ────────► FASE 2 (BETA) ─────
 
 ---
 
-## 🤝 Como Contribuir
-
-### **Para Desenvolvedores:**
-1. **Faça fork do repositório**
-2. **Clone sua fork localmente**
-3. **Siga o guia de instalação acima**
-4. **Execute os testes para verificar funcionamento**
-5. **Implemente melhorias**
-6. **Submeta pull request**
-
-### **Para Testadores:**
-1. **Clone o repositório**
-2. **Execute todos os comandos de teste acima**
-3. **Reporte bugs via GitHub Issues**
-4. **Sugira melhorias na documentação**
-
-### **Para Pesquisadores:**
-1. **Revise a documentação técnica**
-2. **Analise os diagramas C4**
-3. **Proponha extensões dos algoritmos ML**
-4. **Contribua com datasets reais**
-
----
-
 ### Arquitetura Multi-Camadas
 
 O sistema utiliza uma arquitetura multi-camadas robusta e escalável. Para uma visão geral detalhada da arquitetura, incluindo os diagramas C4, por favor, consulte a seção 'ARQUITETURA SISTÊMICA CONSOLIDADA' em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
@@ -700,65 +595,34 @@ O sistema utiliza uma arquitetura multi-camadas robusta e escalável. Para uma v
 - **Integração Cultural:** Folclore brasileiro para confiança pública
 - **Escalabilidade Nacional:** Arquitetura para 200M+ cidadãos
 
----
 
-## 📚 Estrutura do Repositório
+--- 
+ 
+## 🤝 Como Contribuir
 
-A estrutura do projeto está organizada da seguinte forma:
+### **Para Desenvolvedores:**
+1. **Faça fork do repositório**
+2. **Clone sua fork localmente**
+3. **Siga o guia de instalação acima**
+4. **Execute os testes para verificar funcionamento**
+5. **Implemente melhorias**
+6. **Submeta pull request**
 
-```plaintext
-📁 global_solution_1_fiap/
-├── 📄 README.md                                    # Este documento (português)
-├── 📄 MASTER_DOCUMENTATION.md                      # Documentação técnica completa e centralizada
-├── 📄 sistema_guardiao_c4_diagrams.html           # 🎨 Diagramas C4 Interativos da arquitetura
-├──  src/                                        # Código fonte principal
-│   ├── 📁 ml_models/                             # Scripts para treinamento e predição de modelos de IA/ML
-│   │   └── 📄 saci_fire_predictor.py              # Ex: Modelo de predição de incêndio do SACI
-│   ├── 📁 applications/                           # Aplicações de integração e serviços principais
-│   │   └── 📄 saci_mvp_integration_app.py         # Ex: Aplicação de integração do MVP SACI
-│   ├── 📁 hardware/esp32/                       # Firmware para dispositivos ESP32
-│   │   └── 📄 saci_sensor_node.py                 # Ex: Nó sensor do SACI para ESP32
-│   ├── 📁 data_collection/                      # Scripts para coleta e leitura de dados de sensores
-│   │   └── 📄 saci_serial_reader.py               # Ex: Leitor serial para dados do SACI
-│   └── 📁 core_logic/                           # Lógica central e orquestração do sistema
-│       └── 📄 guardian_orchestrator.py            # Componente GuardianCentralOrchestrator
-├── 📁 models/                                     # Modelos de Machine Learning treinados e serializados
-│   └── 📄 saci_fire_risk_model.joblib            # Ex: Modelo SACI salvo
-├── 📁 data/                                       # Dados utilizados pelo projeto
-│   └── 📁 synthetic/                             # Dados sintéticos para desenvolvimento e testes
-│       └── 📄 fire_risk_dataset.csv              # Ex: Dataset sintético para o SACI
-├── 📁 docs/                                      # Documentação técnica detalhada e complementar
-│   ├── 📄 DATA_MODELS.md                         # Modelos de dados, esquemas de BD
-│   ├── 📄 SACI_MVP_SPECIFICATION.md              # Especificações detalhadas do MVP SACI
-│   ├── 📄 DATA_FLOWS.md                         # Diagramas e descrição de fluxos de dados
-│   ├── 📄 TECH_DEPENDENCIES.md                  # Matriz de dependências tecnológicas
-│   ├── 📄 API_SPECIFICATION.md                   # Especificação das APIs do sistema
-│   ├── 📄 IOT_PROTOCOLS.md                      # Protocolos de comunicação IoT utilizados
-│   ├── 📄 DASHBOARD_SPECIFICATIONS.md            # Especificações para os dashboards visuais
-│   ├── 📄 ADVANCED_AI_SPECIFICATIONS.md          # Detalhamento dos motores de IA avançada
-│   └── 📄 DAY_6_COMPLETION_SUMMARY.md            # Resumo das entregas do Dia 6
-├── 📁 docker/                                    # Arquivos de configuração Docker específicos por serviço
-├── 📁 kubernetes/                                # Manifestos e configurações para deployment em Kubernetes
-├── 📄 docker-compose.yml                         # Arquivo Docker Compose para orquestração local
-├── 📄 requirements.txt                           # Dependências Python do projeto
-├── 📁 assets/                                    # Recursos como imagens, apresentações (não código)
-├── 📁 .github/workflows/                         # Workflows para CI/CD com GitHub Actions
-└── 📄 .gitignore                                 # Especifica arquivos e diretórios ignorados pelo Git
-```
-Uma descrição mais detalhada da arquitetura e dos componentes pode ser encontrada em [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md#arquitetura-sistêmica-consolidada).
+### **Para Testadores:**
+1. **Clone o repositório**
+2. **Execute todos os comandos de teste acima**
+3. **Reporte bugs via GitHub Issues**
+4. **Sugira melhorias na documentação**
+
+### **Para Pesquisadores:**
+1. **Revise a documentação técnica**
+2. **Analise os diagramas C4**
+3. **Proponha extensões dos algoritmos ML**
+4. **Contribua com datasets reais**
 
 ---
 
 > "Assim como as lendas brasileiras protegiam nossas terras, o Sistema Guardião protegerá nosso futuro."
-
----
-
-## 🤝 Como Contribuir
-
-1.  **Clone o repositório**
-2.  **Revise a [documentação principal](./MASTER_DOCUMENTATION.md)**
-3.  **Explore os [diagramas C4](./sistema_guardiao_c4_diagrams.html)**
-4.  **Acompanhe o progresso via Issues e Projects**
 
 ---
 
